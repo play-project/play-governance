@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<bean id="metaloader"
+		class="eu.playproject.governance.JSONTopicMetadataLoader"/>
+
+	<bean id="eventservice"
+		class="eu.playproject.governance.service.EventGovernanceService" />
+
+	<bean id="metaservice"
+		class="eu.playproject.governance.service.TopicMetadataService" />
+
+	<bean id="managementservice"
+		class="eu.playproject.governance.service.GovernanceManagementService">
+		<property name="loader" ref="metaloader" />
+		<property name="topicMetadataService" ref="metaservice" />
+		<property name="eventGovernance" ref="eventservice" />
+	</bean>
+		
+	<jaxws:endpoint id="event" implementor="#eventservice"
+		address="/EventGovernance" />
+
+	<jaxws:endpoint id="meta" implementor="#metaservice"
+		address="/TopicMetadataService" />
+
+	<jaxws:endpoint id="management" implementor="#managementservice"
+		address="/ManagementService" />
+
+</beans>
