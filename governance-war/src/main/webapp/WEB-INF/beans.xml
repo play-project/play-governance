@@ -8,28 +8,22 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-	
-	<bean id="metaloader"
-		class="eu.playproject.governance.JSONTopicMetadataLoader"/>
+
+	<bean id="serviceregistry" class="eu.playproject.governance.client.ServiceRegistry">
+		<property name="url" value="http://46XXX" />
+	</bean>
 
 	<bean id="eventservice"
-		class="eu.playproject.governance.service.EventGovernanceService" />
-
-	<bean id="metaservice"
-		class="eu.playproject.governance.service.TopicMetadataService" />
+		class="eu.playproject.governance.service.EventGovernanceService">
+		<property name="serviceRegistry" ref="serviceregistry" />
+	</bean>
 
 	<bean id="managementservice"
 		class="eu.playproject.governance.service.GovernanceManagementService">
-		<property name="loader" ref="metaloader" />
-		<property name="topicMetadataService" ref="metaservice" />
-		<property name="eventGovernance" ref="eventservice" />
 	</bean>
-		
+
 	<jaxws:endpoint id="event" implementor="#eventservice"
 		address="/EventGovernance" />
-
-	<jaxws:endpoint id="meta" implementor="#metaservice"
-		address="/TopicMetadataService" />
 
 	<jaxws:endpoint id="management" implementor="#managementservice"
 		address="/ManagementService" />

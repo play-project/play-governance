@@ -48,7 +48,7 @@ public interface EventGovernance {
 	 * @return
 	 */
 	@WebMethod
-	List<Topic> getTopics();
+	List<Topic> getTopics() throws GovernanceExeption;
 
 	/**
 	 * 

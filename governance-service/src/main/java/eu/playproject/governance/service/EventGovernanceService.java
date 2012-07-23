@@ -4,16 +4,16 @@
 package eu.playproject.governance.service;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
+import org.ow2.play.service.registry.api.Registry;
+import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.notification.client.http.simple.HTTPProducerRPClient;
 import org.petalslink.dsb.notification.commons.NotificationException;
 
@@ -28,6 +28,7 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import eu.playproject.governance.api.EventGovernance;
 import eu.playproject.governance.api.GovernanceExeption;
 import eu.playproject.governance.api.bean.Topic;
+import eu.playproject.governance.client.ServiceRegistry;
 
 /**
  * @author chamerling
@@ -37,6 +38,8 @@ public class EventGovernanceService implements EventGovernance {
 
 	static Logger logger = Logger.getLogger(EventGovernanceService.class
 			.getName());
+	
+	private Registry serviceRegistry;
 	
 	static {
 		// WTF?
@@ -75,7 +78,7 @@ public class EventGovernanceService implements EventGovernance {
 	 */
 	@Override
 	public void createTopic(Topic topic) throws GovernanceExeption {
-		GovernanceEngine.getInstance().createTopic(topic);
+		throw new GovernanceExeption("Not implemented");
 	}
 
 	/*
@@ -84,22 +87,27 @@ public class EventGovernanceService implements EventGovernance {
 	 * @see eu.playproject.governance.api.EventGovernance#getTopics()
 	 */
 	@Override
-	public List<Topic> getTopics() {
+	public List<Topic> getTopics() throws GovernanceExeption{
 		logger.fine("Get topics...");
 		
 		List<Topic> result = new ArrayList<Topic>();
-		Properties props = null;
-		try {
-			props = new Properties();
-			URL url = new URL(eu.playproject.governance.Constants.CONFIG);
-			props.load(url.openStream());
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return result;
+		
+		if (serviceRegistry == null) {
+			throw new GovernanceExeption("Can not get the service regsitry");
 		}
+		
+		String endpoint = null;
+		try {
+			endpoint = serviceRegistry.get(org.ow2.play.service.registry.api.Constants.TOPIC);
+		} catch (RegistryException e1) {
+			e1.printStackTrace();
 
-		String endpoint = props
-				.getProperty(eu.playproject.governance.Constants.TOPIC_ENDPOINT);
+			throw new GovernanceExeption(e1);
+		}
+		
+		if (endpoint == null) {
+			throw new GovernanceExeption("Can not get the topic provider endpoint from the service registry");
+		}
 
 		HTTPProducerRPClient client = new HTTPProducerRPClient(endpoint);
 		try {
@@ -159,6 +167,13 @@ public class EventGovernanceService implements EventGovernance {
 	public List<W3CEndpointReference> findEventProducersByElements(
 			List<QName> element) throws GovernanceExeption {
 		throw new GovernanceExeption("Not implemented");
+	}
+	
+	/**
+	 * @param serviceRegistry the serviceRegistry to set
+	 */
+	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+		this.serviceRegistry = serviceRegistry;
 	}
 
 }
