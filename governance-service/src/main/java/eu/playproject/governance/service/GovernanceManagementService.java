@@ -3,21 +3,10 @@
  */
 package eu.playproject.governance.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Logger;
 
-import eu.playproject.governance.api.EventGovernance;
 import eu.playproject.governance.api.GovernanceExeption;
 import eu.playproject.governance.api.GovernanceManagement;
-import eu.playproject.governance.api.TopicMetadataLoader;
-import eu.playproject.governance.api.TopicMetadataService;
-import eu.playproject.governance.api.bean.Metadata;
-import eu.playproject.governance.api.bean.Topic;
-import eu.playproject.governance.api.bean.TopicMetadata;
 
 /**
  * This is a dirty implementation which gets data from a remote properties file
