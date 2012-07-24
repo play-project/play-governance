@@ -108,6 +108,8 @@ public class EventGovernanceService implements EventGovernance {
 		if (endpoint == null) {
 			throw new GovernanceExeption("Can not get the topic provider endpoint from the service registry");
 		}
+		
+		logger.info("Get topics from " + endpoint);
 
 		HTTPProducerRPClient client = new HTTPProducerRPClient(endpoint);
 		try {

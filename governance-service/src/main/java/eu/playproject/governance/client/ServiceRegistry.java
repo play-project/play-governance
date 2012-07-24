@@ -129,6 +129,7 @@ public class ServiceRegistry implements Registry {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+		this.client = null;
 	}
 
 }

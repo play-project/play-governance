@@ -10,7 +10,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
 	<bean id="serviceregistry" class="eu.playproject.governance.client.ServiceRegistry">
-		<property name="url" value="http://46.105.181.221:8080/registry/RegistryService"/>
+		<property name="url" value="http://localhost:8080/registry/RegistryService"/>
 	</bean>
 
 	<bean id="eventservice"
