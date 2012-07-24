@@ -12,12 +12,8 @@ import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
-import org.ow2.play.metadata.api.MetaResource;
-import org.ow2.play.metadata.api.MetadataException;
-import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 import org.petalslink.dsb.notification.client.http.simple.HTTPProducerRPClient;
 import org.petalslink.dsb.notification.commons.NotificationException;
 
@@ -35,20 +31,32 @@ import eu.playproject.governance.api.bean.Topic;
 import eu.playproject.governance.client.ServiceRegistry;
 
 /**
+ * Get the topics from the DSB runtime (WSN API), old way to get. Please check
+ * {@link EventGovernanceService}
+ * 
  * @author chamerling
  * 
  */
-public class EventGovernanceService implements EventGovernance {
+public class DSBEventGovernanceService implements EventGovernance {
 
-	static Logger logger = Logger.getLogger(EventGovernanceService.class
+	static Logger logger = Logger.getLogger(DSBEventGovernanceService.class
 			.getName());
 
 	private Registry serviceRegistry;
 
+	static {
+		// WTF?
+		logger.info("Creating WSN factories...");
+		Wsnb4ServUtils.initModelFactories(new WsrfbfModelFactoryImpl(),
+				new WsrfrModelFactoryImpl(), new WsrfrlModelFactoryImpl(),
+				new WsrfrpModelFactoryImpl(), new WstopModelFactoryImpl(),
+				new WsnbModelFactoryImpl());
+	}
+
 	/**
 	 * 
 	 */
-	public EventGovernanceService() {
+	public DSBEventGovernanceService() {
 	}
 
 	/*
@@ -83,7 +91,7 @@ public class EventGovernanceService implements EventGovernance {
 	 */
 	@Override
 	public List<Topic> getTopics() throws GovernanceExeption {
-		logger.fine("Get topics from metadata service...");
+		logger.fine("Get topics...");
 
 		List<Topic> result = new ArrayList<Topic>();
 
@@ -94,70 +102,39 @@ public class EventGovernanceService implements EventGovernance {
 		String endpoint = null;
 		try {
 			endpoint = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.METADATA);
+					.get(org.ow2.play.service.registry.api.Constants.TOPIC);
 		} catch (RegistryException e1) {
 			e1.printStackTrace();
+
 			throw new GovernanceExeption(e1);
 		}
 
 		if (endpoint == null) {
 			throw new GovernanceExeption(
-					"Can not get the metadata provider endpoint from the service registry");
+					"Can not get the topic provider endpoint from the service registry");
 		}
 
-		logger.info("Getting topics from " + endpoint);
+		logger.info("Get topics from " + endpoint);
 
-		MetadataService client = getMetadataClient(endpoint);
-		// FIXME : Get all for now, we need to only get the resources which are
-		// topics
-		List<MetaResource> resources = null;
+		HTTPProducerRPClient client = new HTTPProducerRPClient(endpoint);
 		try {
-			resources = client.list();
-		} catch (Exception e) {
-			throw new GovernanceExeption(e);
-		}
+			List<QName> topics = client.getTopics();
+			if (topics != null) {
+				for (QName qName : topics) {
+					logger.info("Topic : " + qName);
 
-		if (resources != null) {
-			for (MetaResource r : resources) {
-				logger.info("Resource : " + r.getResource());
-				// TODO : Get the prefix from the metaresources, for now we only
-				// get the topic from the resource name where the name is
-				// 'stream'
-
-				if ("stream".equals(r.getResource().getName())) {
 					Topic topic = new Topic();
-					String ns = r
-							.getResource()
-							.getUrl()
-							.substring(
-									0,
-									r.getResource().getUrl().lastIndexOf('/') + 1);
-					String name = r
-							.getResource()
-							.getUrl()
-							.substring(
-									r.getResource().getUrl().lastIndexOf('/') + 1);
-					topic.setName(name);
-					topic.setNs(ns);
-					
-					// TODO : get the prefix from a metadata entry
-					topic.setPrefix("s");
+					topic.setName(qName.getLocalPart());
+					topic.setNs(qName.getNamespaceURI());
+					topic.setPrefix(qName.getPrefix());
 					result.add(topic);
-				} else {
-					logger.info("Not a topic");
 				}
 			}
+		} catch (NotificationException e) {
+			e.printStackTrace();
 		}
 
 		return result;
-	}
-
-	/**
-	 * @param endpoint
-	 * @return
-	 */
-	private MetadataService getMetadataClient(String endpoint) {
-		return CXFHelper.getClientFromFinalURL(endpoint, MetadataService.class);
 	}
 
 	/*
