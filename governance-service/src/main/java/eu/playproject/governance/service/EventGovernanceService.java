@@ -13,21 +13,10 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.ow2.play.metadata.api.MetaResource;
-import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.cxf.CXFHelper;
-import org.petalslink.dsb.notification.client.http.simple.HTTPProducerRPClient;
-import org.petalslink.dsb.notification.commons.NotificationException;
-
-import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resourcelifetime.datatypes.impl.impl.WsrfrlModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.impl.impl.WsrfrpModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.topics.datatypes.impl.impl.WstopModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 import eu.playproject.governance.api.EventGovernance;
 import eu.playproject.governance.api.GovernanceExeption;
