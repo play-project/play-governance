@@ -17,11 +17,11 @@ import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.client.ServiceRegistry;
 import org.ow2.play.metadata.api.MetaResource;
+import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.cxf.CXFHelper;
-
 
 /**
  * @author chamerling
@@ -32,6 +32,9 @@ public class EventGovernanceService implements EventGovernance {
 	static Logger logger = Logger.getLogger(EventGovernanceService.class
 			.getName());
 
+	/**
+	 * Uses the registry to get endpoint to reach metadata service
+	 */
 	private Registry serviceRegistry;
 
 	/**
@@ -113,7 +116,7 @@ public class EventGovernanceService implements EventGovernance {
 				// get the topic from the resource name where the name is
 				// 'stream'
 
-				if ("stream".equals(r.getResource().getName())) {
+				if (Constants.STREAM_RESOURCE_NAME.equals(r.getResource().getName())) {
 					Topic topic = new Topic();
 					String ns = r
 							.getResource()
@@ -129,15 +132,23 @@ public class EventGovernanceService implements EventGovernance {
 					topic.setName(name);
 					topic.setNs(ns);
 					
-					// TODO : get the prefix from a metadata entry
-					topic.setPrefix("s");
+					Metadata md = null;
+					try {
+						md = client.getMetadataValue(r.getResource(), Constants.QNAME_PREFIX_URL);
+					} catch (Exception e) {
+						logger.info("Get not get metadata from service");
+					}
+					if (md != null && md.getData() != null && md.getData().size() == 1 && md.getData().get(0).getValue() != null) {
+						topic.setPrefix(md.getData().get(0).getValue());
+					} else {
+						topic.setPrefix("s");
+					}
 					result.add(topic);
 				} else {
 					logger.info("Not a topic");
 				}
 			}
 		}
-
 		return result;
 	}
 
