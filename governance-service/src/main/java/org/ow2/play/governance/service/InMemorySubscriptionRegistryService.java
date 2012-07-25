@@ -86,9 +86,8 @@ public class InMemorySubscriptionRegistryService implements
 
 		while (it.hasNext()) {
 			Subscription s = it.next();
-			if (subscriptions.remove(s)) {
-				result.add(s);
-			}
+			it.remove();
+			result.add(s);
 		}
 		return result;
 	}
