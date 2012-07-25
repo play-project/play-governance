@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.playproject.governance;
+package org.ow2.play.governance;
 
 /**
  * @author chamerling

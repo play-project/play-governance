@@ -9,17 +9,17 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="serviceregistry" class="eu.playproject.governance.client.ServiceRegistry">
+	<bean id="serviceregistry" class="org.ow2.play.governance.client.ServiceRegistry">
 		<property name="url" value="http://localhost:8080/registry/RegistryService"/>
 	</bean>
 
 	<bean id="eventservice"
-		class="eu.playproject.governance.service.EventGovernanceService">
+		class="org.ow2.play.governance.service.EventGovernanceService">
 		<property name="serviceRegistry" ref="serviceregistry" />
 	</bean>
 
 	<bean id="managementservice"
-		class="eu.playproject.governance.service.GovernanceManagementService">
+		class="org.ow2.play.governance.service.GovernanceManagementService">
 	</bean>
 
 	<jaxws:endpoint id="event" implementor="#eventservice"

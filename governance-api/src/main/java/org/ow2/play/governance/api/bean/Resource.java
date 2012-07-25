@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package eu.playproject.governance.api.bean;
+package org.ow2.play.governance.api.bean;
 
 /**
  * @author chamerling

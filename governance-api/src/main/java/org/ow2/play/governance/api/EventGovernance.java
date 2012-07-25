@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.playproject.governance.api;
+package org.ow2.play.governance.api;
 
 import java.io.InputStream;
 import java.util.List;
@@ -11,7 +11,8 @@ import javax.jws.WebService;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
-import eu.playproject.governance.api.bean.Topic;
+import org.ow2.play.governance.api.bean.Topic;
+
 
 /**
  * easiergov/event-api

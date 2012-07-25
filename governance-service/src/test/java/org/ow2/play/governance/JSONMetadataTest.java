@@ -1,13 +1,16 @@
 /**
  * 
  */
-package eu.playproject.governance;
+package org.ow2.play.governance;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.ow2.play.governance.api.bean.Metadata;
+import org.ow2.play.governance.api.bean.TopicMetadata;
 
 import junit.framework.TestCase;
 
@@ -16,8 +19,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import eu.playproject.governance.api.bean.Metadata;
-import eu.playproject.governance.api.bean.TopicMetadata;
 
 /**
  * @author chamerling

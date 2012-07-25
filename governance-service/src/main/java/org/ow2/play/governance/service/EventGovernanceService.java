@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.playproject.governance.service;
+package org.ow2.play.governance.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,16 +12,16 @@ import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
+import org.ow2.play.governance.api.EventGovernance;
+import org.ow2.play.governance.api.GovernanceExeption;
+import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.client.ServiceRegistry;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.cxf.CXFHelper;
 
-import eu.playproject.governance.api.EventGovernance;
-import eu.playproject.governance.api.GovernanceExeption;
-import eu.playproject.governance.api.bean.Topic;
-import eu.playproject.governance.client.ServiceRegistry;
 
 /**
  * @author chamerling
@@ -43,7 +43,7 @@ public class EventGovernanceService implements EventGovernance {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see eu.playproject.governance.api.EventGovernance#loadResources(java.io.
+	 * @see org.ow2.play.governance.api.EventGovernance#loadResources(java.io.
 	 * InputStream)
 	 */
 	@Override
@@ -57,7 +57,7 @@ public class EventGovernanceService implements EventGovernance {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * eu.playproject.governance.api.EventGovernance#createTopic(eu.playproject
+	 * org.ow2.play.governance.api.EventGovernance#createTopic(eu.playproject
 	 * .governance.api.bean.Topic)
 	 */
 	@Override
@@ -68,7 +68,7 @@ public class EventGovernanceService implements EventGovernance {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see eu.playproject.governance.api.EventGovernance#getTopics()
+	 * @see org.ow2.play.governance.api.EventGovernance#getTopics()
 	 */
 	@Override
 	public List<Topic> getTopics() throws GovernanceExeption {
@@ -153,7 +153,7 @@ public class EventGovernanceService implements EventGovernance {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * eu.playproject.governance.api.EventGovernance#findTopicsByElement(javax
+	 * org.ow2.play.governance.api.EventGovernance#findTopicsByElement(javax
 	 * .xml.namespace.QName)
 	 */
 	@Override
@@ -166,7 +166,7 @@ public class EventGovernanceService implements EventGovernance {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * eu.playproject.governance.api.EventGovernance#findEventProducersByTopics
+	 * org.ow2.play.governance.api.EventGovernance#findEventProducersByTopics
 	 * (java.util.List)
 	 */
 	@Override
@@ -179,7 +179,7 @@ public class EventGovernanceService implements EventGovernance {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * eu.playproject.governance.api.EventGovernance#findEventProducersByElements
+	 * org.ow2.play.governance.api.EventGovernance#findEventProducersByElements
 	 * (java.util.List)
 	 */
 	@Override

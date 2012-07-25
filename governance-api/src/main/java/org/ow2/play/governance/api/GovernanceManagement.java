@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.playproject.governance.api;
+package org.ow2.play.governance.api;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

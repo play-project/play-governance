@@ -1,7 +1,7 @@
 /**
  * 
  */
-package eu.playproject.governance.api.bean;
+package org.ow2.play.governance.api.bean;
 
 import java.util.List;
 

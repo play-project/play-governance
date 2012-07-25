@@ -1,13 +1,16 @@
 /**
  * 
  */
-package eu.playproject.governance.service;
+package org.ow2.play.governance.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.service.GovernanceManagementService;
+
+
 import junit.framework.TestCase;
-import eu.playproject.governance.api.bean.Topic;
 
 /**
  * @author chamerling

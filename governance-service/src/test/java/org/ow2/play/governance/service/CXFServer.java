@@ -1,14 +1,14 @@
 /**
  * 
  */
-package eu.playproject.governance.service;
+package org.ow2.play.governance.service;
 
 import java.util.concurrent.TimeUnit;
 
+import org.ow2.play.governance.api.EventGovernance;
 import org.petalslink.dsb.commons.service.api.Service;
 import org.petalslink.dsb.cxf.CXFHelper;
 
-import eu.playproject.governance.api.EventGovernance;
 
 /**
  * @author chamerling
@@ -21,7 +21,7 @@ public class CXFServer {
 
 		Service eventService = CXFHelper.getService(localhost,
 				EventGovernance.class,
-				new eu.playproject.governance.service.EventGovernanceService());
+				new org.ow2.play.governance.service.EventGovernanceService());
 
 		eventService.start();
 

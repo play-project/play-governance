@@ -1,12 +1,13 @@
 /**
  * 
  */
-package eu.playproject.governance.service;
+package org.ow2.play.governance.service;
 
 import java.util.logging.Logger;
 
-import eu.playproject.governance.api.GovernanceExeption;
-import eu.playproject.governance.api.GovernanceManagement;
+import org.ow2.play.governance.api.GovernanceExeption;
+import org.ow2.play.governance.api.GovernanceManagement;
+
 
 /**
  * This is a dirty implementation which gets data from a remote properties file

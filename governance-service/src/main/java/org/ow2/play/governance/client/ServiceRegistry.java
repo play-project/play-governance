@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package eu.playproject.governance.client;
+package org.ow2.play.governance.client;
 
 import java.util.List;
 import java.util.logging.Logger;
