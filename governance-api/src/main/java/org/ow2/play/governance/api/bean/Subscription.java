@@ -34,7 +34,7 @@ public class Subscription {
 	String subscriber;
 	String provider;
 	Topic topic;
-	long date;
+	long date = -1L;
 
 	/**
 	 * 

@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.bean.Subscription;
 
@@ -71,6 +74,21 @@ public class InMemorySubscriptionRegistryService implements
 	@Override
 	public List<Subscription> getSubscriptions() {
 		return subscriptions;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.ow2.play.governance.api.SubscriptionRegistry#getSubscriptions(org
+	 * .ow2.play.governance.api.bean.Subscription)
+	 */
+	@Override
+	@WebMethod
+	public List<Subscription> getSubscriptions(
+			@WebParam(name = "filter") Subscription filter) {
+		// NOT implemented, use mongo implementation....
+		return new ArrayList<Subscription>();
 	}
 
 	/*

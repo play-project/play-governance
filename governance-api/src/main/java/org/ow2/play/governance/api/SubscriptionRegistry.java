@@ -22,6 +22,7 @@ package org.ow2.play.governance.api;
 import java.util.List;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.ow2.play.governance.api.bean.Subscription;
@@ -51,6 +52,18 @@ public interface SubscriptionRegistry {
 	 */
 	@WebMethod
 	List<Subscription> getSubscriptions();
+
+	/**
+	 * Get all the subscriptions which match the given subcription filter. ie we
+	 * use all the filter information to create a valid query to the storage
+	 * layer.
+	 * 
+	 * @param filter
+	 * @return all values matching the viven filter, all if filter is null.
+	 */
+	@WebMethod
+	List<Subscription> getSubscriptions(
+			@WebParam(name = "filter") Subscription filter);
 
 	/**
 	 * Unsubscribe to all the current subscriptions...
@@ -87,6 +100,5 @@ public interface SubscriptionRegistry {
 	 */
 	@WebMethod
 	List<Subscription> removeAllFromConsumer(String consumer);
-
 
 }
