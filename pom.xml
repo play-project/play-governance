@@ -16,8 +16,9 @@
   <modules>
     <module>governance-api</module>
     <module>governance-service</module>
-    <module>governance-war</module>
     <module>governance-mongostorage</module>
+    <module>governance-war</module>
+    <module>governance-mongodb-war</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

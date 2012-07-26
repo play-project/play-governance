@@ -61,7 +61,7 @@ public interface SubscriptionRegistry {
 	 * @param filter
 	 * @return all values matching the viven filter, all if filter is null.
 	 */
-	@WebMethod
+	@WebMethod(operationName="getFilterSubscriptions")
 	List<Subscription> getSubscriptions(
 			@WebParam(name = "filter") Subscription filter);
 
