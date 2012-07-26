@@ -93,6 +93,7 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 	 * org.ow2.play.metadata.api.service.Initializable#init(java.util.Properties
 	 * )
 	 */
+	@WebMethod(exclude = true)
 	public void init() {
 		logger.info("Initializing metadata service");
 
@@ -390,17 +391,17 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 			if (filter.getTopic().getNs() != null) {
 				tf.put(TOPIC_NS_KEY, filter.getTopic().getNs());
 			}
-			
+
 			if (filter.getTopic().getPrefix() != null) {
 				tf.put(TOPIC_PREFIX_KEY, filter.getTopic().getPrefix());
 			}
-			
+
 			// FIXME = Topic filter does not work...
 			f.put(TOPIC_KEY, tf);
 		}
-		
+
 		logger.fine("Filtering with : " + f);
-		
+
 		DBCursor cursor = getDbCollection().find(f);
 		Iterator<DBObject> iter = cursor.iterator();
 		while (iter.hasNext()) {
