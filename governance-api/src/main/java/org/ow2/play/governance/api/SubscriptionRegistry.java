@@ -43,7 +43,7 @@ public interface SubscriptionRegistry {
 	 * @param subscription
 	 */
 	@WebMethod
-	void addSubscription(Subscription subscription);
+	void addSubscription(Subscription subscription) throws GovernanceExeption;
 
 	/**
 	 * Get all the current subscriptions which have been done by this component
@@ -51,7 +51,7 @@ public interface SubscriptionRegistry {
 	 * @return
 	 */
 	@WebMethod
-	List<Subscription> getSubscriptions();
+	List<Subscription> getSubscriptions() throws GovernanceExeption;
 
 	/**
 	 * Get all the subscriptions which match the given subcription filter. ie we
@@ -63,7 +63,7 @@ public interface SubscriptionRegistry {
 	 */
 	@WebMethod(operationName="getFilterSubscriptions")
 	List<Subscription> getSubscriptions(
-			@WebParam(name = "filter") Subscription filter);
+			@WebParam(name = "filter") Subscription filter) throws GovernanceExeption;
 
 	/**
 	 * Unsubscribe to all the current subscriptions...
@@ -71,7 +71,7 @@ public interface SubscriptionRegistry {
 	 * @return the list of subscriptions which has been removed
 	 */
 	@WebMethod
-	List<Subscription> removeAll();
+	List<Subscription> removeAll() throws GovernanceExeption;
 
 	/**
 	 * Remove a subscription
@@ -80,7 +80,7 @@ public interface SubscriptionRegistry {
 	 * @return
 	 */
 	@WebMethod
-	boolean remove(Subscription subscription);
+	boolean remove(Subscription subscription) throws GovernanceExeption;
 
 	/**
 	 * Remove all the subscriptions from the registry where the provider is
@@ -90,7 +90,7 @@ public interface SubscriptionRegistry {
 	 * @return the list of removed subscriptions
 	 */
 	@WebMethod
-	List<Subscription> removeAllFromProvider(String provider);
+	List<Subscription> removeAllFromProvider(String provider) throws GovernanceExeption;
 
 	/**
 	 * Remove all the subscriptions where the consumer if equal to the input one
@@ -99,6 +99,6 @@ public interface SubscriptionRegistry {
 	 * @return the list of removed subscriptions
 	 */
 	@WebMethod
-	List<Subscription> removeAllFromConsumer(String consumer);
+	List<Subscription> removeAllFromConsumer(String consumer) throws GovernanceExeption;
 
 }
