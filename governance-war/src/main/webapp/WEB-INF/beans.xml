@@ -21,11 +21,18 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="managementservice"
 		class="org.ow2.play.governance.service.GovernanceManagementService">
 	</bean>
+	
+	<bean id="subscriptionstorageservice"
+		class="org.ow2.play.governance.service.InMemorySubscriptionRegistryService">
+	</bean>
 
 	<jaxws:endpoint id="event" implementor="#eventservice"
 		address="/EventGovernance" />
 
 	<jaxws:endpoint id="management" implementor="#managementservice"
 		address="/ManagementService" />
+		
+	<jaxws:endpoint id="subscriptionstorage" implementor="#subscriptionstorageservice"
+		address="/SubscriptionStorageService" />
 
 </beans>
