@@ -20,6 +20,7 @@
 package org.ow2.play.governance.mocks.ec;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -78,13 +79,19 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 	public String createPublishProxy(
 			@WebParam(name = "streamUrl") String streamURL) {
 		logger.info("CreatePublishProxy for stream " + streamURL);
+
+		String str = getPublishProxyURL(streamURL);
+		publishEndpoints.add(str);
+
+		return str;
+	}
+
+	protected String getPublishProxyURL(String streamURL) {
 		HttpServletRequest request = (HttpServletRequest) context
 				.getMessageContext().get(MessageContext.SERVLET_REQUEST);
 		String str = request.getRequestURL().toString();
 		str = str.substring(0, str.lastIndexOf('/'));
 		str = str + "/ec/publish/" + streamURL;
-
-		publishEndpoints.add(str);
 		return str;
 	}
 
@@ -101,14 +108,19 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 		logger.info("createPutGetProxy for stream " + streamURL);
 		System.out.println(context);
 
+		String str = getPutGetProxyURL(streamURL);
+
+		putgetEndpoints.add(str);
+
+		return str;
+	}
+
+	protected String getPutGetProxyURL(String streamURL) {
 		HttpServletRequest request = (HttpServletRequest) context
 				.getMessageContext().get(MessageContext.SERVLET_REQUEST);
 		String str = request.getRequestURL().toString();
 		str = str.substring(0, str.lastIndexOf('/'));
 		str = str + "/ec/putget/" + streamURL;
-
-		putgetEndpoints.add(str);
-
 		return str;
 	}
 
@@ -123,14 +135,19 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 	public String createSubscribeProxy(
 			@WebParam(name = "streamUrl") String streamURL) {
 		logger.info("createSubscribeProxy for stream " + streamURL);
+		String str = getSubscribeProxyURL(streamURL);
+		subscribeEndpoints.add(str);
+
+		return str;
+	}
+
+	protected String getSubscribeProxyURL(String streamURL) {
 		HttpServletRequest request = (HttpServletRequest) context
 				.getMessageContext().get(MessageContext.SERVLET_REQUEST);
 		String str = request.getRequestURL().toString();
 		str = str.substring(0, str.lastIndexOf('/'));
 
 		str = str + "/ec/subscribe/" + streamURL;
-		subscribeEndpoints.add(str);
-
 		return str;
 	}
 
@@ -208,9 +225,7 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 	@WebMethod
 	public List<String> getEventCloudIds() {
 		logger.info("getEventCloudIds");
-		System.out.println(context);
-
-		return new ArrayList<String>();
+		return ids;
 	}
 
 	/*
@@ -226,7 +241,12 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 		logger.info("getPublishProxyEndpointUrls for stream " + streamURL);
 		System.out.println(context);
 
-		return new ArrayList<String>();
+		if (publishEndpoints.contains(getPublishProxyURL(streamURL))) {
+			return Arrays.asList(getPublishProxyURL(streamURL));
+		} else {
+			return new ArrayList<String>();
+		}
+
 	}
 
 	/*
@@ -242,7 +262,11 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 		logger.info("getPublishProxyEndpointUrls for stream " + streamUrl);
 		System.out.println(context);
 
-		return new ArrayList<String>();
+		if (putgetEndpoints.contains(getPutGetProxyURL(streamUrl))) {
+			return Arrays.asList(getPutGetProxyURL(streamUrl));
+		} else {
+			return new ArrayList<String>();
+		}
 	}
 
 	/*
@@ -273,7 +297,11 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 		logger.info("getSubscribeProxyEndpointUrls for stream " + streamUrl);
 		System.out.println(context);
 
-		return new ArrayList<String>();
+		if (subscribeEndpoints.contains(getSubscribeProxyURL(streamUrl))) {
+			return Arrays.asList(getSubscribeProxyURL(streamUrl));
+		} else {
+			return new ArrayList<String>();
+		}
 	}
 
 	/*
@@ -289,7 +317,7 @@ public class EventCloudManagementWsImpl implements EventCloudManagementWsApi {
 		logger.info("getSubscribeProxyEndpointUrls for stream " + streamUrl);
 		System.out.println(context);
 
-		return true;
+		return ids.contains(streamUrl);
 	}
 
 }
