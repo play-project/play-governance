@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/beans.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>NotificationConsumerService</servlet-name>
+		<servlet-class>
+			org.ow2.play.governance.mocks.NotificationConsumerService</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>NotificationConsumerService</servlet-name>
+		<url-pattern>/wsn/consumer/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>NotificationProviderService</servlet-name>
+		<servlet-class>
+			org.ow2.play.governance.mocks.NotificationProviderService</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>NotificationProviderService</servlet-name>
+		<url-pattern>/wsn/provider/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ECPublishProxy</servlet-name>
+		<servlet-class>org.ow2.play.governance.mocks.ec.ECPublishProxy</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ECPublishProxy</servlet-name>
+		<url-pattern>/ec/publish/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ECPutGetProxy</servlet-name>
+		<servlet-class>org.ow2.play.governance.mocks.ec.ECPutGetProxy</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ECPutGetProxy</servlet-name>
+		<url-pattern>/ec/putget/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SubscribeProxy</servlet-name>
+		<servlet-class>org.ow2.play.governance.mocks.ec.SubscribeProxy</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SubscribeProxy</servlet-name>
+		<url-pattern>/ec/subscribe/*</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

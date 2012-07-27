@@ -19,6 +19,7 @@
     <module>governance-mongostorage</module>
     <module>governance-war</module>
     <module>governance-mongodb-war</module>
+    <module>governance-mocks</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
