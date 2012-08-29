@@ -26,6 +26,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-wsn</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-cxfutils</artifactId>
 			<version>${project.version}</version>

@@ -25,6 +25,10 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="subscriptionstorageservice"
 		class="org.ow2.play.governance.service.InMemorySubscriptionRegistryService">
 	</bean>
+	
+	<bean id="wsnsubscriptionservice"
+		class="org.ow2.play.governance.wsn.SubscriptionServiceClient">
+	</bean>
 
 	<jaxws:endpoint id="event" implementor="#eventservice"
 		address="/EventGovernance" />
@@ -34,5 +38,8 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		
 	<jaxws:endpoint id="subscriptionstorage" implementor="#subscriptionstorageservice"
 		address="/SubscriptionStorageService" />
+
+	<jaxws:endpoint id="subscriptionservice" implementor="#wsnsubscriptionservice"
+		address="/SubscriptionService" />
 
 </beans>
