@@ -33,7 +33,10 @@ public class Subscription {
 	String id;
 	String subscriber;
 	String provider;
+	
+	// TODO : This can be a resource to be more generic...
 	Topic topic;
+	
 	long date = -1L;
 	String status;
 
