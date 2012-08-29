@@ -21,6 +21,7 @@
     <module>governance-mongodb-war</module>
     <module>governance-mocks</module>
     <module>governance-migrator</module>
+    <module>governance-wsn</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
