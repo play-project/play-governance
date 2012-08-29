@@ -59,6 +59,7 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 	private static final String PRODUCER_KEY = "producer";
 	private static final String TOPIC_KEY = "topic";
 	private static final String DATE_KEY = "date";
+	private static final String STATUS_KEY = "status";
 
 	private static final String TOPIC_NAME_KEY = "name";
 	private static final String TOPIC_NS_KEY = "ns";
@@ -302,6 +303,7 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 		dbo.put(PRODUCER_KEY, subscription.getProvider());
 		dbo.put(SUBSCRIBER_KEY, subscription.getSubscriber());
 		dbo.put(DATE_KEY, Long.toString(subscription.getDate()));
+		dbo.put(STATUS_KEY, subscription.getStatus());
 
 		if (subscription.getTopic() != null) {
 			DBObject topic = new BasicDBObject();
@@ -381,6 +383,10 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 
 		if (filter.getSubscriber() != null) {
 			f.put(SUBSCRIBER_KEY, filter.getSubscriber());
+		}
+		
+		if (filter.getStatus() != null) {
+			f.put(STATUS_KEY, filter.getStatus());
 		}
 
 		if (filter.getTopic() != null) {
@@ -541,6 +547,8 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 				.get(PRODUCER_KEY).toString());
 		s.setDate(dbo.get(DATE_KEY) == null ? 0L : Long.parseLong(dbo.get(
 				DATE_KEY).toString()));
+		s.setStatus(dbo.get(STATUS_KEY) == null ? "" : dbo
+				.get(STATUS_KEY).toString());
 
 		if (dbo.get(TOPIC_KEY) != null
 				&& dbo.get(TOPIC_KEY) instanceof DBObject) {
