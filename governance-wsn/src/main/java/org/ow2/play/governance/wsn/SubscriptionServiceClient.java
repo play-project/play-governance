@@ -25,7 +25,7 @@ import com.ebmwebsourcing.wsstar.topics.datatypes.impl.impl.WstopModelFactoryImp
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
- * WSN client for pubsub
+ * WSN client for pubsub. Can also be exposed as web service.
  * 
  * @author chamerling
  * 
