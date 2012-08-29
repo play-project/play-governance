@@ -22,6 +22,7 @@
     <module>governance-mocks</module>
     <module>governance-migrator</module>
     <module>governance-wsn</module>
+    <module>governance-bootstrap</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
