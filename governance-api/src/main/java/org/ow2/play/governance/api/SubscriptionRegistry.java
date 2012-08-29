@@ -28,7 +28,8 @@ import javax.jws.WebService;
 import org.ow2.play.governance.api.bean.Subscription;
 
 /**
- * A simple subscription registry
+ * A subscription registry which is used to register all the subscriptions which
+ * has been made on the system.
  * 
  * @author chamerling
  * 
