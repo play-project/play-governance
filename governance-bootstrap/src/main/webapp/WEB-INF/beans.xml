@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://cxf.apache.org/core" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		 http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/transports/http/configuration         http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+        http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
+
+	<cxf:bus>
+		<cxf:features>
+			<cxf:logging />
+		</cxf:features>
+	</cxf:bus>
+
+	<bean id="registry"
+		class="org.ow2.play.governance.bootstrap.client.ServiceRegistry">
+		<property name="url"
+			value="http://localhost:8080/registry/RegistryService" />
+	</bean>
+
+	<bean id="metaclient"
+		class="org.ow2.play.governance.bootstrap.client.MetadataServiceClient">
+		<property name="registry" ref="registry" />
+	</bean>
+
+	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
+		<property name="serializeAsArray" value="true" />
+	</bean>
+
+	<bean id="governanceclient"
+		class="org.ow2.play.governance.bootstrap.client.GovernanceClientImpl">
+		<property name="serviceRegistry" ref="registry" />
+	</bean>
+
+	<bean id="subscriptionregistry"
+		class="org.ow2.play.governance.bootstrap.client.SubscriptionRegistryClient">
+		<property name="registry" ref="registry" />
+	</bean>
+
+	<bean id="topicmanager"
+		class="org.ow2.play.governance.bootstrap.DSBTopicManager">
+		<property name="subscriptionRegistry" ref="subscriptionregistry" />
+	</bean>
+
+	<bean id="eventcloudclientfactory"
+		class="org.ow2.play.governance.bootstrap.client.JAXWSEventCloudClientFactory" />
+
+	<bean id="dsbsubscribestoecbootstrap"
+		class="org.ow2.play.governance.bootstrap.DSBSubscribesToECBootstrapServiceImpl">
+		<property name="topicManager" ref="topicmanager" />
+		<property name="eventCloudClientFactory" ref="eventcloudclientfactory" />
+		<property name="governanceClient" ref="governanceclient" />
+		<property name="subscriptionRegistry" ref="subscriptionregistry" />
+		<property name="metadataServiceClient" ref="metaclient" />
+	</bean>
+
+	<bean id="ecsubscribestodsbbootstrap"
+		class="org.ow2.play.governance.bootstrap.ECSubscribesToDSBBootstrapServiceImpl">
+		<property name="topicManager" ref="topicmanager" />
+		<property name="eventCloudClientFactory" ref="eventcloudclientfactory" />
+		<property name="governanceClient" ref="governanceclient" />
+		<property name="subscriptionRegistry" ref="subscriptionregistry" />
+		<property name="metadataServiceClient" ref="metaclient" />
+	</bean>
+
+	<bean id="logservice"
+		class="org.ow2.play.governance.bootstrap.MemoryLogServiceImpl" />
+
+	<!-- REST services -->
+	<bean id="restinit"
+		class="org.ow2.play.governance.bootstrap.rest.InitServiceImpl">
+		<property name="dsbSubscribesBootstrapService" ref="dsbsubscribestoecbootstrap" />
+		<property name="ecSubscribesBootstrapService" ref="ecsubscribestodsbbootstrap" />
+		<property name="endpointRegistry" ref="registry" />
+	</bean>
+
+	<bean id="restlog"
+		class="org.ow2.play.governance.bootstrap.rest.LogServiceImpl" />
+
+	<bean id="restsubscriptionregistry"
+		class="org.ow2.play.governance.bootstrap.rest.SubscriptionRegistryServiceImpl">
+		<property name="subscriptionRegistry" ref="subscriptionregistry" />
+	</bean>
+
+	<jaxrs:server id="restContainer" address="/rest/">
+		<jaxrs:serviceBeans>
+			<ref bean="restsubscriptionregistry" />
+			<ref bean="restlog" />
+			<ref bean="restinit" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jsonprovider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+	<!-- JAXWS Services -->
+	<jaxws:endpoint id="dsbecboostrap" implementor="#dsbsubscribestoecbootstrap"
+		address="/DSB2ECBootstrapService" />
+
+	<jaxws:endpoint id="ecdsbboostrap" implementor="#ecsubscribestodsbbootstrap"
+		address="/EC2DSBBootstrapService" />
+
+	<jaxws:endpoint id="subscriptionregistryservice"
+		implementor="#subscriptionregistry" address="/SubscriptionRegistryService" />
+
+	<jaxws:endpoint id="logservicendpoint" implementor="#logservice"
+		address="/LogService" />
+
+</beans>

@@ -1,25 +1,191 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>play-governance</artifactId>
-    <groupId>org.ow2.play</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  <groupId>org.ow2.play</groupId>
-  <artifactId>governance-bootstrap</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>governance-bootstrap</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>play-governance</artifactId>
+		<groupId>org.ow2.play</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.ow2.play</groupId>
+	<artifactId>governance-pubsubbootstrap</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>governance-pubsubbootstrap</name>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>play-metadata-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>play-metadata-json</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.play-project</groupId>
+			<artifactId>play-commons-utils</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>play-metadata-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>play-serviceregistry-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.inria.eventcloud</groupId>
+			<artifactId>eventcloud-webservices-api</artifactId>
+			<version>1.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objectweb.proactive</groupId>
+					<artifactId>proactive-programming-bundle</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>eu.play-project</groupId>
+					<artifactId>play-commons-eventformat</artifactId>
+				</exclusion>
+				<!-- Causes conflict on DOM (ElementTraversal)... -->
+				<!-- Dep from fr.inria.eventcloud:eventcloud-translators-wsn -->
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-notification-httpclient</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-cxfutils</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>sonatype-nexus-release</id>
+			<name>sonatype-nexus-release</name>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>sonatype-nexus-snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>play-private.release</id>
+			<url>http://maven.petalslink.com/private-play-release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>play-private.snapshot</id>
+			<url>http://maven.petalslink.com/private-play-snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warName>pubsubbootstrap</warName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>6.1.10</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>8082</port>
+							<maxIdleTime>60000</maxIdleTime>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
