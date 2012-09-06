@@ -26,6 +26,10 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		class="org.ow2.play.governance.storage.MongoSubscriptionRegistry"  init-method="init">
 	</bean>
 	
+	<bean id="bootsubscriptionstorageservice"
+		class="org.ow2.play.governance.storage.MongoBootSubscriptionService" init-method="init">
+	</bean>
+	
 	<bean id="wsnsubscriptionservice"
 		class="org.ow2.play.governance.wsn.SubscriptionServiceClient">
 	</bean>
@@ -38,6 +42,9 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		
 	<jaxws:endpoint id="subscriptionstorage" implementor="#subscriptionstorageservice"
 		address="/SubscriptionStorageService" />
+		
+	<jaxws:endpoint id="bootsubscriptionstorage" implementor="#bootsubscriptionstorageservice"
+		address="/BootSubscriptionStorageService" />
 		
 	<jaxws:endpoint id="subscriptionservice" implementor="#wsnsubscriptionservice"
 		address="/SubscriptionService" />
