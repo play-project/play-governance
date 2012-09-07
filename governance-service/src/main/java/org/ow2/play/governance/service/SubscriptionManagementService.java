@@ -11,6 +11,7 @@ import javax.jws.WebMethod;
 
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SubscriptionManagement;
+import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.SubscriptionService;
 import org.ow2.play.governance.api.bean.Subscription;
 
@@ -26,6 +27,8 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 			.getLogger(SubscriptionManagementService.class.getName());
 
 	private SubscriptionService subscriptionService;
+	
+	private SubscriptionRegistry subscriptionRegistry;
 
 	@Override
 	@WebMethod
@@ -45,6 +48,12 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 			
 			try {
 				s = this.subscriptionService.subscribe(subscription);
+				
+				// persist the subscription in the system...
+				if (subscriptionRegistry != null && s != null) {
+					subscriptionRegistry.addSubscription(s);
+				}
+				
 				if (s != null) {
 					s.setStatus("created");
 					result.add(s);
@@ -85,6 +94,15 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 
 	public SubscriptionService getSubscriptionService() {
 		return this.subscriptionService;
+	}
+	
+	public void setSubscriptionRegistry(
+			SubscriptionRegistry subscriptionRegistry) {
+		this.subscriptionRegistry = subscriptionRegistry;
+	}
+	
+	public SubscriptionRegistry getSubscriptionRegistry() {
+		return subscriptionRegistry;
 	}
 
 }
