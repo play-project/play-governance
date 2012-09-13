@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>fr.inria.eventcloud</groupId>
 			<artifactId>eventcloud-webservices-api</artifactId>
-			<version>1.1.0</version>
+			<version>1.2.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>fr.inria.eventcloud</groupId>
