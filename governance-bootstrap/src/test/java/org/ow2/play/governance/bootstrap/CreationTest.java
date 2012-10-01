@@ -123,6 +123,13 @@ public class CreationTest extends TestCase {
 				// TODO Auto-generated method stub
 
 			}
+			
+			@Override
+			@WebMethod
+			public void clear() throws MetadataException {
+				// TODO Auto-generated method stub
+				
+			}
 
 			@Override
 			@WebMethod

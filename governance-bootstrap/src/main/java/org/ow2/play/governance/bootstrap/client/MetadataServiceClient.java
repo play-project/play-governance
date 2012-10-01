@@ -185,4 +185,10 @@ public class MetadataServiceClient implements MetadataService {
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}
+
+	@Override
+	@WebMethod
+	public void clear() throws MetadataException {
+		getClient().clear();
+	}
 }

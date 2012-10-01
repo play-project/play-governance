@@ -31,14 +31,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
+			<groupId>org.ow2.petals.dsb</groupId>
 			<artifactId>dsb-cxfutils</artifactId>
-			<version>${project.version}</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
+			<groupId>org.ow2.petals.dsb</groupId>
 			<artifactId>dsb-notification-httpclient</artifactId>
-			<version>${project.version}</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.play</groupId>
