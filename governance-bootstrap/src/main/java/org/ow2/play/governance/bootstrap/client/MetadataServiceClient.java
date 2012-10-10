@@ -177,18 +177,36 @@ public class MetadataServiceClient implements MetadataService {
 			throws MetadataException {
 		getClient().removeMetadata(arg0, arg1);
 	}
-
-	/**
-	 * @param registry
-	 *            the registry to set
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#create(org.ow2.play.metadata.api.MetaResource)
 	 */
-	public void setRegistry(Registry registry) {
-		this.registry = registry;
+	@Override
+	@WebMethod
+	public boolean create(MetaResource arg0) throws MetadataException {
+		return getClient().create(arg0);
 	}
 
 	@Override
 	@WebMethod
 	public void clear() throws MetadataException {
 		getClient().clear();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#exists(org.ow2.play.metadata.api.Resource)
+	 */
+	@Override
+	@WebMethod
+	public boolean exists(Resource arg0) throws MetadataException {
+		return getClient().exists(arg0);
+	}
+	
+	/**
+	 * @param registry
+	 *            the registry to set
+	 */
+	public void setRegistry(Registry registry) {
+		this.registry = registry;
 	}
 }

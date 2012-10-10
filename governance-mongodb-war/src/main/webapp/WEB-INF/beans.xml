@@ -13,11 +13,6 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		<property name="url" value="http://localhost:8080/registry/RegistryService"/>
 	</bean>
 
-	<bean id="eventservice"
-		class="org.ow2.play.governance.service.EventGovernanceService">
-		<property name="serviceRegistry" ref="serviceregistry" />
-	</bean>
-
 	<bean id="managementservice"
 		class="org.ow2.play.governance.service.GovernanceManagementService">
 	</bean>
@@ -38,6 +33,13 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		class="org.ow2.play.governance.service.SubscriptionManagementService">
 		<property name="subscriptionService" ref="wsnsubscriptionservice"/>
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice"/>
+	</bean>
+	
+	<bean id="eventservice"
+		class="org.ow2.play.governance.service.EventGovernanceService">
+		<property name="serviceRegistry" ref="serviceregistry" />
+		<property name="subscriptionService" ref="wsnsubscriptionservice" />
+		<property name="subscriptionRegistry" ref="subscriptionstorageservice" />
 	</bean>
 
 	<jaxws:endpoint id="event" implementor="#eventservice"

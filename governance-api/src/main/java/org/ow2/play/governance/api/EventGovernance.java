@@ -36,12 +36,48 @@ public interface EventGovernance {
 			throws GovernanceExeption;
 
 	/**
+	 * Create a topic. This will register it in the governance, deploy it in the
+	 * platform (ie DSB and EC) and create required links.
 	 * 
 	 * @param topic
+	 *            the topic to create
+	 * @return the {@link SubscriptionService} endpoint for the created topic.
+	 *         You can subscribe and unsubscribe from this endpoint.
+	 * @throws GovernanceExeption
+	 *             if something is bad...
+	 */
+	@WebMethod
+	String createTopic(Topic topic) throws GovernanceExeption;
+	
+	/**
+	 * Create a topic used to pusblish to. ie we will send notification to the returned endpoint.
+	 * 
+	 * @param topic the topic to create
+	 * @return the endpoint to send notifications to
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
-	void createTopic(Topic topic) throws GovernanceExeption;
+	String createPublisherTopic(Topic topic) throws GovernanceExeption;
+	
+	/**
+	 * Create a topic used to subscribe to.
+	 * 
+	 * @param topic the topic to create
+	 * @return the endpoint to subscribe to to receive notifications
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	String createSubscriberTopic(Topic topic) throws GovernanceExeption;
+	
+	/**
+	 * Delete a Topic, use me with care...
+	 * 
+	 * @param topic the topic to delete
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	boolean deleteTopic(Topic topic) throws GovernanceExeption;
 
 	/**
 	 * Get all the topics...

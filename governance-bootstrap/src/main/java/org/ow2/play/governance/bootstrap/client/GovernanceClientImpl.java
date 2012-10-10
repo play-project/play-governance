@@ -22,6 +22,7 @@ package org.ow2.play.governance.bootstrap.client;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
@@ -61,7 +62,7 @@ public class GovernanceClientImpl implements GovernanceClient {
 	}
 
 	@Override
-	public void createTopic(Topic topic) throws GovernanceExeption {
+	public String createTopic(Topic topic) throws GovernanceExeption {
 		throw new GovernanceExeption(
 				"This method is not implemented in the client");
 	}
@@ -98,6 +99,24 @@ public class GovernanceClientImpl implements GovernanceClient {
 				"This method is not implemented in the client");
 	}
 
+	@Override
+	public boolean deleteTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption(
+				"This method is not implemented in the client");
+	}
+	
+	@Override
+	public String createPublisherTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption(
+				"This method is not implemented in the client");
+	}
+
+	@Override
+	public String createSubscriberTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption(
+				"This method is not implemented in the client");
+	}
+
 	/**
 	 * @param serviceRegistry
 	 *            the serviceRegistry to set
@@ -105,4 +124,6 @@ public class GovernanceClientImpl implements GovernanceClient {
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
 	}
+
+
 }

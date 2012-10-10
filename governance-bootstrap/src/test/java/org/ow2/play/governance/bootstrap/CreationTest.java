@@ -107,9 +107,27 @@ public class CreationTest extends TestCase {
 			}
 
 			@Override
-			public void createTopic(Topic arg0) throws GovernanceExeption {
-				// TODO Auto-generated method stub
+			public String createTopic(Topic arg0) throws GovernanceExeption {
+				return null;
+			}
+			
+			@Override
+			public boolean deleteTopic(Topic topic) throws GovernanceExeption {
+				return false;
+			}
 
+			@Override
+			@WebMethod
+			public String createPublisherTopic(Topic topic) throws GovernanceExeption {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			@WebMethod
+			public String createSubscriberTopic(Topic topic) throws GovernanceExeption {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		});
 
@@ -189,6 +207,20 @@ public class CreationTest extends TestCase {
 					org.ow2.play.metadata.api.Metadata arg1)
 					throws MetadataException {
 
+			}
+
+			@Override
+			@WebMethod
+			public boolean create(MetaResource arg0) throws MetadataException {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			@WebMethod
+			public boolean exists(Resource arg0) throws MetadataException {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 

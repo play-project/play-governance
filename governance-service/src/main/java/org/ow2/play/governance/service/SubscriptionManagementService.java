@@ -16,7 +16,6 @@ import org.ow2.play.governance.api.SubscriptionService;
 import org.ow2.play.governance.api.bean.Subscription;
 
 /**
- * TODO
  * 
  * @author chamerling
  * 
@@ -30,6 +29,10 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 	
 	private SubscriptionRegistry subscriptionRegistry;
 
+	/**
+	 * Subscribe and save the subscriptions into the subscription registry
+	 * 
+	 */
 	@Override
 	@WebMethod
 	public List<Subscription> subscribe(List<Subscription> subscriptions)

@@ -18,9 +18,23 @@ import org.ow2.play.governance.api.bean.Subscription;
 @WebService
 public interface SubscriptionService {
 
+	/**
+	 * Subscribe to a notification provider.
+	 * 
+	 * @param subscription : subscriber, provider and topic are required.
+	 * @return
+	 * @throws GovernanceExeption
+	 */
 	@WebMethod
 	Subscription subscribe(Subscription subscription) throws GovernanceExeption;
 
+	/**
+	 * Unsubscribe from a notification provider.
+	 * 
+	 * @param subscription: The ID is required.
+	 * @return
+	 * @throws GovernanceExeption
+	 */
 	@WebMethod
 	boolean unsubscribe(Subscription subscription) throws GovernanceExeption;
 }

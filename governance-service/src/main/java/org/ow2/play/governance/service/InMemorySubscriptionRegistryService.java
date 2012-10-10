@@ -36,6 +36,7 @@ import org.ow2.play.governance.api.bean.Subscription;
  * @author chamerling
  * 
  */
+@Deprecated
 public class InMemorySubscriptionRegistryService implements
 		SubscriptionRegistry {
 

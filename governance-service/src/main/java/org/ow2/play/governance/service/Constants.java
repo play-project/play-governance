@@ -33,4 +33,16 @@ public interface Constants {
 	
 	public static String QNAME_LOACALPART_URL = "http://www.play-project.eu/xml/ns/topic/localpart";
 
+	public static String TOPIC = "http://www.play-project.eu/xml/ns/topic";
+
+	public static String TOPIC_CREATED_AT = "http://www.play-project.eu/xml/ns/topic/creation/timestamp";
+
+	public static String TOPIC_CREATED_BY = "http://www.play-project.eu/xml/ns/topic/creation/by";
+
+	public static String TOPIC_MODE = "http://www.play-project.eu/xml/ns/topic/mode";
+
+	public static String TOPIC_MODE_PUBLISHER = "publisher";
+
+	public static String TOPIC_MODE_SUBSCRIBER = "subscriber";
+
 }

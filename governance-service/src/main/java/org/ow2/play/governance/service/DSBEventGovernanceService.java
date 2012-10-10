@@ -32,9 +32,10 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
  * Get the topics from the DSB runtime (WSN API), old way to get. Please check
- * {@link EventGovernanceService}
+ * {@link EventGovernanceService}.
  * 
  * @author chamerling
+ * @deprecated use {@link EventGovernanceService}
  * 
  */
 public class DSBEventGovernanceService implements EventGovernance {
@@ -80,7 +81,31 @@ public class DSBEventGovernanceService implements EventGovernance {
 	 * .governance.api.bean.Topic)
 	 */
 	@Override
-	public void createTopic(Topic topic) throws GovernanceExeption {
+	public String createTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption("Not implemented");
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.governance.api.EventGovernance#createPublisherTopic(org.ow2.play.governance.api.bean.Topic)
+	 */
+	@Override
+	public String createPublisherTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption("Not implemented");
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.governance.api.EventGovernance#createSubscriberTopic(org.ow2.play.governance.api.bean.Topic)
+	 */
+	@Override
+	public String createSubscriberTopic(Topic topic) throws GovernanceExeption {
+		throw new GovernanceExeption("Not implemented");
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.governance.api.EventGovernance#deleteTopic(org.ow2.play.governance.api.bean.Topic)
+	 */
+	@Override
+	public boolean deleteTopic(Topic topic) throws GovernanceExeption {
 		throw new GovernanceExeption("Not implemented");
 	}
 
