@@ -94,7 +94,6 @@ public class EventGovernanceService implements EventGovernance {
 		MetaResource mr = getResourceForTopic(topic);
 		if (mr == null) {
 			mr = Adapter.transform(topic);
-			// TODO : add more metadata
 			mr = createMetaResource(mr);
 		}
 
@@ -105,11 +104,33 @@ public class EventGovernanceService implements EventGovernance {
 		}
 
 		// add the new topic to the DSB and eventcloud...
+		// Do not fail if one operation goes wrong...
+		// TODO : Will be better to have a set of listener for this operation
+		// each one implementing the createTopic(Topic) operation so we can add more at runtime for example.
+		try {
+			this.createDSBTopic(topic);
+		} catch (Exception e) {
+			final String message = "Topic creation failed on DSB '" + topic + "'";
+			if (logger.isLoggable(Level.FINE)) {
+				logger.log(Level.WARNING, message, e);
+			} else {
+				logger.log(Level.WARNING, message);
+			}
+		}
 
-		// get the DSB subscribe endpoint and send it back. This endpoint can be
-		// used directly or in the SubscriptionService
+		try {
+			this.createEventCloud(topic);
+		} catch (Exception e) {
+			final String message = "Topic creation failed on EC '" + topic + "'";
+			if (logger.isLoggable(Level.FINE)) {
+				logger.log(Level.WARNING, message, e);
+			} else {
+				logger.log(Level.WARNING, message);
+			}
+		}
 
-		return "";
+		// at least we can return the endpoints we created...
+		return "FIXME: I just created topic on DSB and new EC instance, that's all...";
 	}
 
 	/*
@@ -123,14 +144,15 @@ public class EventGovernanceService implements EventGovernance {
 	public String createPublisherTopic(Topic topic) throws GovernanceExeption {
 		checkRegistry();
 
+		QName topicName = new QName(topic.getNs(), topic.getName(),
+				topic.getPrefix());
+		String stream = StreamHelper.getStreamName(topicName);
+		
 		// check if the topic already exists in the registry, so we do not
 		// create it
 		MetaResource mr = getResourceForTopic(topic);
 		if (mr == null) {
 			mr = Adapter.transform(topic);
-			mr.getMetadata().add(
-					new Metadata(Constants.TOPIC_CREATED_AT, new Data(
-							Type.LITERAL, "" + System.currentTimeMillis())));
 			mr.getMetadata().add(
 					new Metadata(Constants.TOPIC_MODE, new Data(Type.LITERAL,
 							Constants.TOPIC_MODE_PUBLISHER)));
@@ -145,14 +167,53 @@ public class EventGovernanceService implements EventGovernance {
 		}
 
 		// create the topic on the DSB
+		this.createDSBTopic(topic);
 
 		// create the topic on the event cloud
+		this.createEventCloud(topic);
+		
+		// the EC needs to subscribe to the DSB topic ie get the DSB endpoint to
+		// subscribe, get the EC which can receive such notification type and
+		// send a WSN subscribe to the DSB.
+		
+		List<String> publishURLs = getEventCloudClient().getPublishProxyEndpointUrls(stream);
 
-		// the EC needs to subscribe to the DSB
+		logger.info("Got some URLs back from the EC : " + publishURLs);
 
-		// get the DSB endpoint to notify to
+		String subscriber = (publishURLs != null && publishURLs.size() > 0) ? publishURLs
+				.get(0) : null;
 
-		return null;
+		if (subscriber == null) {
+			final String message = "Can not find any valid EC endpoint for stream "
+					+ stream + " even if we created the EC...";
+			logger.warning(message);
+			throw new GovernanceExeption(message);
+		}
+		
+		Subscription subscription = new Subscription();
+		subscription.setProvider(getEndpoint(org.ow2.play.service.registry.api.Constants.EC_TO_DSB_DSB));
+		subscription.setSubscriber(subscriber);
+		subscription.setTopic(topic);
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Let's subscribe the EC to DSB for stream "
+					+ stream);
+			logger.fine("Input Subscription is " + subscription);
+		}
+
+		Subscription subscribeResult = subscriptionService
+				.subscribe(subscription);
+		
+		logger.fine("EC subscribed to DSB result : " + subscribeResult);
+		
+		// store the subscription
+		if (subscribeResult != null && subscriptionRegistry != null) {
+			subscriptionRegistry.addSubscription(subscription);
+		}
+		
+		// get the DSB endpoint to subscribe to. For now it is unique but we
+		// will have multiple ones when we go distributed...
+		return getDSBNotifyEndpoint();
 	}
 
 	/*
@@ -167,9 +228,8 @@ public class EventGovernanceService implements EventGovernance {
 			throws GovernanceExeption {
 		checkRegistry();
 
-		QName topicName = new QName(topic.getNs(), topic.getName(),
-				topic.getPrefix());
-		String streamName = StreamHelper.getStreamName(topicName);
+		String streamName = StreamHelper.getStreamName(new QName(topic.getNs(), topic.getName(),
+				topic.getPrefix()));
 
 		// check if the topic already exists in the registry, so we do not
 		// create it again
@@ -177,21 +237,18 @@ public class EventGovernanceService implements EventGovernance {
 		if (mr == null) {
 			mr = Adapter.transform(topic);
 			mr.getMetadata().add(
-					new Metadata(Constants.TOPIC_CREATED_AT, new Data(
-							Type.LITERAL, "" + System.currentTimeMillis())));
-			mr.getMetadata().add(
 					new Metadata(Constants.TOPIC_MODE, new Data(Type.LITERAL,
 							Constants.TOPIC_MODE_SUBSCRIBER)));
 
 			// TODO : Fix constants
 			mr.getMetadata().add(
 					new Metadata(
-							"http://www.play-project.eu/xml/ns/complexEvents",
-							new Data(Type.LITERAL, "true")));
+							org.ow2.play.metadata.api.Constants.COMPLEX_EVENT,
+							new Data(Type.LITERAL, Boolean.toString(true))));
 			mr.getMetadata()
 					.add(new Metadata(
-							"http://www.play-project.eu/xml/ns/dsbneedstosubscribe",
-							new Data(Type.LITERAL, "true")));
+							org.ow2.play.metadata.api.Constants.DSB_NEEDS_TO_SUBSCRIBE,
+							new Data(Type.LITERAL, Boolean.toString(true))));
 
 			mr = createMetaResource(mr);
 		}
@@ -265,10 +322,14 @@ public class EventGovernanceService implements EventGovernance {
 				logger.fine("Subscription is " + subscription);
 			}
 
+			// TODO : get the subscription service for EC and not a generic one
+			// here...
 			Subscription subscribeResult = subscriptionService
 					.subscribe(subscription);
 			
-			logger.fine("DSB subscribed to EC : " + subscribeResult);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("DSB subscribed to EC : " + subscribeResult);
+			}
 			
 			// store the subscription
 			if (subscribeResult != null && subscriptionRegistry != null) {
@@ -306,20 +367,7 @@ public class EventGovernanceService implements EventGovernance {
 		checkRegistry();
 
 		List<Topic> result = new ArrayList<Topic>();
-
-		String endpoint = null;
-		try {
-			endpoint = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.METADATA);
-		} catch (RegistryException e1) {
-			e1.printStackTrace();
-			throw new GovernanceExeption(e1);
-		}
-
-		if (endpoint == null) {
-			throw new GovernanceExeption(
-					"Can not get the metadata provider endpoint from the service registry");
-		}
+		String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
 
 		logger.info("Getting topics from " + endpoint);
 
@@ -333,9 +381,12 @@ public class EventGovernanceService implements EventGovernance {
 			throw new GovernanceExeption(e);
 		}
 
+		// TODO/FIXME/!!! : Do not get all the resource but only the topic ones!!!
 		if (resources != null) {
 			for (MetaResource r : resources) {
-				logger.info("Resource : " + r.getResource());
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Resource : " + r.getResource());
+				}
 				// TODO : Get the prefix from the metaresources, for now we only
 				// get the topic from the resource name where the name is
 				// 'stream'
@@ -358,6 +409,8 @@ public class EventGovernanceService implements EventGovernance {
 					topic.setNs(ns);
 
 					Metadata md = null;
+					
+					// FIXME : We have it locally, do not call the meta service again!
 					try {
 						md = client.getMetadataValue(r.getResource(),
 								Constants.QNAME_PREFIX_URL);
@@ -481,23 +534,10 @@ public class EventGovernanceService implements EventGovernance {
 	 */
 	protected MetaResource createMetaResource(MetaResource metaresource)
 			throws GovernanceExeption {
-		String endpoint = null;
-
-		// register the resource in the platform
-		try {
-			endpoint = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.METADATA);
-		} catch (RegistryException e1) {
-			throw new GovernanceExeption(e1);
-		}
-
-		if (endpoint == null) {
-			throw new GovernanceExeption(
-					"Can not get the metadata provider endpoint from the service registry");
-		}
+		String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
 
 		MetadataService client = getMetadataClient(endpoint);
-		boolean created;
+		boolean created = false;
 		try {
 			created = client.create(metaresource);
 		} catch (MetadataException e) {
@@ -517,22 +557,30 @@ public class EventGovernanceService implements EventGovernance {
 			throw new GovernanceExeption("Can not get the service regsitry");
 		}
 	}
-
-	protected TopicAware getDSBTopicClient() throws GovernanceExeption {
+	
+	protected String getEndpoint(String id) throws GovernanceExeption {
 		String url = null;
 		try {
 			url = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.DSB_BUSINESS_TOPIC_MANAGEMENT);
+					.get(id);
 		} catch (RegistryException e) {
 			throw new GovernanceExeption(e);
 		}
+		
 		if (url == null) {
 			throw new GovernanceExeption(
 					"Can not find the service associated to "
-							+ org.ow2.play.service.registry.api.Constants.DSB_BUSINESS_TOPIC_MANAGEMENT);
+							+ id);
 
 		}
-		return CXFHelper.getClientFromFinalURL(url, TopicAware.class);
+		return url;
+	}
+
+	protected TopicAware getDSBTopicClient() throws GovernanceExeption {
+		return CXFHelper
+				.getClientFromFinalURL(
+						getEndpoint(org.ow2.play.service.registry.api.Constants.DSB_BUSINESS_TOPIC_MANAGEMENT),
+						TopicAware.class);
 	}
 
 	/**
@@ -542,56 +590,99 @@ public class EventGovernanceService implements EventGovernance {
 	 * @throws GovernanceExeption
 	 */
 	protected String getDSBSubscribeEndpoint() throws GovernanceExeption {
-		String url = null;
-		try {
-			url = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.DSB_PRODUCER);
-		} catch (RegistryException e) {
-			throw new GovernanceExeption(e);
-		}
-		if (url == null) {
-			throw new GovernanceExeption(
-					"Can not find the service associated to "
-							+ org.ow2.play.service.registry.api.Constants.DSB_PRODUCER);
-
-		}
-		return url;
+		return getEndpoint(org.ow2.play.service.registry.api.Constants.DSB_PRODUCER);
+	}
+	
+	protected String getDSBNotifyEndpoint() throws GovernanceExeption {
+		return getEndpoint(org.ow2.play.service.registry.api.Constants.DSB_CONSUMER);
 	}
 
 	protected String getDSBSubscribeToECEndpoint() throws GovernanceExeption {
-		String url = null;
-		try {
-			url = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.DSB_TO_EC_EC_SUBSCRIBER);
-		} catch (RegistryException e) {
-			throw new GovernanceExeption(e);
-		}
-		if (url == null) {
-			throw new GovernanceExeption(
-					"Can not find the service associated to "
-							+ org.ow2.play.service.registry.api.Constants.DSB_TO_EC_EC_SUBSCRIBER);
-
-		}
-		return url;
+		return getEndpoint(org.ow2.play.service.registry.api.Constants.DSB_CONSUMER);
 	}
 
+	/**
+	 * FIXME : DSB_TO_EC_EC or EC_TO_DSB, same endpoint in the current case...
+	 * 
+	 * @return
+	 * @throws GovernanceExeption
+	 */
 	protected EventCloudManagementServiceApi getEventCloudClient()
 			throws GovernanceExeption {
-		String url = null;
-		try {
-			url = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.DSB_TO_EC_EC);
-		} catch (RegistryException e) {
-			throw new GovernanceExeption(e);
+		return CXFHelper
+				.getClientFromFinalURL(
+						getEndpoint(org.ow2.play.service.registry.api.Constants.DSB_TO_EC_EC),
+						EventCloudManagementServiceApi.class);
+	}
+	
+	/**
+	 * Create a DSB topic if it does not exists. Note that this operation is not
+	 * synchronized and that the topic can be added by someone else. But it
+	 * should not happen...
+	 * 
+	 * @param topic
+	 * @throws GovernanceExeption
+	 */
+	protected void createDSBTopic(final Topic topic) throws GovernanceExeption {
+		TopicAware dsbClient = getDSBTopicClient();
+		if (Collections2.filter(dsbClient.get(), new Predicate<Topic>() {
+			public boolean apply(Topic dsbTopic) {
+				logger.fine("Checking topic from DSB " + dsbTopic);
+				return topic.equals(dsbTopic);
+			}
+		}).size() > 0) {
+			// already have the topic in the DSB
+			logger.info("The topic is already available in the DSB, do nto add it "
+					+ topic);
+		} else {
+			// create the topic in the DSB
+			logger.info("Adding the topic in the DSB " + topic);
+			boolean added = dsbClient.add(topic);
+			logger.info("DSB topic creation return result :" + added + " for topic " + topic);
+			if (added) {
+				//
+			}
 		}
-		if (url == null) {
-			throw new GovernanceExeption(
-					"Can not find the service associated to "
-							+ org.ow2.play.service.registry.api.Constants.DSB_TO_EC_EC);
+	}
+	
+	/**
+	 * Create a new event cloud if it does not exists
+	 * 
+	 * @param topic
+	 * @throws GovernanceExeption 
+	 */
+	protected void createEventCloud(Topic topic) throws GovernanceExeption {
+		String streamName = StreamHelper.getStreamName(new QName(topic.getNs(), topic.getName(),
+				topic.getPrefix()));
 
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Creating the event cloud for stream " + streamName);
 		}
-		return CXFHelper.getClientFromFinalURL(url,
-				EventCloudManagementServiceApi.class);
+		
+		// create the topic on the event cloud ie create the event cloud...
+		EventCloudManagementServiceApi client = getEventCloudClient();
+
+		boolean created = client.createEventCloud(streamName);
+
+		// The create operation returns true if the eventcloud has been created,
+		// if false it means that it is already created and that we do not need
+		// to do it anymore...
+		if (created) {
+			// creates a default proxy for each interface: pub/sub and put/get
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Creating proxy for the event cloud");
+			}
+
+			client.createSubscribeProxy(streamName);
+			client.createPublishProxy(streamName);
+			client.createPutGetProxy(streamName);
+
+		} else {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("EventCloud has been already created for stream "
+						+ streamName);
+			}
+		}
 	}
 	
 	/**

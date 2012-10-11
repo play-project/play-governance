@@ -37,7 +37,7 @@ public interface EventGovernance {
 
 	/**
 	 * Create a topic. This will register it in the governance, deploy it in the
-	 * platform (ie DSB and EC) and create required links.
+	 * platform (ie topic in DSB and new EC instance)
 	 * 
 	 * @param topic
 	 *            the topic to create
@@ -50,9 +50,13 @@ public interface EventGovernance {
 	String createTopic(Topic topic) throws GovernanceExeption;
 	
 	/**
-	 * Create a topic used to pusblish to. ie we will send notification to the returned endpoint.
+	 * Create a topic used to pusblish to. ie we will send notification to the
+	 * returned endpoint. In the current version, it creates a DSB topic, an
+	 * Event Cloud and then the EC subscribes to the DSB topic by giving where
+	 * it want to receive messages published to the DSB topic.
 	 * 
-	 * @param topic the topic to create
+	 * @param topic
+	 *            the topic to create
 	 * @return the endpoint to send notifications to
 	 * @throws GovernanceExeption
 	 */
@@ -60,9 +64,12 @@ public interface EventGovernance {
 	String createPublisherTopic(Topic topic) throws GovernanceExeption;
 	
 	/**
-	 * Create a topic used to subscribe to.
+	 * Create a topic used to subscribe to. In the current implementation, it
+	 * creates a DSB topic, an Event Cloud and the DSB subscribes to the Event
+	 * Cloud.
 	 * 
-	 * @param topic the topic to create
+	 * @param topic
+	 *            the topic to create
 	 * @return the endpoint to subscribe to to receive notifications
 	 * @throws GovernanceExeption
 	 */
