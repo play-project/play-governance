@@ -545,14 +545,14 @@ public class EventGovernanceService implements EventGovernance {
 		String url = null;
 		try {
 			url = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.DSB_CONSUMER);
+					.get(org.ow2.play.service.registry.api.Constants.DSB_PRODUCER);
 		} catch (RegistryException e) {
 			throw new GovernanceExeption(e);
 		}
 		if (url == null) {
 			throw new GovernanceExeption(
 					"Can not find the service associated to "
-							+ org.ow2.play.service.registry.api.Constants.DSB_CONSUMER);
+							+ org.ow2.play.service.registry.api.Constants.DSB_PRODUCER);
 
 		}
 		return url;
