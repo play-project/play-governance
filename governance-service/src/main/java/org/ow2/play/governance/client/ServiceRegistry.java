@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.service.registry.api.Entry;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.cxf.CXFHelper;
@@ -130,6 +131,15 @@ public class ServiceRegistry implements Registry {
 	public void setUrl(String url) {
 		this.url = url;
 		this.client = null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ow2.play.service.registry.api.Registry#entries()
+	 */
+	@Override
+	@WebMethod
+	public List<Entry> entries() throws RegistryException {
+		return getClient().entries();
 	}
 
 }
