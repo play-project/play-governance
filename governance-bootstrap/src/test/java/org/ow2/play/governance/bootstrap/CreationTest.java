@@ -34,11 +34,11 @@ import org.junit.Test;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.bootstrap.DSBSubscribesToECBootstrapServiceImpl;
 import org.ow2.play.governance.bootstrap.api.GovernanceClient;
 import org.ow2.play.governance.service.InMemorySubscriptionRegistryService;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
+import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
@@ -163,6 +163,15 @@ public class CreationTest extends TestCase {
 					throws MetadataException {
 				// TODO Auto-generated method stub
 				return null;
+			}
+			
+			/* (non-Javadoc)
+			 * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
+			 */
+			@Override
+			public void setMetadata(Resource arg0, Metadata arg1)
+					throws MetadataException {
+				// TODO Auto-generated method stub
 			}
 
 			@Override

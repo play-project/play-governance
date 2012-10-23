@@ -202,6 +202,15 @@ public class MetadataServiceClient implements MetadataService {
 		return getClient().exists(arg0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
+	 */
+	@Override
+	public void setMetadata(Resource arg0, Metadata arg1)
+			throws MetadataException {
+		getClient().setMetadata(arg0, arg1);
+	}
+	
 	/**
 	 * @param registry
 	 *            the registry to set

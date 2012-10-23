@@ -19,18 +19,21 @@
  */
 package org.ow2.play.governance.service;
 
+import org.ow2.play.metadata.api.Data;
+import org.ow2.play.metadata.api.Type;
+
 /**
  * @author chamerling
- *
+ * 
  */
 public interface Constants {
-	
+
 	public static String STREAM_RESOURCE_NAME = "stream";
 
 	public static String QNAME_PREFIX_URL = "http://www.play-project.eu/xml/ns/topic/prefix";
-	
+
 	public static String QNAME_NS_URL = "http://www.play-project.eu/xml/ns/topic/ns";
-	
+
 	public static String QNAME_LOACALPART_URL = "http://www.play-project.eu/xml/ns/topic/localpart";
 
 	public static String TOPIC = "http://www.play-project.eu/xml/ns/topic";
@@ -41,8 +44,14 @@ public interface Constants {
 
 	public static String TOPIC_MODE = "http://www.play-project.eu/xml/ns/topic/mode";
 
+	public static String TOPIC_ACTIVE = "http://www.play-project.eu/xml/ns/topic/active";
+
 	public static String TOPIC_MODE_PUBLISHER = "publisher";
 
 	public static String TOPIC_MODE_SUBSCRIBER = "subscriber";
+
+	public static Data BOOLEAN_TRUE = new Data(Type.LITERAL, "true");
+	
+	public static Data BOOLEAN_FALSE = new Data(Type.LITERAL, "false");
 
 }

@@ -41,6 +41,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		<property name="subscriptionService" ref="wsnsubscriptionservice" />
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice" />
 	</bean>
+	
+	<bean id="topicregistryservice"
+		class="org.ow2.play.governance.service.TopicRegistryService">
+		<property name="serviceRegistry" ref="serviceregistry" />
+	</bean>
 
 	<jaxws:endpoint id="event" implementor="#eventservice"
 		address="/EventGovernance" />
@@ -59,5 +64,8 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 	<jaxws:endpoint id="subscriptionmanagement" implementor="#subscriptionmanagementservice"
 		address="/SubscriptionManagementService" />
+
+	<jaxws:endpoint id="topicregistry" implementor="#topicregistryservice"
+		address="/TopicRegistryService" />
 		
 </beans>
