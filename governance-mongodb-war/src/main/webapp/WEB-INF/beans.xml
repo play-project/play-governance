@@ -46,7 +46,28 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		class="org.ow2.play.governance.service.TopicRegistryService">
 		<property name="serviceRegistry" ref="serviceregistry" />
 	</bean>
-
+	
+	<!-- DCEP Governance -->
+	<bean id="simplepatternservice" class="org.ow2.play.governance.dcep.SimplePatternServiceImpl">
+		<property name="registry" ref="serviceregistry" />
+	</bean>
+	
+	<bean id="patternregistry" class="org.ow2.play.governance.storage.MongoPatternRegistry"
+		init-method="init">
+	</bean>
+	
+	<bean id="complexpatternservice" class="org.ow2.play.governance.dcep.ComplexPatternServiceImpl">
+		<property name="simplePatternService" ref="simplepatternservice" />
+		<property name="eventGovernance" ref="eventservice" />
+		<property name="patternRegistry" ref="patternregistry" />
+	</bean>
+	
+	<bean id="patternservice" class="org.ow2.play.governance.dcep.PatternServiceImpl">
+		<property name="complexPatternService" ref="complexpatternservice" />
+		<property name="simplePatternService" ref="simplepatternservice" />
+	</bean>
+		
+	<!-- JAXWS -->
 	<jaxws:endpoint id="event" implementor="#eventservice"
 		address="/EventGovernance" />
 
@@ -68,4 +89,15 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<jaxws:endpoint id="topicregistry" implementor="#topicregistryservice"
 		address="/TopicRegistryService" />
 		
+	<jaxws:endpoint id="patternregistryservice" implementor="#patternregistry"
+		address="/PatternRegistryService" />
+
+	<jaxws:endpoint id="simplepatternserviceservice" implementor="#simplepatternservice"
+		address="/SimplePatternService" />
+		
+	<jaxws:endpoint id="complexpatternserviceservice" implementor="#complexpatternservice"
+		address="/ComplexPatternService" />
+		
+	<jaxws:endpoint id="patternserviceservice" implementor="#patternservice"
+		address="/PatternService" />
 </beans>

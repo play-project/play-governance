@@ -19,8 +19,7 @@
  */
 package org.ow2.play.governance.storage;
 
-import java.util.logging.Level;
-
+import org.ow2.play.governance.api.bean.Pattern;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
 
@@ -33,16 +32,19 @@ import com.mongodb.DBObject;
  */
 public class Helper {
 
-	private static final String ID_KEY = "id";
-	private static final String SUBSCRIBER_KEY = "subscriber";
-	private static final String PRODUCER_KEY = "producer";
-	private static final String TOPIC_KEY = "topic";
-	private static final String DATE_KEY = "date";
-	private static final String STATUS_KEY = "status";
+	public static final String ID_KEY = "id";
+	public static final String SUBSCRIBER_KEY = "subscriber";
+	public static final String PRODUCER_KEY = "producer";
+	public static final String TOPIC_KEY = "topic";
+	public static final String DATE_KEY = "date";
+	public static final String STATUS_KEY = "status";
 
-	private static final String TOPIC_NAME_KEY = "name";
-	private static final String TOPIC_NS_KEY = "ns";
-	private static final String TOPIC_PREFIX_KEY = "prefix";
+	public static final String TOPIC_NAME_KEY = "name";
+	public static final String TOPIC_NS_KEY = "ns";
+	public static final String TOPIC_PREFIX_KEY = "prefix";
+
+	public static final String CONTENT_KEY = "content";
+	public static final String NAME_KEY = "name";
 
 	private Helper() {
 	}
@@ -103,4 +105,35 @@ public class Helper {
 		return s;
 	}
 
+	protected static final DBObject toDBO(Pattern pattern) {
+		if (pattern == null) {
+			return null;
+		}
+
+		DBObject dbo = new BasicDBObject();
+		dbo.put(ID_KEY, pattern.id);
+		dbo.put(NAME_KEY, pattern.name);
+		dbo.put(CONTENT_KEY, pattern.content);
+		dbo.put(DATE_KEY,
+				pattern.recordDate == null ? "" + System.currentTimeMillis()
+						: pattern.recordDate);
+
+		return dbo;
+	}
+
+	protected static final Pattern toPattern(DBObject dbo) {
+		if (dbo == null) {
+			return null;
+		}
+
+		Pattern p = new Pattern();
+		p.id = dbo.get(ID_KEY) == null ? "" : dbo.get(ID_KEY).toString();
+		p.content = dbo.get(CONTENT_KEY) == null ? "" : dbo.get(CONTENT_KEY)
+				.toString();
+		p.name = dbo.get(NAME_KEY) == null ? "" : dbo.get(NAME_KEY).toString();
+		p.recordDate = dbo.get(DATE_KEY) == null ? "" : dbo.get(DATE_KEY)
+				.toString();
+
+		return p;
+	}
 }

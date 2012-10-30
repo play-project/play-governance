@@ -26,6 +26,7 @@
     <!--<module>governance-monitoring</module>-->
     <!--<module>governance-bsm</module>-->
     <!--<module>governance-monitoring-api</module>-->
+    <module>governance-dcep</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
