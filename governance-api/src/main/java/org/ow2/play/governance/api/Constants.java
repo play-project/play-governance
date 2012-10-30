@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.service;
+package org.ow2.play.governance.api;
 
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.Type;
@@ -53,5 +53,7 @@ public interface Constants {
 	public static Data BOOLEAN_TRUE = new Data(Type.LITERAL, "true");
 	
 	public static Data BOOLEAN_FALSE = new Data(Type.LITERAL, "false");
+	
+	public static final String DEFAULT_PREFIX = "s";
 
 }

@@ -21,8 +21,8 @@ package org.ow2.play.governance;
 
 import java.util.List;
 
+import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.service.Constants;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;

@@ -21,6 +21,7 @@ package org.ow2.play.governance.dcep;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
@@ -28,6 +29,9 @@ import javax.jws.WebMethod;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SimplePatternService;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.metadata.api.Metadata;
+import org.ow2.play.metadata.api.Resource;
+import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Constants;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
@@ -93,7 +97,8 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	 */
 	@Override
 	@WebMethod
-	public List<Topic> getOutputTopics(String pattern) throws GovernanceExeption {
+	public List<Topic> getOutputTopics(String pattern)
+			throws GovernanceExeption {
 		List<Topic> result = Lists.newArrayList();
 		QueryDispatchApi dispatchClient = getQueryDispatchApiClient();
 		if (dispatchClient != null) {
@@ -172,16 +177,54 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 			return null;
 		}
 
-		Topic result = new Topic();
-		// TODO
+		Topic topic = new Topic();
+		// TODO get the topic from the registry to retrieve its NS, if new, use
+		// the default NS
+		// TODO : Constant from GOV
+		// Constants.STREAM_RESOURCE_NAME
+		Resource r = new Resource(org.ow2.play.governance.api.Constants.STREAM_RESOURCE_NAME, stream);
 
-		return result;
+		String ns = r.getUrl().substring(0,
+				r.getUrl().lastIndexOf('/') + 1);
+		String name = r.getUrl().substring(
+				r.getUrl().lastIndexOf('/') + 1);
+		
+		topic.setName(name);
+		topic.setNs(ns);
+		
+		// get the NS from the metadataservice, only useful if the topic already exists
+		try {
+			MetadataService client = getMetadataClient(registry.get(Constants.METADATA));
+			Metadata md = client.getMetadataValue(r, org.ow2.play.governance.api.Constants.QNAME_PREFIX_URL);
+			if (md != null && md.getData() != null
+					&& md.getData().size() == 1
+					&& md.getData().get(0).getValue() != null) {
+				topic.setPrefix(md.getData().get(0).getValue());
+			} else {
+				topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
+			}
+		} catch (Exception e) {
+			final String msg = "Can not get registry endpoint";
+			if (logger.isLoggable(Level.FINE)) {
+				logger.log(Level.FINE, msg, e);
+			} else {
+				logger.warning(msg);
+			}
+			topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
+		}
+
+
+		return topic;
 	}
 
 	protected String generateID() {
 		return "http://play.ow2.org/pattern/" + UUID.randomUUID().toString();
 	}
 	
+	protected MetadataService getMetadataClient(String endpoint) {
+		return CXFHelper.getClientFromFinalURL(endpoint, MetadataService.class);
+	}
+
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}

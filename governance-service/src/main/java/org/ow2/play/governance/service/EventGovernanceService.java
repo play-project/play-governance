@@ -15,6 +15,7 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.ow2.play.governance.Adapter;
 import org.ow2.play.governance.Helper;
+import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SubscriptionRegistry;
@@ -422,7 +423,7 @@ public class EventGovernanceService implements EventGovernance {
 							&& md.getData().get(0).getValue() != null) {
 						topic.setPrefix(md.getData().get(0).getValue());
 					} else {
-						topic.setPrefix("s");
+						topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
 					}
 					result.add(topic);
 				} else {

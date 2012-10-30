@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.ow2.play.governance.Adapter;
 import org.ow2.play.governance.Helper;
+import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.TopicRegistry;
 import org.ow2.play.governance.api.bean.Topic;

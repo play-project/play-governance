@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.service.Constants;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.Resource;
