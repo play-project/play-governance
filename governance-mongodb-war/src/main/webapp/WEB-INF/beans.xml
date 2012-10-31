@@ -66,6 +66,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		<property name="complexPatternService" ref="complexpatternservice" />
 		<property name="simplePatternService" ref="simplepatternservice" />
 	</bean>
+	
+	<!-- EC Wrapper -->
+	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudManagementServiceImpl">
+		<property name="registry" ref="serviceregistry" />
+	</bean>
 		
 	<!-- JAXWS -->
 	<jaxws:endpoint id="event" implementor="#eventservice"
@@ -100,4 +105,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		
 	<jaxws:endpoint id="patternserviceservice" implementor="#patternservice"
 		address="/PatternService" />
+		
+	<jaxws:endpoint id="ecserviceservice" implementor="#ecservice"
+		address="/EventCloudService" />
 </beans>
