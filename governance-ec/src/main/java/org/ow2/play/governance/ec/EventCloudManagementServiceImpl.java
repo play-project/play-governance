@@ -204,9 +204,9 @@ public class EventCloudManagementServiceImpl implements
 	 */
 	@Override
 	public List<String> getPublishProxyEndpointUrls(
-			@WebParam(name = "streamUrl") String streamUrl) {
+			@WebParam(name = "streamUrl") String streamUrl) throws GovernanceExeption {
 		logger.info("Create Event Cloud " + streamUrl);
-		return null;
+		return getCloudManagementServiceApi().getPublishProxyEndpointUrls(streamUrl);
 	}
 
 	/*
@@ -217,9 +217,9 @@ public class EventCloudManagementServiceImpl implements
 	 */
 	@Override
 	public List<String> getSubscribeProxyEndpointUrls(
-			@WebParam(name = "streamUrl") String streamUrl) {
+			@WebParam(name = "streamUrl") String streamUrl) throws GovernanceExeption {
 		logger.info("Create Event Cloud " + streamUrl);
-		return null;
+		return getCloudManagementServiceApi().getSubscribeProxyEndpointUrls(streamUrl);
 	}
 
 	/*
@@ -230,9 +230,9 @@ public class EventCloudManagementServiceImpl implements
 	 */
 	@Override
 	public List<String> getPutgetProxyEndpointUrls(
-			@WebParam(name = "streamUrl") String streamUrl) {
+			@WebParam(name = "streamUrl") String streamUrl) throws GovernanceExeption {
 		logger.info("Create Event Cloud " + streamUrl);
-		return null;
+		return getCloudManagementServiceApi().getPutgetProxyEndpointUrls(streamUrl);
 	}
 
 	public EventCloudManagementServiceApi getCloudManagementServiceApi()
