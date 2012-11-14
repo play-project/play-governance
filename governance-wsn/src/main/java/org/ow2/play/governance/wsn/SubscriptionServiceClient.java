@@ -14,6 +14,7 @@ import org.ow2.play.governance.api.SubscriptionService;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
 import org.petalslink.dsb.notification.client.http.simple.HTTPProducerClient;
+import org.petalslink.dsb.notification.client.http.simple.HTTPSubscriptionManagerClient;
 import org.petalslink.dsb.notification.commons.NotificationException;
 
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
@@ -58,20 +59,24 @@ public class SubscriptionServiceClient implements SubscriptionService {
 		logger.info("Subscribe to topic '" + subscription.getTopic()
 				+ "' on producer '" + subscription.getProvider()
 				+ "' for subscriber '" + subscription.getSubscriber() + "'");
-		
-		if (subscription.getProvider() == null || subscription.getSubscriber() == null) {
-			throw new GovernanceExeption("Can not subscribe with null provider or subcriber");
+
+		if (subscription.getProvider() == null
+				|| subscription.getSubscriber() == null) {
+			throw new GovernanceExeption(
+					"Can not subscribe with null provider or subcriber");
 		}
-		
+
 		if (subscription.getTopic() == null) {
 			throw new GovernanceExeption("Can not subscribe to null topic");
 		}
-		
-		QName topic = new QName(subscription.getTopic().getNs(), subscription.getTopic().getName(), subscription.getTopic().getPrefix());
 
-		HTTPProducerClient client = new HTTPProducerClient(subscription.getProvider());
+		QName topic = new QName(subscription.getTopic().getNs(), subscription
+				.getTopic().getName(), subscription.getTopic().getPrefix());
+
+		HTTPProducerClient client = new HTTPProducerClient(
+				subscription.getProvider());
 		try {
-			
+
 			String id = client.subscribe(topic, subscription.getSubscriber());
 			logger.info("Subscribed to topic " + topic + " and ID is " + id);
 
@@ -88,7 +93,7 @@ public class SubscriptionServiceClient implements SubscriptionService {
 			result.setStatus("active");
 
 			// FIXME : Need to push suscription to the registry
-			//this.subscriptionRegistry.addSubscription(subscription);
+			// this.subscriptionRegistry.addSubscription(subscription);
 
 		} catch (NotificationException e) {
 			logger.log(Level.SEVERE, "Problem while subscribing", e);
@@ -105,7 +110,26 @@ public class SubscriptionServiceClient implements SubscriptionService {
 			throw new GovernanceExeption(
 					"Subscription information can not be null");
 		}
-		throw new GovernanceExeption("unsubscribe :: Not implemented");
-	}
 
+		boolean result = false;
+
+		logger.info("Unsubscribe from producer '" + subscription.getProvider()
+				+ "' and UUID " + subscription.getId());
+
+		if (subscription.getProvider() == null) {
+			throw new GovernanceExeption(
+					"Can not unsubscribe from null provider");
+		}
+
+		String endpoint = subscription.getProvider();
+		HTTPSubscriptionManagerClient client = new HTTPSubscriptionManagerClient(
+				endpoint);
+		try {
+			result = client.unsubscribe(subscription.getId());
+		} catch (NotificationException e) {
+			logger.log(Level.SEVERE, "Problem while unsubscribing", e);
+			throw new GovernanceExeption(e);
+		}
+		return result;
+	}
 }
