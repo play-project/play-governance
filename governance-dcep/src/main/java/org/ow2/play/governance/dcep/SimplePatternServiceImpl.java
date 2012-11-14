@@ -19,7 +19,9 @@
  */
 package org.ow2.play.governance.dcep;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +30,7 @@ import javax.jws.WebMethod;
 
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SimplePatternService;
+import org.ow2.play.governance.api.bean.Pattern;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.Resource;
@@ -156,6 +159,39 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 			throw new GovernanceExeption("Can not undeploy pattern");
 		}
 		return "";
+	}
+	
+	@Override
+	@WebMethod
+	public List<Pattern> getPatterns() throws GovernanceExeption {
+		List<Pattern> result = new ArrayList<Pattern>();
+		
+		Map<String, String> patterns = getQueryDispatchApiClient().getRegisteredQueries();
+		if (patterns == null) {
+			return result;	
+		}
+		
+		for (String id : patterns.keySet()) {
+			Pattern pattern = new Pattern();
+			pattern.id = id;
+			pattern.content = patterns.get(id);
+			result.add(pattern);
+		}
+		
+		return result;
+	}
+
+	@Override
+	@WebMethod
+	public Pattern getPattern(String id) throws GovernanceExeption {
+		String pattern = getQueryDispatchApiClient().getRegisteredQuery(id);
+		Pattern result = null;
+		if (pattern != null) {
+			result = new Pattern();
+			result.content = pattern;
+			result.id = id;
+		}
+		return result;
 	}
 
 	private QueryDispatchApi getQueryDispatchApiClient()

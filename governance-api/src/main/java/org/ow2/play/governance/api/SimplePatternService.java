@@ -24,11 +24,14 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.ow2.play.governance.api.bean.Pattern;
 import org.ow2.play.governance.api.bean.Topic;
 
 /**
  * Simple pattern service just integrate the DCEP stuff but does not create the
  * topics and event clouds.
+ * 
+ * TODO : Update APIs for use {@link Pattern}
  * 
  * @author chamerling
  * 
@@ -76,5 +79,24 @@ public interface SimplePatternService {
 	 */
 	@WebMethod
 	String undeploy(String id) throws GovernanceExeption;
+	
+	/**
+	 * Get deployed patterns from the DCEP runtime.
+	 * 
+	 * @return
+	 * @throws GovernanceExeption 
+	 */
+	@WebMethod
+	List<Pattern> getPatterns() throws GovernanceExeption;
+	
+	/**
+	 * Get a pattern from its ID
+	 * 
+	 * @param id
+	 * @return the pattern or null if not found
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	Pattern getPattern(String id) throws GovernanceExeption;
 
 }

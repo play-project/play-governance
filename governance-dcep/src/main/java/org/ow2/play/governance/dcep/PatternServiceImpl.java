@@ -27,6 +27,7 @@ import javax.jws.WebMethod;
 import org.ow2.play.governance.api.ComplexPatternService;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SimplePatternService;
+import org.ow2.play.governance.api.bean.Pattern;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.metadata.api.Metadata;
 
@@ -105,7 +106,19 @@ public class PatternServiceImpl implements SimplePatternService {
 				.getData().get(0).getValue() : "";
 		return result;
 	}
+	
+	@Override
+	@WebMethod
+	public List<Pattern> getPatterns() throws GovernanceExeption{
+		throw new GovernanceExeption("Not implemented");
+	}
 
+	@Override
+	@WebMethod
+	public Pattern getPattern(String id) throws GovernanceExeption{
+		throw new GovernanceExeption("Not implemented");
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
