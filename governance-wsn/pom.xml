@@ -22,11 +22,13 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+	
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.ow2.petals.dsb</groupId>
 			<artifactId>dsb-notification-httpclient</artifactId>

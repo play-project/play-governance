@@ -32,9 +32,10 @@ public interface SubscriptionService {
 	 * Unsubscribe from a notification provider.
 	 * 
 	 * @param subscription: The ID is required.
+	 * @param subscriptionManagement : where to send the unsubscribe
 	 * @return
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
-	boolean unsubscribe(Subscription subscription) throws GovernanceExeption;
+	boolean unsubscribe(Subscription subscription, String subscriptionManagementEndpoint) throws GovernanceExeption;
 }

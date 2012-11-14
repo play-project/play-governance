@@ -14,8 +14,13 @@ import org.ow2.play.governance.api.SubscriptionManagement;
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.SubscriptionService;
 import org.ow2.play.governance.api.bean.Subscription;
+import org.ow2.play.service.registry.api.Constants;
+import org.ow2.play.service.registry.api.Registry;
+import org.ow2.play.service.registry.api.RegistryException;
 
 /**
+ * The Subscription Management Service only handles subscriptions for DSB.
+ * EC must be another service since endpoints may vary.
  * 
  * @author chamerling
  * 
@@ -28,6 +33,8 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 	private SubscriptionService subscriptionService;
 	
 	private SubscriptionRegistry subscriptionRegistry;
+	
+	private Registry serviceRegistry;
 
 	/**
 	 * Subscribe and save the subscriptions into the subscription registry
@@ -77,6 +84,17 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 		if (subscriptions == null) {
 			throw new GovernanceExeption("Can not unsubscribe null subscriptions");
 		}
+		
+		// FIXME = This will change according to subscriptions : DSB, EC, ...
+		String subcriptionManagementEndpoint = null;
+		try {
+			subcriptionManagementEndpoint = serviceRegistry.get(Constants.DSB_SUBSCRIPTION);
+		} catch (RegistryException e) {
+			logger.warning(e.getMessage());
+			throw new GovernanceExeption(
+					"Can not get the subcription management endpoint : "
+							+ e.getMessage());
+		}
 
 		List<Subscription> result = new ArrayList<Subscription>();
 
@@ -84,10 +102,12 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 			logger.fine("Unsubscribe for " + subscription);
 			
 			try {
-				boolean unsubscribe = this.subscriptionService.unsubscribe(subscription);
+				boolean unsubscribe = this.subscriptionService.unsubscribe(
+						subscription, subcriptionManagementEndpoint);
 				if (unsubscribe) {
 					logger.info("Unsubscription OK for : " + subscription);
 					result.add(subscription);
+					subscription.setStatus("Unsubscribed");
 					// remove the subscription from the registry
 					// TODO : Just update its state
 					// persist the subscription in the system...
@@ -96,12 +116,16 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 					}
 				} else {
 					logger.info("Unsubscription KO for : " + subscription);
+					subscription.setStatus("Unable to unsubscribe");
+					result.add(subscription);
+
 					// TODO : Update the registry with failure
 					// TODO : Notify monitoring
 				}
 			} catch (Exception e) {
 				logger.warning(e.getMessage());
 				subscription.setStatus(e.getMessage());
+				result.add(subscription);
 			}
 		}
 		return result;
@@ -119,6 +143,26 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 			throws GovernanceExeption {
 		throw new GovernanceExeption("replay :: Not implemented");
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.governance.api.SubscriptionManagement#unsubscribeAllFrom(java.lang.String)
+	 */
+	@Override
+	@WebMethod
+	public List<Subscription> unsubscribeAllForSubscriber(String subscriber)
+			throws GovernanceExeption {
+		List<Subscription> result = new ArrayList<Subscription>();
+		
+		Subscription filter = new Subscription();
+		filter.setSubscriber(subscriber);
+		List<Subscription> subscriptions = subscriptionRegistry.getSubscriptions(filter);
+		
+		if (subscriptions == null || subscriptions.size() == 0) {
+			logger.fine("Can not find any subscription for subscriber " + subscriber);
+			return result;
+		}
+		return unsubscribe(subscriptions);
+	}
 
 	public void setSubscriptionService(SubscriptionService subscriptionService) {
 		this.subscriptionService = subscriptionService;
@@ -135,6 +179,10 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 	
 	public SubscriptionRegistry getSubscriptionRegistry() {
 		return subscriptionRegistry;
+	}
+	
+	public void setServiceRegistry(Registry serviceRegistry) {
+		this.serviceRegistry = serviceRegistry;
 	}
 
 }

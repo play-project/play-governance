@@ -44,7 +44,7 @@ public class SubscriptionServiceClient implements SubscriptionService {
 				new WsrfrpModelFactoryImpl(), new WstopModelFactoryImpl(),
 				new WsnbModelFactoryImpl());
 	}
-
+	
 	@Override
 	@WebMethod
 	public Subscription subscribe(Subscription subscription)
@@ -104,26 +104,25 @@ public class SubscriptionServiceClient implements SubscriptionService {
 
 	@Override
 	@WebMethod
-	public boolean unsubscribe(Subscription subscription)
+	public boolean unsubscribe(Subscription subscription, String subscriptionManagementEndpoint)
 			throws GovernanceExeption {
 		if (subscription == null || subscription.getId() == null) {
 			throw new GovernanceExeption(
-					"Subscription information can not be null");
+					"Subscription information/ID can not be null");
+		}
+		
+		if (subscriptionManagementEndpoint == null) {
+			throw new GovernanceExeption("Can not unsubscribe if the management endpoint is not set");
 		}
 
 		boolean result = false;
-
 		logger.info("Unsubscribe from producer '" + subscription.getProvider()
-				+ "' and UUID " + subscription.getId());
+				+ "' and UUID " + subscription.getId()
+				+ " on subscriptionManagementEndpoint "
+				+ subscriptionManagementEndpoint);
 
-		if (subscription.getProvider() == null) {
-			throw new GovernanceExeption(
-					"Can not unsubscribe from null provider");
-		}
-
-		String endpoint = subscription.getProvider();
 		HTTPSubscriptionManagerClient client = new HTTPSubscriptionManagerClient(
-				endpoint);
+				subscriptionManagementEndpoint);
 		try {
 			result = client.unsubscribe(subscription.getId());
 		} catch (NotificationException e) {
@@ -132,4 +131,5 @@ public class SubscriptionServiceClient implements SubscriptionService {
 		}
 		return result;
 	}
+	
 }

@@ -80,7 +80,22 @@ public interface SubscriptionManagement {
 	 *         time, ...)
 	 * @throws GovernanceExeption
 	 */
+	@WebMethod
 	List<Subscription> replay(List<Subscription> subscriptions)
 			throws GovernanceExeption;
+	
+	/**
+	 * Unsubscribe all for the given subscriber. Will query the registry to get
+	 * all the registered subsciptions and then will call unsubscribe on the
+	 * right endpoint. If the unsubscribe is successful, it removes the
+	 * subscription from the registry. If it fails, it will update the
+	 * subscription state in the registry.
+	 * 
+	 * @param subscriber
+	 * @return the list of removed subscriptions.
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	List<Subscription> unsubscribeAllForSubscriber(String subscriber) throws GovernanceExeption;
 
 }

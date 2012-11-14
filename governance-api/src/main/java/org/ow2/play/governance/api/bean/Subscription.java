@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.ow2.play.governance.api.bean.Topic;
 
 /**
+ * TODO : Add subscriptionManagementEndpoint...
+ * 
  * @author chamerling
  * 
  */
