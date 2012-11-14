@@ -72,10 +72,39 @@ public class SubscriptionManagementService implements SubscriptionManagement {
 
 	@Override
 	@WebMethod
-	public boolean unsubscribe(List<Subscription> subscriptions)
+	public List<Subscription> unsubscribe(List<Subscription> subscriptions)
 			throws GovernanceExeption {
-		throw new GovernanceExeption("unsubscribe :: Not implemented");
+		if (subscriptions == null) {
+			throw new GovernanceExeption("Can not unsubscribe null subscriptions");
+		}
 
+		List<Subscription> result = new ArrayList<Subscription>();
+
+		for (Subscription subscription : subscriptions) {
+			logger.fine("Unsubscribe for " + subscription);
+			
+			try {
+				boolean unsubscribe = this.subscriptionService.unsubscribe(subscription);
+				if (unsubscribe) {
+					logger.info("Unsubscription OK for : " + subscription);
+					result.add(subscription);
+					// remove the subscription from the registry
+					// TODO : Just update its state
+					// persist the subscription in the system...
+					if (subscriptionRegistry != null) {
+						subscriptionRegistry.remove(subscription);
+					}
+				} else {
+					logger.info("Unsubscription KO for : " + subscription);
+					// TODO : Update the registry with failure
+					// TODO : Notify monitoring
+				}
+			} catch (Exception e) {
+				logger.warning(e.getMessage());
+				subscription.setStatus(e.getMessage());
+			}
+		}
+		return result;
 	}
 
 	@Override

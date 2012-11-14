@@ -47,14 +47,16 @@ public interface SubscriptionManagement {
 			throws GovernanceExeption;
 
 	/**
-	 * Unsubscribe
+	 * Unsubscribe. Call unsubscribe on services and remove from the
+	 * subscription registry.
 	 * 
 	 * @param subscription
-	 * @return
+	 * @return the list of subscriptions removed from the system (unsubscribe is
+	 *         OK)
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
-	boolean unsubscribe(List<Subscription> subscriptions)
+	List<Subscription> unsubscribe(List<Subscription> subscriptions)
 			throws GovernanceExeption;
 
 	/**
