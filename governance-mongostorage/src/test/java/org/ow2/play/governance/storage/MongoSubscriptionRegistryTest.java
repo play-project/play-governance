@@ -243,8 +243,35 @@ public class MongoSubscriptionRegistryTest extends TestCase {
 		tt.setName("foo");
 		filter.setTopic(tt);
 
-		// does not work...
-		//filtered = registry.getSubscriptions(filter);
-		//assertEquals(20, filtered.size());
+		filtered = registry.getSubscriptions(filter);
+		assertEquals(20, filtered.size());
+		
+		topic = new Topic();
+		topic.setName("fooo");
+		topic.setNs("http://bar");
+		topic.setPrefix("s");
+
+		Subscription subscription = new Subscription(UUID.randomUUID()
+				.toString(), "http://subscriberFOO", "http://provider",
+				topic, System.currentTimeMillis());
+		registry.addSubscription(subscription);
+		
+		filter = new Subscription();
+		Topic ttt = new Topic();
+		ttt.setName("fooo");
+		filter.setTopic(ttt);
+
+		filtered = registry.getSubscriptions(filter);
+		assertEquals(1, filtered.size());
+		
+		// filter on NS
+		filter = new Subscription();
+		Topic tttt = new Topic();
+		tttt.setNs("http://bar");
+		filter.setTopic(tttt);
+
+		filtered = registry.getSubscriptions(filter);
+		assertEquals(21, filtered.size());
+		
 	}
 }

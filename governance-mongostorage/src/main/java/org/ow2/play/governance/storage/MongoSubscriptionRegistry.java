@@ -388,22 +388,18 @@ public class MongoSubscriptionRegistry implements SubscriptionRegistry {
 		if (filter.getStatus() != null) {
 			f.put(STATUS_KEY, filter.getStatus());
 		}
-
+		
+		// use the dot notation to search inner args
 		if (filter.getTopic() != null) {
-			BasicDBObject tf = new BasicDBObject();
 			if (filter.getTopic().getName() != null) {
-				tf.put(TOPIC_NAME_KEY, filter.getTopic().getName());
+				f.put(TOPIC_KEY + "." + TOPIC_NAME_KEY, filter.getTopic().getName());
 			}
 			if (filter.getTopic().getNs() != null) {
-				tf.put(TOPIC_NS_KEY, filter.getTopic().getNs());
+				f.put(TOPIC_KEY + "." + TOPIC_NS_KEY, filter.getTopic().getNs());
 			}
-
 			if (filter.getTopic().getPrefix() != null) {
-				tf.put(TOPIC_PREFIX_KEY, filter.getTopic().getPrefix());
+				f.put(TOPIC_KEY + "." + TOPIC_PREFIX_KEY, filter.getTopic().getNs());
 			}
-
-			// FIXME = Topic filter does not work...
-			f.put(TOPIC_KEY, tf);
 		}
 
 		logger.fine("Filtering with : " + f);
