@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
+import org.ow2.play.commons.utils.StreamHelper;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.bean.Subscription;
@@ -42,7 +43,6 @@ import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
 
-import eu.playproject.commons.utils.StreamHelper;
 import fr.inria.eventcloud.webservices.api.EventCloudManagementServiceApi;
 
 /**

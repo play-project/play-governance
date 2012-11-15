@@ -13,6 +13,7 @@ import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
+import org.ow2.play.commons.utils.StreamHelper;
 import org.ow2.play.governance.Adapter;
 import org.ow2.play.governance.Helper;
 import org.ow2.play.governance.api.Constants;
@@ -38,7 +39,6 @@ import org.petalslink.dsb.cxf.CXFHelper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-import eu.playproject.commons.utils.StreamHelper;
 import fr.inria.eventcloud.webservices.api.EventCloudManagementServiceApi;
 
 /**
