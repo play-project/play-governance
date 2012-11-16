@@ -36,7 +36,9 @@ import org.ow2.play.governance.api.bean.Subscription;
 public interface SubscriptionManagement {
 
 	/**
-	 * Subscribe to producers on behalf of the consumers
+	 * Subscribe to producers on behalf of the consumers. This will send the
+	 * subscribe to the right place and add entries to the subscription
+	 * registry.
 	 * 
 	 * @param subscription
 	 * @return
@@ -45,7 +47,7 @@ public interface SubscriptionManagement {
 	@WebMethod
 	List<Subscription> subscribe(List<Subscription> subscriptions)
 			throws GovernanceExeption;
-
+	
 	/**
 	 * Unsubscribe. Call unsubscribe on services and remove from the
 	 * subscription registry.

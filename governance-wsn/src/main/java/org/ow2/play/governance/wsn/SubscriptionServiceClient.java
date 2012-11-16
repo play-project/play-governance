@@ -27,6 +27,7 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
  * WSN client for pubsub. Can also be exposed as web service.
+ * Does not retreive any endpoint; All must be available in the beans.
  * 
  * @author chamerling
  * 
@@ -131,5 +132,4 @@ public class SubscriptionServiceClient implements SubscriptionService {
 		}
 		return result;
 	}
-	
 }

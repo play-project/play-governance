@@ -28,6 +28,7 @@
     <!--<module>governance-monitoring-api</module>-->
     <module>governance-dcep</module>
     <module>governance-ec</module>
+    <module>governance-dsb</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
