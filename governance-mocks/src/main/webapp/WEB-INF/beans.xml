@@ -9,7 +9,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="ecmanagement" class="org.ow2.play.governance.mocks.ec.EventCloudManagementWsImpl"/>
+	<bean id="ecmanagement" class="org.ow2.play.governance.mocks.ec.EventCloudsManagementWsImpl"/>
 
 	<jaxws:endpoint id="ecmanagementservice" implementor="#ecmanagement"
 		address="/EventCloudManagement" />

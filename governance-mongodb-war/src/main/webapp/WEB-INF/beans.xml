@@ -69,7 +69,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	</bean>
 	
 	<!-- EC Wrapper -->
-	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudManagementServiceImpl">
+	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudsManagementWsImpl">
 		<property name="registry" ref="serviceregistry" />
 	</bean>
 		

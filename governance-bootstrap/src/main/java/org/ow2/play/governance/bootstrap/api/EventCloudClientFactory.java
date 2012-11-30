@@ -19,7 +19,8 @@
  */
 package org.ow2.play.governance.bootstrap.api;
 
-import fr.inria.eventcloud.webservices.api.EventCloudManagementServiceApi;
+import fr.inria.eventcloud.webservices.api.EventCloudsManagementWsApi;
+
 
 /**
  * @author chamerling
@@ -34,6 +35,6 @@ public interface EventCloudClientFactory {
      * 
      * @return
      */
-    EventCloudManagementServiceApi getClient(String endpoint);
+    EventCloudsManagementWsApi getClient(String endpoint);
 
 }
