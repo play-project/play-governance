@@ -21,7 +21,6 @@ package org.ow2.play.governance.dcep;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +45,7 @@ import com.google.common.collect.Lists;
 
 import eu.play_project.play_platformservices.api.QueryDetails;
 import eu.play_project.play_platformservices.api.QueryDispatchApi;
+import eu.play_project.play_platformservices.jaxb.Query;
 
 /**
  * Wrap the initial query dispatcher
@@ -166,15 +166,17 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	public List<Pattern> getPatterns() throws GovernanceExeption {
 		List<Pattern> result = new ArrayList<Pattern>();
 		
-		Map<String, String> patterns = getQueryDispatchApiClient().getRegisteredQueries();
+		List<Query> patterns = getQueryDispatchApiClient().getRegisteredQueries();
 		if (patterns == null) {
 			return result;	
 		}
 		
-		for (String id : patterns.keySet()) {
+		for (Query q : patterns) {
 			Pattern pattern = new Pattern();
-			pattern.id = id;
-			pattern.content = patterns.get(id);
+			pattern.id = q.id;
+			pattern.content = q.content;
+			pattern.name = q.name;
+			pattern.recordDate = q.recordDate;
 			result.add(pattern);
 		}
 		
