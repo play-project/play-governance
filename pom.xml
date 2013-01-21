@@ -4,7 +4,7 @@
 
   <parent>
 	<artifactId>play-parent</artifactId>
-    <groupId>eu.play-project</groupId>
+    <groupId>org.ow2.play</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
@@ -34,26 +34,6 @@
     <defaultGoal>install</defaultGoal>
   </build>
   <repositories>
-    <repository>
-      <id>play-private.release</id>
-      <url>http://maven.petalslink.com/private-play-release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>play-private.snapshot</id>
-      <url>http://maven.petalslink.com/private-play-snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
     <repository>
       <id>ow2.release</id>
       <url>http://repository.ow2.org/nexus/content/repositories/releases/</url>
