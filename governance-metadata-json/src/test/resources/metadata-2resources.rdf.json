@@ -1,0 +1,22 @@
+[
+	{
+	    "http://streams.event-processing.org/ids/FacebookStatusFeed#stream" :
+	    {
+	        "http://purl.org/dc/elements/1.1/title": [ { "type" : "literal", "value" : "Facebook Status Feed" } ],
+	        "http://purl.org/dc/elements/1.1/description": [ { "type" : "literal", "value" : "A stream of Facebook Wall updates." } ],
+	        "http://www.w3.org/2002/06/xhtml2/icon": [ { "type" : "uri", "value" : "http://s-static.ak.facebook.com/rsrc.php/yi/r/q9U99v3_saj.ico" } ],
+	        "http://www.play-project.eu/xml/ns/topic":  [ { "type" : "uri" , "value" : "http://streams.event-processing.org/ids/FacebookStatusFeed" } ],
+	        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [ { "type" : "uri", "value" : "http://events.event-processing.org/types/Stream" } ]
+	    },
+	    "http://streams.event-processing.org/ids/FacebookCepResults#stream" :
+	    {
+	        "http://purl.org/dc/elements/1.1/title": [ { "type" : "literal", "value" : "Facebook CEP Results" } ],
+	        "http://purl.org/dc/elements/1.1/description": [ { "type" : "literal", "value" : "A stream of Facebook CEP results." } ],
+	        "http://www.w3.org/2002/06/xhtml2/icon": [ { "type" : "uri", "value" : "http://s-static.ak.facebook.com/rsrc.php/yi/r/q9U99v3_saj.ico" } ],
+	        "http://www.play-project.eu/xml/ns/topic":  [ { "type" : "uri" , "value" : "http://streams.event-processing.org/ids/FacebookCepResults" } ],
+	        "http://www.play-project.eu/xml/ns/complexEvents":  [ { "type" : "literal" , "value" : "true" } ],
+	        "http://www.play-project.eu/xml/ns/dsbneedstosubscribe":  [ { "type" : "literal" , "value" : "true" } ],
+	        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [ { "type" : "uri", "value" : "http://events.event-processing.org/types/Stream" } ]
+	    }
+	}
+]

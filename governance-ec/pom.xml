@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.play</groupId>
-			<artifactId>play-serviceregistry-api</artifactId>
+			<artifactId>governance-serviceregistry-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

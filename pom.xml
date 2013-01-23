@@ -14,6 +14,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
+    <!-- Governance Runtime -->
     <module>governance-api</module>
     <module>governance-service</module>
     <module>governance-mongostorage</module>
@@ -29,6 +30,22 @@
     <module>governance-dcep</module>
     <module>governance-ec</module>
     <module>governance-dsb</module>
+    <!-- Governance Metadata -->
+		<module>governance-metadata-api</module>
+		<module>governance-metadata-client</module>
+		<module>governance-metadata-service</module>
+		<module>governance-metadata-war</module>
+    <module>governance-metadata-json</module>
+    <module>governance-metadata-mongodb</module>
+    <module>governance-metadata-mongodb-war</module>
+    <module>governance-metadata-inject</module>
+    <!-- Governance Registry -->
+    <module>governance-serviceregistry-api</module>
+    <module>governance-servicregistry-service</module>
+    <module>governance-serviceregistry-war</module>
+    <module>governance-serviceregistry-soapclient</module>
+    <module>governance-serviceregistry-mongo</module>
+    <module>governance-serviceregistry-mongo-war</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

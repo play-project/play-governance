@@ -1,0 +1,7 @@
+{
+    "http://streams.event-processing.org/ids/FacebookStatusFeed#stream" :
+    {
+        "http://purl.org/dc/elements/1.1/title": [ { "type" : "literal", "value" : "Facebook Status Feed" } ],
+        "http://purl.org/dc/elements/1.1/description": [ { "type" : "literal", "value" : "A stream of Facebook Wall updates." } ]
+    }
+}
