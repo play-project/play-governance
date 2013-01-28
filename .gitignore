@@ -4,3 +4,5 @@ target/
 .classpath
 etc/
 .settings
+*.iml
+.idea/
