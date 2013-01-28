@@ -231,7 +231,21 @@ public class CreationTest extends TestCase {
 				// TODO Auto-generated method stub
 				return false;
 			}
-		});
+
+            /**
+             * Delete a resource from the repository
+             *
+             * @param resource
+             * @throws org.ow2.play.metadata.api.MetadataException
+             *
+             */
+            @Override
+            public boolean deleteResource(Resource resource) throws MetadataException {
+                return false;
+            }
+
+
+        });
 
 		List<Subscription> result = service.bootstrap(ecEndpoint,
 				subscriberEndpoint);

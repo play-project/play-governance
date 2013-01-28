@@ -177,10 +177,22 @@ public class MetadataClient implements MetadataService {
 	public boolean exists(Resource resource) throws MetadataException {
 		return getClient().exists(resource);
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
-	 */
+
+    /**
+     * Delete a resource from the repository
+     *
+     * @param resource
+     * @throws org.ow2.play.metadata.api.MetadataException
+     *
+     */
+    @Override
+    public boolean deleteResource(Resource resource) throws MetadataException {
+        return getClient().deleteResource(resource);
+    }
+
+    /* (non-Javadoc)
+     * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
+     */
 	@Override
 	public void setMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {

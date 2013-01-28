@@ -243,7 +243,19 @@ public class InMemoryMetadataServiceImpl implements
 		return resourceExists(resource);
 	}
 
-	protected boolean resourceExists(Resource r) {
+    /**
+     * Delete a resource from the repository
+     *
+     * @param resource
+     * @throws org.ow2.play.metadata.api.MetadataException
+     *
+     */
+    @Override
+    public boolean deleteResource(Resource resource) throws MetadataException {
+        return false;
+    }
+
+    protected boolean resourceExists(Resource r) {
 		return r != null && metadata.containsKey(r);
 	}
 
