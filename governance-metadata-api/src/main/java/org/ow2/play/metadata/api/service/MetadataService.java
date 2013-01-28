@@ -148,4 +148,14 @@ public interface MetadataService {
 	 */
 	@WebMethod
 	boolean exists(Resource resource) throws MetadataException;
+
+    /**
+     * Delete a resource from the repository
+     *
+     *
+     * @param resource
+     * @throws MetadataException
+     */
+    @WebMethod
+    boolean deleteResource(Resource resource) throws MetadataException;
 }

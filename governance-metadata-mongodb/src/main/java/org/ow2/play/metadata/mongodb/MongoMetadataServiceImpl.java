@@ -481,10 +481,41 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 		return (findFirst(resource) != null);
 	}
 
-	/*
-	 * This method could be overridden to provide the DB instance from an
-	 * existing connection.
-	 */
+    /**
+     * Delete a resource from the repository
+     *
+     *
+     * @param resource
+     * @throws org.ow2.play.metadata.api.MetadataException
+     *
+     */
+    @Override
+    public boolean deleteResource(Resource resource) throws MetadataException {
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Removing resource : " + resource);
+        }
+
+        if (resource == null || resource.getName() == null || resource.getUrl() == null) {
+            throw new MetadataException("Can not delete a null resource!");
+        }
+
+        BasicDBObject filter = new BasicDBObject();
+        BasicDBObject resourceObject = new BasicDBObject();
+        resourceObject.put("name", resource.getName());
+        resourceObject.put("url", resource.getUrl());
+        filter.put("resource", resourceObject);
+
+        WriteResult wr = getDbCollection().remove(filter);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Remove result : " + wr);
+        }
+        return true;
+    }
+
+    /*
+     * This method could be overridden to provide the DB instance from an
+     * existing connection.
+     */
 	protected DB getDatabase(Mongo mongo, String databaseName) {
 		return mongo.getDB(databaseName);
 	}

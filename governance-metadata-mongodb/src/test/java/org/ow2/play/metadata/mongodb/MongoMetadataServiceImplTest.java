@@ -436,4 +436,42 @@ public class MongoMetadataServiceImplTest extends TestCase {
 		
 		
 	}
+
+    public void testDeleteResource() throws Exception {
+        MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+        mongoMetadataServiceImpl.setProperties(props);
+        mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+        mongoMetadataServiceImpl.init();
+
+        // create a resource
+        String name = UUID.randomUUID().toString();
+        Resource r = new Resource(name, "http://" + name);
+        System.out.println("Creating a resource " + r);
+
+        MetaResource mr = new MetaResource(r, Lists.newArrayList(new Metadata(
+                "1", new Data(Type.LITERAL, "A")), new Metadata("2", new Data(
+                Type.LITERAL, "B"))));
+
+        try {
+            mongoMetadataServiceImpl.create(mr);
+        } catch (MetadataException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check if it exists
+        assertTrue(mongoMetadataServiceImpl.exists(r));
+
+        // delete the resource
+        try {
+            mongoMetadataServiceImpl.deleteResource(r);
+        } catch (MetadataException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // the resource does not exists anymore
+        assertFalse(mongoMetadataServiceImpl.exists(r));
+
+    }
 }
