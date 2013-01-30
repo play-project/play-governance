@@ -29,36 +29,29 @@
 		</cxf:features>
 	</cxf:bus>
 	
-	<!-- <context:property-placeholder location="classpath:/com/myapp/mongodb/config/mongo.properties"/>-->
-	<!-- then use ${foo.bar} properties... -->
-    <mongo:mongo host="localhost" port="27017" id="mongo">
-    <!-- 
-     	<mongo:options connections-per-host="8"
-                   threads-allowed-to-block-for-connection-multiplier="4"
-                   connect-timeout="1000"
-                   max-wait-time="1500"
-                   auto-connect-retry="true"
-                   socket-keep-alive="true"
-                   socket-timeout="1500"
-                   slave-ok="true"
-                   write-number="1"
-                   write-timeout="0"
-                   write-fsync="true"/>
-    -->
-    </mongo:mongo>
-    
- 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-    	<constructor-arg ref="mongo" />
-    	<constructor-arg name="databaseName" value="play"/>
-  	</bean>    
-        
+	<mongo:db-factory host="localhost" port="27017"
+		dbname="play-test" />
+		
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
+	
 	<bean id="userservice" class="org.ow2.play.governance.user.UserService">
 		<property name="mongoTemplate" ref="mongoTemplate"/>
 	</bean>
+	
+	<bean id="userwebservice" class="org.ow2.play.governance.user.ws.UserServiceImpl">
+		<property name="userService" ref="userservice"/>
+	</bean>
+	
+	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
+		address="/UserService" />
 
-	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
+	
+	<!-- <bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
 		<property name="serializeAsArray" value="true" />
 	</bean>
+	-->
 <!-- 
 	<jaxrs:server id="restContainer" address="/rest/">
 		<jaxrs:serviceBeans>
