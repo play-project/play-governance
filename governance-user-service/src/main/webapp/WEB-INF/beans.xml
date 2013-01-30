@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://cxf.apache.org/core" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/transports/http/configuration         http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+        http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd
+        http://www.springframework.org/schema/data/jpa              http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/data/mongo            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
+
+	<cxf:bus>
+		<cxf:features>
+			<cxf:logging />
+		</cxf:features>
+	</cxf:bus>
+	
+	<!-- <context:property-placeholder location="classpath:/com/myapp/mongodb/config/mongo.properties"/>-->
+	<!-- then use ${foo.bar} properties... -->
+    <mongo:mongo host="localhost" port="27017" id="mongo">
+    <!-- 
+     	<mongo:options connections-per-host="8"
+                   threads-allowed-to-block-for-connection-multiplier="4"
+                   connect-timeout="1000"
+                   max-wait-time="1500"
+                   auto-connect-retry="true"
+                   socket-keep-alive="true"
+                   socket-timeout="1500"
+                   slave-ok="true"
+                   write-number="1"
+                   write-timeout="0"
+                   write-fsync="true"/>
+    -->
+    </mongo:mongo>
+    
+ 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    	<constructor-arg ref="mongo" />
+    	<constructor-arg name="databaseName" value="play"/>
+  	</bean>    
+        
+	<bean id="userservice" class="org.ow2.play.governance.user.UserService">
+		<property name="mongoTemplate" ref="mongoTemplate"/>
+	</bean>
+
+	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
+		<property name="serializeAsArray" value="true" />
+	</bean>
+<!-- 
+	<jaxrs:server id="restContainer" address="/rest/">
+		<jaxrs:serviceBeans>
+			<ref bean="restuserservice" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jsonprovider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+-->
+</beans>

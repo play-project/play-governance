@@ -46,6 +46,9 @@
     <module>governance-serviceregistry-soapclient</module>
     <module>governance-serviceregistry-mongo</module>
     <module>governance-serviceregistry-mongo-war</module>
+    <!-- User Management -->
+    <module>governance-user-api</module>
+    <module>governance-user-service</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
