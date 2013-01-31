@@ -51,11 +51,17 @@
 	<!--  SOAP -->
 	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
 		address="/UserService" />
+		
+	<util:list id="jsonkeys">
+		<value>accounts</value>
+	</util:list>
 
 	<!--  REST -->
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="dropRootElement" value="true" />
 		<property name="supportUnwrapped" value="true" />
+		<property name="serializeAsArray" value="true" />
+		<property name="arrayKeys" ref="jsonkeys"/>
 	</bean>
 	 
 	<jaxrs:server id="restContainer" address="/rest/">

@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService {
 			return ResponseBuilder.error(e).build();
 		}
 		result.password = "";
+		// created HTTP status
 		return Response.status(201).entity(result).build();
 	}
 
