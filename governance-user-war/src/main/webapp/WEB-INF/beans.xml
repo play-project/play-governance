@@ -30,7 +30,7 @@
 	</cxf:bus>
 	
 	<mongo:db-factory host="localhost" port="27017"
-		dbname="play-test" />
+		dbname="play" />
 		
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
@@ -43,23 +43,27 @@
 	<bean id="userwebservice" class="org.ow2.play.governance.user.ws.UserServiceImpl">
 		<property name="userService" ref="userservice"/>
 	</bean>
+
+	<bean id="userrestservice" class="org.ow2.play.governance.user.rest.UserServiceImpl">
+		<property name="userService" ref="userservice"/>
+	</bean>
 	
+	<!--  SOAP -->
 	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
 		address="/UserService" />
 
-	
-	<!-- <bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
-		<property name="serializeAsArray" value="true" />
+	<!--  REST -->
+	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+		<property name="dropRootElement" value="true" />
 	</bean>
-	-->
-<!-- 
+	 
 	<jaxrs:server id="restContainer" address="/rest/">
 		<jaxrs:serviceBeans>
-			<ref bean="restuserservice" />
+			<ref bean="userrestservice" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />
 		</jaxrs:providers>
 	</jaxrs:server>
--->
+
 </beans>

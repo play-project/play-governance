@@ -6,12 +6,15 @@ package org.ow2.play.governance.user.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * User bean
  * 
  * @author chamerling
  * 
  */
+@XmlRootElement(name = "user")
 public class User {
 
 	/**
