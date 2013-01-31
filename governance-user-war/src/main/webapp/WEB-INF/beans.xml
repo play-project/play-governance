@@ -55,6 +55,7 @@
 	<!--  REST -->
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="dropRootElement" value="true" />
+		<property name="supportUnwrapped" value="true" />
 	</bean>
 	 
 	<jaxrs:server id="restContainer" address="/rest/">

@@ -19,6 +19,7 @@
  */
 package org.ow2.play.governance.user.rest;
 
+import java.net.URI;
 import java.util.logging.Logger;
 
 import javax.ws.rs.core.Response;
@@ -73,11 +74,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public Response update(User user) {
-		return ResponseBuilder.error(new Exception("Not implemented")).build();
+		if (user == null) {
+			return ResponseBuilder.error("User data is null").build();
+		}
+
+		logger.info("Updating the user " + user);
+		User result = null;
+		try {
+			result = userService.update(user);
+		} catch (UserException e) {
+			return ResponseBuilder.error(e).build();
+		}
+		result.password = "";
+		return ok(result);
 	}
 
 	public Response register(User user) {
-		return ResponseBuilder.error(new Exception("Not implemented")).build();
+		if (user == null) {
+			return ResponseBuilder.error("User data is null").build();
+		}
+
+		logger.info("Registering new user " + user);
+		User result = null;
+		try {
+			result = userService.register(user);
+		} catch (UserException e) {
+			return ResponseBuilder.error(e).build();
+		}
+		result.password = "";
+		return Response.status(201).entity(result).build();
 	}
 
 	public Response delete(User user) {
