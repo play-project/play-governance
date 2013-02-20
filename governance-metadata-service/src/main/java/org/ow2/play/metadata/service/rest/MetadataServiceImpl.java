@@ -22,9 +22,14 @@ package org.ow2.play.metadata.service.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
+import org.ow2.play.metadata.api.service.rest.MetadataContainer;
 import org.ow2.play.metadata.api.service.rest.MetadataService;
 
 /**
@@ -64,6 +69,18 @@ public class MetadataServiceImpl implements MetadataService {
 		}
 
 		return Response.ok("Service initialized").build();
+	}
+	
+	@Override
+	public Response all() {
+		List<MetaResource> result = null;
+		try {
+			result = metadataService.list();
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+		return Response.ok(new MetadataContainer(result)).build();
 	}
 
 	public void setBootstrap(
