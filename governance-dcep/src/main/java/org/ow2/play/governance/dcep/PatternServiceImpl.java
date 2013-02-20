@@ -110,13 +110,16 @@ public class PatternServiceImpl implements SimplePatternService {
 	@Override
 	@WebMethod
 	public List<Pattern> getPatterns() throws GovernanceExeption{
-		throw new GovernanceExeption("Not implemented");
+		return simplePatternService.getPatterns();
 	}
 
 	@Override
 	@WebMethod
-	public Pattern getPattern(String id) throws GovernanceExeption{
-		throw new GovernanceExeption("Not implemented");
+	public Pattern getPattern(String id) throws GovernanceExeption {
+		if (id == null) {
+			throw new GovernanceExeption("Null pattern id parameter");
+		}
+		return simplePatternService.getPattern(id);
 	}
 	
 	/*
