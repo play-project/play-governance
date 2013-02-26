@@ -196,7 +196,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		return result;
 	}
 
-	private QueryDispatchApi getQueryDispatchApiClient()
+	protected QueryDispatchApi getQueryDispatchApiClient()
 			throws GovernanceExeption {
 		try {
 			String url = registry.get(Constants.QUERY_DISPATCH_SERVICE);
