@@ -19,6 +19,7 @@
  */
 package org.ow2.play.metadata.service.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -26,16 +27,47 @@ import javax.ws.rs.core.Response;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.service.rest.MetadataContainer;
-import org.ow2.play.metadata.api.service.rest.MetadataService;
+import org.ow2.play.metadata.api.service.rest.MetadataManagementService;
 
 /**
  * @author chamerling
  * 
  */
-public class MetadataServiceImpl implements MetadataService {
+public class MetadataManagementServiceImpl implements MetadataManagementService {
 
 	private org.ow2.play.metadata.api.service.MetadataService metadataService;
 
+	private org.ow2.play.metadata.api.service.MetadataBootstrap bootstrap;
+
+	public Response clear() {
+		if (metadataService == null) {
+			return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+		}
+		try {
+			this.metadataService.clear();
+		} catch (MetadataException e) {
+		}
+		return Response.ok("Data deleted").build();
+	}
+
+	public Response load(String url) {
+		if (bootstrap == null || url == null) {
+			return Response.serverError().build();
+		}
+
+		List<String> urls = new ArrayList<String>();
+		urls.add(url);
+
+		try {
+			bootstrap.init(urls);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+
+		return Response.ok("Service initialized").build();
+	}
+	
 	@Override
 	public Response all() {
 		List<MetaResource> result = null;
@@ -47,17 +79,10 @@ public class MetadataServiceImpl implements MetadataService {
 		}
 		return Response.ok(new MetadataContainer(result)).build();
 	}
-	
-	@Override
-	public Response get(String id) {
-		MetaResource result = null;
-		try {
-			result = metadataService.get(id);
-		} catch (MetadataException e) {
-			e.printStackTrace();
-			return Response.serverError().build();
-		}
-		return Response.ok(result).build();
+
+	public void setBootstrap(
+			org.ow2.play.metadata.api.service.MetadataBootstrap bootstrap) {
+		this.bootstrap = bootstrap;
 	}
 
 	public void setMetadataService(

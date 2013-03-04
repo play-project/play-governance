@@ -21,8 +21,8 @@ package org.ow2.play.metadata.api.service.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -30,28 +30,38 @@ import javax.ws.rs.core.Response;
  * @author chamerling
  *
  */
-@Path("metadatas")
-public interface MetadataService {
-	
-	/**
-	 * Get all the resources of the platform...
-	 * 
-	 * @return
-	 */
-	@GET
-	@Path("")
-	@Produces(MediaType.APPLICATION_JSON)
-	Response all();
+@Path("metadata/manage")
+public interface MetadataManagementService {
 
 	/**
-	 * Get resource from its ID
+	 * Clear the metadata list
 	 * 
 	 * @return
 	 */
 	@GET
-	@Path("/{id}")
+	@Path("clear")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response get(@PathParam("id") String id);
+	Response clear();
 	
+	/**
+	 * Load metadata from a resource
+	 * 
+	 * @param url
+	 * @return
+	 */
+	@GET
+	@Path("load")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response load(@QueryParam("url") String url);
+	
+	/**
+	 * Get all the metadata from the data store
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("all")
+	@Produces(MediaType.APPLICATION_JSON)	
+	Response all();
 	
 }

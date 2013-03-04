@@ -132,6 +132,13 @@ public class CreationTest extends TestCase {
 		});
 
 		service.setMetadataServiceClient(new MetadataService() {
+			
+			@Override
+			@WebMethod
+			public MetaResource get(String id) throws MetadataException {
+				// TODO Auto-generated method stub
+				return null;
+			}
 
 			@Override
 			@WebMethod

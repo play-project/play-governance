@@ -47,8 +47,12 @@
 	</bean>
 
 	<!-- REST stuff -->
-	<bean id="restmeta" class="org.ow2.play.metadata.service.rest.MetadataServiceImpl">
+	<bean id="restmetamanage" class="org.ow2.play.metadata.service.rest.MetadataManagementServiceImpl">
 		<property name="bootstrap" ref="bootservice"/>
+		<property name="metadataService" ref="metaservice"/>
+	</bean>
+	
+	<bean id="restmeta" class="org.ow2.play.metadata.service.rest.MetadataServiceImpl">
 		<property name="metadataService" ref="metaservice"/>
 	</bean>
 
@@ -62,6 +66,7 @@
 	<jaxrs:server id="restContainer" address="/rest/">
 		<jaxrs:serviceBeans>
 			<ref bean="restmeta" />
+			<ref bean="restmetamanage" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />

@@ -55,6 +55,15 @@ public class InMemoryMetadataServiceImpl implements
 	public InMemoryMetadataServiceImpl() {
 		this.metadata = new ConcurrentHashMap<Resource, Set<Metadata>>();
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#get(java.lang.String)
+	 */
+	@Override
+	@WebMethod
+	public MetaResource get(String id) throws MetadataException {
+		return null;
+	}
 
 	/*
 	 * (non-Javadoc)

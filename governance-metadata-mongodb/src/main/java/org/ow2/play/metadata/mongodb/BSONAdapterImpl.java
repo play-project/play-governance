@@ -124,6 +124,8 @@ public class BSONAdapterImpl implements BSONAdapter {
 		}
 
 		MetaResource result = new MetaResource();
+		result.setId(dbo.get("_id").toString());
+		
 		result.setResource(readResource((DBObject) dbo.get("resource")));
 
 		Object o = dbo.get("metadata");

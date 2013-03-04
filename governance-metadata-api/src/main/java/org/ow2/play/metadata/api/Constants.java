@@ -33,6 +33,11 @@ public interface Constants {
 	public static final String CREATED_AT = NS + "/createdat";
 	
 	/**
+	 * 
+	 */
+	public static final String GROUPS = NS + "/groups";
+	
+	/**
 	 * The metadata can be linked to a complex event
 	 */
 	public static final String COMPLEX_EVENT = "http://www.play-project.eu/xml/ns/complexEvents";

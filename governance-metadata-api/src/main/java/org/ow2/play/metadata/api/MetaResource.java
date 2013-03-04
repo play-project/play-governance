@@ -22,13 +22,19 @@ package org.ow2.play.metadata.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Bind resource and metadata
  * 
  * @author chamerling
  * 
  */
+@XmlRootElement
 public class MetaResource {
+	
+	private String id;
 
 	private Resource resource;
 
@@ -75,6 +81,20 @@ public class MetaResource {
 	 */
 	public void setMetadata(List<Metadata> metadata) {
 		this.metadata = metadata;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/*

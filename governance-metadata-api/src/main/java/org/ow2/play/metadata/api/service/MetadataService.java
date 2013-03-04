@@ -38,6 +38,16 @@ import org.ow2.play.metadata.api.Resource;
 public interface MetadataService {
 	
 	/**
+	 * Get metadata from its ID
+	 * 
+	 * @param id
+	 * @return
+	 * @throws MetadataException
+	 */
+	@WebMethod
+	MetaResource get(String id) throws MetadataException;
+	
+	/**
 	 * Clear all the metadatas
 	 * 
 	 * @throws MetadataException

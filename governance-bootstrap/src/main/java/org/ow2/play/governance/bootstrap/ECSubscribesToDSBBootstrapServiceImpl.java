@@ -134,7 +134,7 @@ public class ECSubscribesToDSBBootstrapServiceImpl implements BootstrapService {
         // check if we already subscribed...
         if (alreadySubscribed(topic, subscriber, providerEndpoint)) {
             log.log("EC already subscribed to DSB for topic %s", topic);
-            logger.info(String.format("EC at %s already subscribed to topic %s", topic));
+            logger.info(String.format("EC already subscribed to topic %s", topic));
             return result;
         }
 

@@ -177,6 +177,15 @@ public class MetadataClient implements MetadataService {
 	public boolean exists(Resource resource) throws MetadataException {
 		return getClient().exists(resource);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#get(java.lang.String)
+	 */
+	@Override
+	@WebMethod
+	public MetaResource get(String id) throws MetadataException {
+		return getClient().get(id);
+	}
 
     /**
      * Delete a resource from the repository

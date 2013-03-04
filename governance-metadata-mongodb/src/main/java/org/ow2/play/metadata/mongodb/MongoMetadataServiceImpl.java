@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.jws.WebMethod;
 
 import org.bson.types.BasicBSONList;
+import org.bson.types.ObjectId;
 import org.ow2.play.metadata.api.Constants;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
@@ -48,6 +49,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+import com.mongodb.QueryBuilder;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteResult;
 
@@ -510,6 +512,22 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
             logger.fine("Remove result : " + wr);
         }
         return true;
+    }
+    
+    @Override
+    public MetaResource get(String id) throws MetadataException {
+    	BasicDBObject keys = new BasicDBObject();
+    	keys.put("_id", id);
+
+    	// TODO!
+		DBObject dbo = this.collection.findOne(keys);
+		if (dbo != null) {
+			MetaResource mr = bsonAdapter.readMetaResource(dbo);
+			if (mr != null) {
+				return mr;
+			}
+		}
+    	return null;
     }
 
     /*
