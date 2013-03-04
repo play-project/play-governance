@@ -19,14 +19,13 @@
  */
 package org.ow2.play.governance.user.rest;
 
-import java.net.URI;
 import java.util.logging.Logger;
 
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.commons.rest.error.ResponseBuilder;
-import org.ow2.play.governance.user.api.User;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.User;
 import org.ow2.play.governance.user.api.rest.UserService;
 
 /**
@@ -39,6 +38,22 @@ public class UserServiceImpl implements UserService {
 
 	private static Logger logger = Logger.getLogger(UserServiceImpl.class
 			.getName());
+	
+	public Response get(String id) {
+		logger.info("Get user from ID " + id);
+
+		try {
+			User user = userService.getUserFromID(id);
+			if (user == null) {
+				return ResponseBuilder.error("User '%s' Not found", id)
+						.build();
+			}
+			return ok(user);
+
+		} catch (UserException e) {
+			return ResponseBuilder.error(e).build();
+		}
+	}
 
 	public Response getUser(String login) {
 		logger.info("Get user " + login);
@@ -61,6 +76,22 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			User user = userService.getUserFromProvider(provider, login);
+			if (user == null) {
+				return ResponseBuilder.error("User '%s' Not found", login)
+						.build();
+			}
+
+			return ok(user);
+
+		} catch (UserException e) {
+			return ResponseBuilder.error(e).build();
+		}
+	}
+	
+	public Response basicAuth(String login, String password) {
+		logger.info("Get user from login and password");
+		try {
+			User user = userService.authenticate(login, password);
 			if (user == null) {
 				return ResponseBuilder.error("User '%s' Not found", login)
 						.build();

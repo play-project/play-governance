@@ -6,7 +6,7 @@ package org.ow2.play.governance.user.repositories;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ow2.play.governance.user.User;
+import org.ow2.play.governance.user.bean.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**

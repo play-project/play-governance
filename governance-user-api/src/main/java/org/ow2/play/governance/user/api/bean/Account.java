@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.ow2.play.governance.user.api;
+package org.ow2.play.governance.user.api.bean;
 
 /**
  * An external authentication provider. This is used to login using external

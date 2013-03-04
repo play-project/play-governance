@@ -39,13 +39,21 @@
 	<bean id="userservice" class="org.ow2.play.governance.user.UserService">
 		<property name="mongoTemplate" ref="mongoTemplate"/>
 	</bean>
-	
+
+	<bean id="groupservice" class="org.ow2.play.governance.user.GroupService">
+		<property name="mongoTemplate" ref="mongoTemplate"/>
+	</bean>
+		
 	<bean id="userwebservice" class="org.ow2.play.governance.user.ws.UserServiceImpl">
 		<property name="userService" ref="userservice"/>
 	</bean>
 
 	<bean id="userrestservice" class="org.ow2.play.governance.user.rest.UserServiceImpl">
 		<property name="userService" ref="userservice"/>
+	</bean>
+	
+	<bean id="grouprestservice" class="org.ow2.play.governance.user.rest.GroupServiceImpl">
+		<property name="groupService" ref="groupservice"/>
 	</bean>
 	
 	<!--  SOAP -->
@@ -67,6 +75,7 @@
 	<jaxrs:server id="restContainer" address="/rest/">
 		<jaxrs:serviceBeans>
 			<ref bean="userrestservice" />
+			<ref bean="grouprestservice" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />

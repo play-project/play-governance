@@ -3,6 +3,8 @@
  */
 package org.ow2.play.governance.user.api;
 
+import org.ow2.play.governance.user.api.bean.User;
+
 /**
  * External Authenticator provides way to authenticate using external OAuth
  * providers such as twitter, facebook, ...

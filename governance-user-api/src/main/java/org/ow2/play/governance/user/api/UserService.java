@@ -3,6 +3,8 @@
  */
 package org.ow2.play.governance.user.api;
 
+import org.ow2.play.governance.user.api.bean.User;
+
 /**
  * @author chamerling
  * 
@@ -31,10 +33,20 @@ public interface UserService {
 	User getUser(String login) throws UserException;
 	
 	/**
+	 * Get a user from its main ID
+	 * 
+	 * @param id
+	 * @return
+	 * @throws UserException
+	 */
+	User getUserFromID(String id) throws UserException;
+
+	
+	/**
 	 * Find a user from its provider login
 	 * 
-	 * @param provider
-	 * @param key
+	 * @param provider the provider name 
+	 * @param login the login of the user in the privder context
 	 * @return the matching user or null if not found
 	 * @throws UserException if something is bad
 	 */
@@ -70,5 +82,5 @@ public interface UserService {
 	 * @throws UserException if the user to delete has not been found
 	 */
 	void delete(User user) throws UserException;
-
+	
 }

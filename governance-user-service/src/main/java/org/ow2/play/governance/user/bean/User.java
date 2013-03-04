@@ -1,13 +1,13 @@
 /**
  * 
  */
-package org.ow2.play.governance.user;
+package org.ow2.play.governance.user.bean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ow2.play.governance.user.api.Account;
+import org.ow2.play.governance.user.api.bean.Account;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,16 +21,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
 	@Id
-	private ObjectId id;
+	public ObjectId id;
 
 	public String login;
 
+	public String fullName;
+	
 	public String password;
 
 	public String email;
 
 	public String avatarURL;
-
+	
 	public List<Account> accounts = new ArrayList<Account>();
 
 	public List<String> groups = new ArrayList<String>();

@@ -31,7 +31,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.ow2.play.governance.user.api.User;
+import org.ow2.play.governance.user.api.Provider;
+import org.ow2.play.governance.user.api.bean.User;
 
 /**
  * @author chamerling
@@ -46,15 +47,27 @@ public interface UserService {
 	 * @return
 	 */
 	@GET
-	@Path("{login}")
+	@Path("/login/{login}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response getUser(@PathParam("login") String login);
+	
+	/**
+	 * Get a user from its ID
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GET
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response get(@PathParam("id") String id);
+
 
 	/**
 	 * Get a user from its provider information
 	 * 
 	 * @param login
-	 * @param provider
+	 * @param provider supported providers are listed in {@link Provider}
 	 * @return
 	 */
 	@GET
@@ -62,6 +75,18 @@ public interface UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response getUserFromProvider(@QueryParam("login") String login,
 			@QueryParam("provider") String provider);
+
+	/**
+	 * Authenticate user from login/password. Password is not hashed
+	 * @param login
+	 * @param password
+	 * @return the user object if auth is OK
+	 */
+	@GET
+	@Path("basicauth")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response basicAuth(@QueryParam("login") String login, @QueryParam("password") String password);
+
 
 	/**
 	 * Update a user. Received data is user as JSON.

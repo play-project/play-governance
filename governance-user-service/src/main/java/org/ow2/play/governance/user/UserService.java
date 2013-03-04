@@ -7,8 +7,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 import org.ow2.play.commons.security.Crypto;
-import org.ow2.play.governance.user.api.User;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.User;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -37,9 +37,9 @@ public class UserService implements
 	 */
 	@Override
 	public User authenticate(String name, String password) throws UserException {
-		org.ow2.play.governance.user.User user = mongoTemplate.findOne(
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
 				query(where(LOGIN).is(name)),
-				org.ow2.play.governance.user.User.class);
+				org.ow2.play.governance.user.bean.User.class);
 		if (user == null) {
 			throw new UserException("User not found");
 		}
@@ -67,7 +67,7 @@ public class UserService implements
 		if (user == null || user.login == null) {
 			throw new UserException("Null user data...");
 		}
-		this.authenticate(user.login, user.password);
+		//this.authenticate(user.login, user.password);
 		User u = getUser(user.login);
 		if (u == null) {
 			throw new UserException("User nto found");
@@ -78,9 +78,20 @@ public class UserService implements
 
 	@Override
 	public User getUser(String login) throws UserException {
-		org.ow2.play.governance.user.User user = mongoTemplate.findOne(
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
 				query(where(LOGIN).is(login)),
-				org.ow2.play.governance.user.User.class);
+				org.ow2.play.governance.user.bean.User.class);
+		if (user == null) {
+			throw new UserException("User not found");
+		}
+		return toAPI(user);
+	}
+	
+	@Override
+	public User getUserFromID(String id) throws UserException {
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
+				query(where("_id").is(id)),
+				org.ow2.play.governance.user.bean.User.class);
 		if (user == null) {
 			throw new UserException("User not found");
 		}
@@ -94,8 +105,8 @@ public class UserService implements
 		Query query = query(where("accounts").elemMatch(
 				where("login").is(login).and("provider").is(provider)));
 
-		org.ow2.play.governance.user.User user = mongoTemplate.findOne(query,
-				org.ow2.play.governance.user.User.class);
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(query,
+				org.ow2.play.governance.user.bean.User.class);
 
 		if (user == null) {
 			return null;
@@ -108,7 +119,7 @@ public class UserService implements
 		if (user == null || user.login == null)
 			throw new UserException("null user data");
 
-		this.authenticate(user.login, user.password);
+		//this.authenticate(user.login, user.password);
 
 		Update update = new Update();
 		// get the original data to check the diff...
@@ -131,7 +142,7 @@ public class UserService implements
 		return toAPI(mongoTemplate.findAndModify(
 				new Query(where(LOGIN).is(user.login)), update,
 				new FindAndModifyOptions().returnNew(true),
-				org.ow2.play.governance.user.User.class));
+				org.ow2.play.governance.user.bean.User.class));
 	}
 
 	public void setMongoTemplate(MongoTemplate mongoTemplate) {
@@ -142,10 +153,12 @@ public class UserService implements
 	 * @param user
 	 * @return
 	 */
-	private User toAPI(org.ow2.play.governance.user.User user) {
+	private User toAPI(org.ow2.play.governance.user.bean.User user) {
 		User result = new User();
+		result.id = user.id.toStringMongod();
 		result.accounts = user.accounts;
 		result.email = user.email;
+		result.fullName = user.fullName;
 		result.groups = user.groups;
 		result.login = user.login;
 		result.password = user.password;
@@ -153,10 +166,11 @@ public class UserService implements
 		return result;
 	}
 
-	private org.ow2.play.governance.user.User fromAPI(User user) {
-		org.ow2.play.governance.user.User result = new org.ow2.play.governance.user.User();
+	private org.ow2.play.governance.user.bean.User fromAPI(User user) {
+		org.ow2.play.governance.user.bean.User result = new org.ow2.play.governance.user.bean.User();
 		result.accounts = user.accounts;
 		result.email = user.email;
+		result.fullName = user.fullName;
 		result.groups = user.groups;
 		result.login = user.login;
 		result.password = user.password;

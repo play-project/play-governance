@@ -5,8 +5,8 @@ package org.ow2.play.governance.user.ws;
 
 import javax.jws.WebMethod;
 
-import org.ow2.play.governance.user.api.User;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.User;
 import org.ow2.play.governance.user.api.ws.UserService;
 
 /**

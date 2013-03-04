@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.ow2.play.governance.user.api;
+package org.ow2.play.governance.user.api.bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "user")
 public class User {
+	
+	public String id;
 
 	/**
 	 * The user id in the Play platform
@@ -34,10 +36,13 @@ public class User {
 	public String avatarURL;
 	
 	/**
-	 * Providers accounts
+	 * Providers accounts for the user
 	 */
 	public List<Account> accounts = new ArrayList<Account>();
 
+	/**
+	 * List of groupIds the user belongs to
+	 */
 	public List<String> groups = new ArrayList<String>();
 
 	public User() {
