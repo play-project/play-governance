@@ -45,6 +45,7 @@ import com.google.common.collect.Lists;
 
 import eu.play_project.play_platformservices.api.QueryDetails;
 import eu.play_project.play_platformservices.api.QueryDispatchApi;
+import eu.play_project.play_platformservices.api.QueryDispatchException;
 import eu.play_project.play_platformservices.jaxb.Query;
 
 /**
@@ -72,8 +73,13 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		List<Topic> result = Lists.newArrayList();
 		QueryDispatchApi dispatchClient = getQueryDispatchApiClient();
 		if (dispatchClient != null) {
-			QueryDetails details = dispatchClient.analyseQuery(generateID(),
-					pattern);
+			QueryDetails details = null;
+			try {
+				details = dispatchClient.analyseQuery(generateID(),
+						pattern);
+			} catch (QueryDispatchException e) {
+				throw new GovernanceExeption(e);
+			}
 			if (details != null) {
 				List<String> input = details.getInputStreams();
 				result.addAll(Collections2.transform(input,
@@ -105,8 +111,13 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		List<Topic> result = Lists.newArrayList();
 		QueryDispatchApi dispatchClient = getQueryDispatchApiClient();
 		if (dispatchClient != null) {
-			QueryDetails details = dispatchClient.analyseQuery(generateID(),
-					pattern);
+			QueryDetails details = null;
+			try {
+				details = dispatchClient.analyseQuery(generateID(),
+						pattern);
+			} catch (QueryDispatchException e) {
+				throw new GovernanceExeption(e);
+			}
 			if (details != null) {
 				String output = details.getOutputStream();
 				result.add(streamToTopic(output));
@@ -186,8 +197,13 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	@Override
 	@WebMethod
 	public Pattern getPattern(String id) throws GovernanceExeption {
-		String pattern = getQueryDispatchApiClient().getRegisteredQuery(id);
+		String pattern = null;
 		Pattern result = null;
+		try {
+			pattern = getQueryDispatchApiClient().getRegisteredQuery(id);
+		} catch (QueryDispatchException e) {
+			throw new GovernanceExeption(e);
+		}
 		if (pattern != null) {
 			result = new Pattern();
 			result.content = pattern;
