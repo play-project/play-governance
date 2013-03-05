@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2012, PetalsLink
+ * Copyright (c) 2013, Linagora
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,40 +17,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.metadata.mongodb;
+package org.ow2.play.metadata.service.document;
 
-import org.ow2.play.metadata.api.service.MetadataService;
-import org.petalslink.dsb.commons.service.api.Service;
-import org.petalslink.dsb.cxf.CXFHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.ow2.play.metadata.api.Metadata;
+import org.ow2.play.metadata.api.Resource;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author chamerling
- * 
+ *
  */
-public class Main {
+@Document(collection = "metadata")
+public class MetaResource {
 
-	public static void main(String[] args) {
-
-		
-		MongoMetadataServiceImpl bean = new MongoMetadataServiceImpl();
-		bean.setBsonAdapter(new BSONAdapterImpl());
-		bean.init();
-		
-		Service service = CXFHelper
-				.getServiceFromFinalURL(
-						"http://localhost:8080/play-metadata-mongodb-war/MetadataService",
-						MetadataService.class, bean);
-		
-		service.start();
-		
-		try {
-			Thread.sleep(1000000000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		
-
+	@Id
+	public ObjectId id;
+	
+	public Resource resource;
+	
+	public List<Metadata> metadata = new ArrayList<Metadata>();
+	
+	public MetaResource() {
 	}
-
 }

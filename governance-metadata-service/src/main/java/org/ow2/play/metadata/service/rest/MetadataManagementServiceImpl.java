@@ -64,8 +64,7 @@ public class MetadataManagementServiceImpl implements MetadataManagementService 
 			e.printStackTrace();
 			return Response.serverError().build();
 		}
-
-		return Response.ok("Service initialized").build();
+		return Response.ok().build();
 	}
 	
 	@Override

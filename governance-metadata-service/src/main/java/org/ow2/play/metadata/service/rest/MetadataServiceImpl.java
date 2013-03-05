@@ -21,6 +21,10 @@ package org.ow2.play.metadata.service.rest;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.metadata.api.MetaResource;
@@ -58,6 +62,17 @@ public class MetadataServiceImpl implements MetadataService {
 			return Response.serverError().build();
 		}
 		return Response.ok(result).build();
+	}
+	
+	@Override
+	public Response getResources(String name, String url) {
+		List<MetaResource> result = null;
+		try {
+			result = metadataService.listWhere(name, url);
+		} catch (MetadataException e) {
+			return Response.serverError().build();
+		}
+		return Response.ok(new MetadataContainer(result)).build();
 	}
 
 	public void setMetadataService(

@@ -23,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,16 +43,27 @@ public interface MetadataService {
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response all();
-
+	
 	/**
 	 * Get resource from its ID
 	 * 
 	 * @return
 	 */
 	@GET
-	@Path("/{id}")
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response get(@PathParam("id") String id);
+	
+	/**
+	 * 
+	 * @param name
+	 * @param url
+	 * @return
+	 */
+	@GET
+	@Path("query")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response getResources(@QueryParam("name") String name, @QueryParam("url") String url);
 	
 	
 }

@@ -150,6 +150,15 @@ public interface MetadataService {
 	List<MetaResource> list() throws MetadataException;
 	
 	/**
+	 * List all the MetaResource where the resource name is the given one
+	 * 
+	 * @param name
+	 * @return
+	 * @throws MetadataException
+	 */
+	List<MetaResource> listWhere(String name, String url) throws MetadataException;
+	
+	/**
 	 * Check if a resource exists in the repository
 	 * 
 	 * @param resource

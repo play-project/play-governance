@@ -360,48 +360,49 @@ public class EventGovernanceService implements EventGovernance {
         // topics
         List<MetaResource> resources = null;
         try {
-            resources = client.list();
+            resources = client.listWhere(Constants.STREAM_RESOURCE_NAME, null);
         } catch (Exception e) {
             throw new GovernanceExeption(e);
         }
 
-        // TODO/FIXME/!!! : Do not get all the resource but only the topic ones!!!
         if (resources != null) {
             for (MetaResource r : resources) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Resource : " + r.getResource());
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.info("Resource : " + r.getResource());
                 }
-                // TODO : Get the prefix from the metaresources, for now we only
-                // get the topic from the resource name where the name is
-                // 'stream'
+				Topic topic = new Topic();
+				String ns = r
+						.getResource()
+						.getUrl()
+						.substring(0,
+								r.getResource().getUrl().lastIndexOf('/') + 1);
+				String name = r
+						.getResource()
+						.getUrl()
+						.substring(
+								r.getResource().getUrl().lastIndexOf('/') + 1);
+				topic.setName(name);
+				topic.setNs(ns);
 
-                if (Constants.STREAM_RESOURCE_NAME.equals(r.getResource().getName())) {
-                    Topic topic = new Topic();
-                    String ns = r.getResource().getUrl()
-                            .substring(0, r.getResource().getUrl().lastIndexOf('/') + 1);
-                    String name = r.getResource().getUrl()
-                            .substring(r.getResource().getUrl().lastIndexOf('/') + 1);
-                    topic.setName(name);
-                    topic.setNs(ns);
-
-                    Metadata md = null;
-
-                    // FIXME : We have it locally, do not call the meta service again!
-                    try {
-                        md = client.getMetadataValue(r.getResource(), Constants.QNAME_PREFIX_URL);
-                    } catch (Exception e) {
-                        logger.info("Get not get metadata from service");
-                    }
-                    if (md != null && md.getData() != null && md.getData().size() == 1 &&
-                        md.getData().get(0).getValue() != null) {
-                        topic.setPrefix(md.getData().get(0).getValue());
-                    } else {
-                        topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
-                    }
-                    result.add(topic);
-                } else {
-                    logger.info("Not a topic");
-                }
+				List<Metadata> md = new ArrayList<Metadata>(Collections2.filter(r.getMetadata(), new Predicate<Metadata>() {
+					public boolean apply(Metadata meta) {
+						return meta.getName() != null && meta.getName().equals(Constants.QNAME_PREFIX_URL);
+					}
+				}));
+				
+				if (md.size() == 0) {
+					topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
+				} else {
+					Metadata m = md.get(0);
+					if (m != null && m.getData() != null
+							&& m.getData().size() == 1
+							&& m.getData().get(0).getValue() != null) {
+						topic.setPrefix(m.getData().get(0).getValue());
+					} else {
+						topic.setPrefix(org.ow2.play.governance.api.Constants.DEFAULT_PREFIX);
+					}
+				}
+				result.add(topic);
             }
         }
         return result;

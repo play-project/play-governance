@@ -273,4 +273,14 @@ public class InMemoryMetadataServiceImpl implements
 			metadata.put(resource, new HashSet<Metadata>());
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#listWhereName(java.lang.String)
+	 */
+	@Override
+	public List<MetaResource> listWhere(String name, String url)
+			throws MetadataException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

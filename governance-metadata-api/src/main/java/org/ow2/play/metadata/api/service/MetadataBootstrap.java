@@ -35,11 +35,20 @@ public interface MetadataBootstrap {
 
 	/**
 	 * Initialize the metadata service from a list of metadata resources located
-	 * at the given URLs.
+	 * at the given URLs. Init loads all and overrides any existing entries.
 	 * 
 	 * @param urls
 	 * @throws MetadataException
 	 */
 	@WebMethod
 	void init(List<String> urls) throws MetadataException;
+	
+	/**
+	 * Update the resources with the given input data as already retrieved in {@link #init(List)}.
+	 * 
+	 * @param urls
+	 * @throws MetadataException
+	 */
+	@WebMethod
+	void update(List<String> urls) throws MetadataException;
 }

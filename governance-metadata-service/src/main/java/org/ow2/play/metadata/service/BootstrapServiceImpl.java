@@ -53,7 +53,7 @@ public class BootstrapServiceImpl implements MetadataBootstrap {
 	/**
 	 * Load data from a list of resources. Add them to the registry if needed.
 	 */
-	public void init(List<String> urls) {
+	public void update(List<String> urls) {
 		if (metadataLoader != null && metadataService != null && urls != null) {
 			for (String url : urls) {
 				logger.info("Loading data from " + url);
@@ -65,6 +65,26 @@ public class BootstrapServiceImpl implements MetadataBootstrap {
 							metadataService.addMetadata(
 									metaResource.getResource(), metadata);
 						}
+					}
+				} catch (MetadataException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Load data from a list of resources. Add them to the registry if needed.
+	 */
+	public void init(List<String> urls) {
+		if (metadataLoader != null && metadataService != null && urls != null) {
+			for (String url : urls) {
+				logger.info("Loading data from " + url);
+				try {
+					List<MetaResource> list = metadataLoader.load(url);
+
+					for (MetaResource metaResource : list) {
+						metadataService.create(metaResource);
 					}
 				} catch (MetadataException e) {
 					e.printStackTrace();

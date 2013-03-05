@@ -222,6 +222,15 @@ public class MetadataServiceClient implements MetadataService {
     public boolean deleteResource(Resource resource) throws MetadataException {
         return getClient().deleteResource(resource);
     }
+    
+    /* (non-Javadoc)
+     * @see org.ow2.play.metadata.api.service.MetadataService#listWhere(java.lang.String, java.lang.String)
+     */
+    @Override
+    public List<MetaResource> listWhere(String name, String url)
+    		throws MetadataException {
+    	return getClient().listWhere(name, url);
+    }
 
     /* (non-Javadoc)
      * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)

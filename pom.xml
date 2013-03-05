@@ -36,8 +36,6 @@
 		<module>governance-metadata-service</module>
 		<module>governance-metadata-war</module>
     <module>governance-metadata-json</module>
-    <module>governance-metadata-mongodb</module>
-    <module>governance-metadata-mongodb-war</module>
     <module>governance-metadata-inject</module>
     <!-- Governance Registry -->
     <module>governance-serviceregistry-api</module>

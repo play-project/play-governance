@@ -133,6 +133,16 @@ public class CreationTest extends TestCase {
 
 		service.setMetadataServiceClient(new MetadataService() {
 			
+			/* (non-Javadoc)
+			 * @see org.ow2.play.metadata.api.service.MetadataService#listWhere(java.lang.String, java.lang.String)
+			 */
+			@Override
+			public List<MetaResource> listWhere(String name, String url)
+					throws MetadataException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
 			@Override
 			@WebMethod
 			public MetaResource get(String id) throws MetadataException {
