@@ -42,7 +42,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 
 /**
  * @author chamerling
@@ -169,9 +171,30 @@ public class MetadataServiceImpl implements MetadataService {
 
 	@Override
 	@WebMethod
-	public Metadata getMetadataValue(Resource resource, String key)
+	public Metadata getMetadataValue(final Resource resource, final String key)
 			throws MetadataException {
-		throw new MetadataException("Not implemented");
+		
+		if (resource == null || resource.getName() == null
+				|| resource.getUrl() == null || key == null) {
+			throw new MetadataException("Null parameters");
+		}
+		
+		org.ow2.play.metadata.service.document.MetaResource mr = mongoTemplate
+				.findOne(
+						query(where("resource.name").is(resource.getName())
+								.and("resource.url").is(resource.getUrl())
+								.and("metadata")
+								.elemMatch(where("name").is(key))),
+						org.ow2.play.metadata.service.document.MetaResource.class);
+		if (mr == null) {
+			return null;
+		}
+		
+		return Iterables.find(mr.metadata, new Predicate<Metadata>() {
+			public boolean apply(Metadata element) {
+				return element.getName().equals(key);
+			};
+		});
 	}
 
 	@Override

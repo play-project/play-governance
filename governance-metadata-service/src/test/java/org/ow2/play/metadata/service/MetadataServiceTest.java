@@ -22,6 +22,8 @@ package org.ow2.play.metadata.service;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -376,5 +378,39 @@ public class MetadataServiceTest {
 			fail();
 		}
 		
+	}
+	
+	@Test
+	public void getMetadataValue() {
+		Resource foo = new Resource(UUID.randomUUID().toString(), "http://foo");
+		org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource(
+				foo, new ArrayList<Metadata>());
+		Metadata m = new Metadata("foo", new Data("mytype", "myvalue"));
+		mr.getMetadata().add(m);
+
+		try {
+			metadataService.create(mr);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			Metadata md = metadataService.getMetadataValue(foo, m.getName());
+			assertNotNull(md);
+			assertEquals(md.getName(), m.getName());
+			assertEquals(md.getData().get(0), m.getData().get(0));
+			
+			md = metadataService.getMetadataValue(foo, "bar");
+			assertNull(md);
+			
+			md = metadataService.getMetadataValue(new Resource("foo", "bar"), "baz");
+			assertNull(md);
+			
+		} catch (MetadataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
 	}
 }
