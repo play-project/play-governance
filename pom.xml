@@ -18,7 +18,6 @@
     <module>governance-api</module>
     <module>governance-service</module>
     <module>governance-mongostorage</module>
-    <module>governance-war</module>
     <module>governance-mongodb-war</module>
     <module>governance-mocks</module>
     <module>governance-migrator</module>
@@ -48,6 +47,7 @@
     <module>governance-user-api</module>
     <module>governance-user-service</module>
     <module>governance-user-war</module>
+    <module>governance-groups</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

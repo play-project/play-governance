@@ -17,39 +17,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.user.bean;
-
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.ow2.play.governance.user.api.bean.Meta;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package org.ow2.play.governance.groups;
 
 /**
  * @author chamerling
  * 
  */
-@Document
-public class Group {
-
-	@Id
-	public ObjectId id;
-
-	public String name;
-
-	public String description;
+public interface Constants {
 	
-	public String type;
-	
-	/**
-	 * A list of metadata attached to the group
-	 */
-	public List<Meta> metadata;
+	public static String RESOURCE_NAME = "group";
 
-	/**
-	 * 
-	 */
-	public Group() {
-	}
+	public static String TITLE = "http://purl.org/dc/elements/1.1/title";
+	
+	public static String DESCRIPTION = "http://purl.org/dc/elements/1.1/description";
+	
+	public static String DATE = "http://purl.org/dc/elements/1.1/date";
+	
+	public static String ICON = "http://www.w3.org/2002/06/xhtml2/icon";
+	
+	public static String PREFIX = "http://groups.event-processing.org/id/";
+	
+	public static String RDFS_USERGROUP = "http://rdfs.org/sioc/ns#Usergroup";
+	
+	public static String RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 }

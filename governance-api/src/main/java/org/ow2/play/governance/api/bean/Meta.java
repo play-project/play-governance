@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.user.api.bean;
+package org.ow2.play.governance.api.bean;
 
 /**
  * 
@@ -27,6 +27,8 @@ package org.ow2.play.governance.user.api.bean;
 public class Meta {
 
 	public String name;
+	
+	public String type;
 	
 	public String value;
 	

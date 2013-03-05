@@ -12,6 +12,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="serviceregistry" class="org.ow2.play.governance.client.ServiceRegistry">
 		<property name="url" value="http://localhost:8080/registry/RegistryService"/>
 	</bean>
+	
+	<!-- Metadata Client, to be replaced by the real one instaed of a client -->
+	<bean id="metadataservice" class="org.ow2.play.governance.client.MetadataService">
+		<property name="serviceRegistry" ref="serviceregistry"/>
+	</bean>
 
 	<bean id="managementservice"
 		class="org.ow2.play.governance.service.GovernanceManagementService">
@@ -72,6 +77,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudsManagementWsImpl">
 		<property name="registry" ref="serviceregistry" />
 	</bean>
+	
+	<!-- User Management -->
+	<bean id="groupservice" class="org.ow2.play.governance.groups.GroupServiceImpl">
+		<property name="metadataService" ref="metadataservice"/>
+	</bean>
 		
 	<!-- JAXWS -->
 	<jaxws:endpoint id="event" implementor="#eventservice"
@@ -109,4 +119,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		
 	<jaxws:endpoint id="ecserviceservice" implementor="#ecservice"
 		address="/EventCloudService" />
+		
+	<jaxws:endpoint id="groupserviceservice" implementor="#groupservice"
+		address="/GroupService" />
 </beans>

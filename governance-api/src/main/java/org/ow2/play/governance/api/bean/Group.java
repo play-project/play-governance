@@ -17,8 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.user.api.bean;
+package org.ow2.play.governance.api.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,19 +44,19 @@ public class Group {
 	public String name;
 	
 	/**
+	 * 
+	 */
+	public String title;
+	
+	/**
 	 * Group description
 	 */
 	public String description;
 	
 	/**
-	 * 
-	 */
-	public String type;
-	
-	/**
 	 * Additional information as key/value...
 	 */
-	public List<Meta> metadata;
+	public List<Meta> metadata = new ArrayList<Meta>();
 	
 	/**
 	 * 
