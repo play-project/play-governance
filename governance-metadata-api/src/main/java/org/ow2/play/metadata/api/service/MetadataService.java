@@ -156,6 +156,7 @@ public interface MetadataService {
 	 * @return
 	 * @throws MetadataException
 	 */
+	@WebMethod
 	List<MetaResource> listWhere(String name, String url) throws MetadataException;
 	
 	/**
