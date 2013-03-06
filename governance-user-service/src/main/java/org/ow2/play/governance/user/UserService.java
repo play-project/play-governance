@@ -6,7 +6,6 @@ package org.ow2.play.governance.user;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import org.ow2.play.commons.security.Crypto;
