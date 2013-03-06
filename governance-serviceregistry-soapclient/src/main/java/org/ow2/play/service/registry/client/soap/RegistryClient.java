@@ -23,10 +23,10 @@ import java.util.List;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.service.registry.api.Entry;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
  * A CXF-based registry client

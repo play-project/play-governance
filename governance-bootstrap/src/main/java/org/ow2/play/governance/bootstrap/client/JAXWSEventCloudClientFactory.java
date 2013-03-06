@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ow2.play.governance.bootstrap.api.EventCloudClientFactory;
-import org.petalslink.dsb.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.CXFHelper;
 
 import fr.inria.eventcloud.webservices.api.EventCloudsManagementWsApi;
 

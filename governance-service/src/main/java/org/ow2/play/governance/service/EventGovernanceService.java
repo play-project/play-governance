@@ -24,7 +24,7 @@ import org.ow2.play.governance.api.SubscriptionService;
 import org.ow2.play.governance.api.TopicAware;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.client.ServiceRegistry;
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
@@ -34,7 +34,6 @@ import org.ow2.play.metadata.api.Type;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -54,6 +53,8 @@ public class EventGovernanceService implements EventGovernance {
      * Uses the registry to get endpoint to reach metadata service
      */
     private Registry serviceRegistry;
+    
+    private MetadataService metadataService;
 
     private SubscriptionService subscriptionService;
 
@@ -348,19 +349,10 @@ public class EventGovernanceService implements EventGovernance {
     public List<Topic> getTopics() throws GovernanceExeption {
         logger.fine("Get topics from metadata service...");
 
-        checkRegistry();
-
         List<Topic> result = new ArrayList<Topic>();
-        String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
-
-        logger.info("Getting topics from " + endpoint);
-
-        MetadataService client = getMetadataClient(endpoint);
-        // FIXME : Get all for now, we need to only get the resources which are
-        // topics
         List<MetaResource> resources = null;
         try {
-            resources = client.listWhere(Constants.STREAM_RESOURCE_NAME, null);
+            resources = metadataService.listWhere(Constants.STREAM_RESOURCE_NAME, null);
         } catch (Exception e) {
             throw new GovernanceExeption(e);
         }
@@ -408,14 +400,6 @@ public class EventGovernanceService implements EventGovernance {
         return result;
     }
 
-    /**
-     * @param endpoint
-     * @return
-     */
-    protected MetadataService getMetadataClient(String endpoint) {
-        return CXFHelper.getClientFromFinalURL(endpoint, MetadataService.class);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -458,28 +442,14 @@ public class EventGovernanceService implements EventGovernance {
      * @throws GovernanceExeption
      */
     protected MetaResource getResourceForTopic(Topic topic) throws GovernanceExeption {
-        String endpoint = null;
         MetaResource result = null;
 
-        try {
-            endpoint = serviceRegistry.get(org.ow2.play.service.registry.api.Constants.METADATA);
-        } catch (RegistryException e1) {
-            e1.printStackTrace();
-            throw new GovernanceExeption(e1);
-        }
-
-        if (endpoint == null) {
-            throw new GovernanceExeption(
-                "Can not get the metadata provider endpoint from the service registry");
-        }
-
         Resource resource = Helper.getResource(topic);
-        MetadataService client = getMetadataClient(endpoint);
 
         try {
-            boolean exists = client.exists(resource);
+            boolean exists = metadataService.exists(resource);
             if (exists) {
-                result = new MetaResource(resource, client.getMetaData(resource));
+                result = new MetaResource(resource, metadataService.getMetaData(resource));
             } else {
                 // let's do it...
                 logger.warning("Can not find the resource in the repository " + resource);
@@ -499,12 +469,9 @@ public class EventGovernanceService implements EventGovernance {
      * @throws GovernanceExeption
      */
     protected MetaResource createMetaResource(MetaResource metaresource) throws GovernanceExeption {
-        String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
-
-        MetadataService client = getMetadataClient(endpoint);
         boolean created = false;
         try {
-            created = client.create(metaresource);
+            created = metadataService.create(metaresource);
         } catch (MetadataException e) {
             throw new GovernanceExeption("Can not create the metaresource in the repository", e);
         }
@@ -647,7 +614,7 @@ public class EventGovernanceService implements EventGovernance {
      * @param serviceRegistry
      *            the serviceRegistry to set
      */
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+    public void setServiceRegistry(Registry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
     }
 
@@ -658,5 +625,12 @@ public class EventGovernanceService implements EventGovernance {
     public void setSubscriptionRegistry(SubscriptionRegistry subscriptionRegistry) {
         this.subscriptionRegistry = subscriptionRegistry;
     }
+    
+    /**
+	 * @param metadataService the metadataService to set
+	 */
+	public void setMetadataService(MetadataService metadataService) {
+		this.metadataService = metadataService;
+	}
 
 }

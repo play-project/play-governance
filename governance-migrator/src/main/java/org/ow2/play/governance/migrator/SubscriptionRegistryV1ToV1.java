@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.bean.Subscription;
-import org.petalslink.dsb.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.CXFHelper;
 
 /**
  * Migrate data from V1 registry to V1 registry

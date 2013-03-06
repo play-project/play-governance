@@ -13,7 +13,6 @@
   
 	<groupId>org.ow2.play</groupId>
 	<artifactId>governance-serviceregistry-api</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>governance-serviceregistry-api</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://cxf.apache.org/core" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		 http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/transports/http/configuration         http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+        http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
+
+	<!-- Registry -->
+	<jaxws:endpoint id="registry" implementor="#registryservice"
+		address="/RegistryService" />
+
+	<!-- Metadata -->
+	<jaxws:endpoint id="metadataservicendpoint" implementor="#metadataservice"
+		address="/MetadataService" />
+
+	<jaxws:endpoint id="metadatabootserviceendpoint" implementor="#metadatabootservice"
+		address="/MetadataBootService" />
+		
+	<!-- Core -->
+	<jaxws:endpoint id="eventserviceendpoint" implementor="#eventservice"
+		address="/EventGovernance" />
+
+	<jaxws:endpoint id="managementserviceendpoint" implementor="#managementservice"
+		address="/ManagementService" />
+		
+	<jaxws:endpoint id="subscriptionstorageendpoint" implementor="#subscriptionstorageservice"
+		address="/SubscriptionStorageService" />
+		
+	<jaxws:endpoint id="bootsubscriptionstorageendpoint" implementor="#bootsubscriptionstorageservice"
+		address="/BootSubscriptionStorageService" />
+		
+	<jaxws:endpoint id="subscriptionserviceendpoint" implementor="#wsnsubscriptionservice"
+		address="/SubscriptionService" />
+
+	<jaxws:endpoint id="subscriptionmanagementendpoint" implementor="#subscriptionmanagementservice"
+		address="/SubscriptionManagementService" />
+
+	<jaxws:endpoint id="topicregistryendpoint" implementor="#topicregistryservice"
+		address="/TopicRegistryService" />
+		
+	<jaxws:endpoint id="patternregistryserviceendpoint" implementor="#patternregistry"
+		address="/PatternRegistryService" />
+
+	<jaxws:endpoint id="simplepatternserviceserviceendpoint" implementor="#simplepatternservice"
+		address="/SimplePatternService" />
+		
+	<jaxws:endpoint id="complexpatternserviceserviceendpoint" implementor="#complexpatternservice"
+		address="/ComplexPatternService" />
+		
+	<jaxws:endpoint id="patternserviceserviceendpoint" implementor="#patternservice"
+		address="/PatternService" />
+		
+	<jaxws:endpoint id="ecserviceserviceendpoint" implementor="#ecservice"
+		address="/EventCloudService" />
+		
+	<jaxws:endpoint id="groupserviceserviceendpoint" implementor="#groupservice"
+		address="/GroupService" />
+</beans>

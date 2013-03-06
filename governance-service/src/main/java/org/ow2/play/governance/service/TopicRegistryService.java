@@ -35,9 +35,6 @@ import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
-import org.ow2.play.service.registry.api.Registry;
-import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -51,7 +48,7 @@ public class TopicRegistryService implements TopicRegistry {
 	private static Logger logger = Logger.getLogger(TopicRegistryService.class
 			.getName());
 
-	private Registry serviceRegistry;
+	private MetadataService metadataService;
 
 	/*
 	 * (non-Javadoc)
@@ -91,14 +88,9 @@ public class TopicRegistryService implements TopicRegistry {
 		logger.fine("Get topics from metadata service...");
 
 		List<Topic> result = new ArrayList<Topic>();
-		String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
-
-		logger.info("Getting topics from " + endpoint);
-
-		MetadataService client = getMetadataClient(endpoint);
 		List<MetaResource> resources = null;
 		try {
-			resources = client.list();
+			resources = metadataService.list();
 		} catch (Exception e) {
 			throw new GovernanceExeption(e);
 		}
@@ -165,11 +157,9 @@ public class TopicRegistryService implements TopicRegistry {
 		boolean result = true;
 
 		MetaResource mr = getResourceForTopic(topic);
-		MetadataService service = getMetadataClient(getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA));
-		
 		for (Metadata metadata : properties) {
 			try {
-				service.setMetadata(mr.getResource(), metadata);
+				metadataService.setMetadata(mr.getResource(), metadata);
 			} catch (MetadataException e) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.log(Level.WARNING, "Got error while setting metadata", e);
@@ -185,30 +175,14 @@ public class TopicRegistryService implements TopicRegistry {
 
 	protected MetaResource getResourceForTopic(Topic topic)
 			throws GovernanceExeption {
-		String endpoint = null;
 		MetaResource result = null;
 
-		try {
-			endpoint = serviceRegistry
-					.get(org.ow2.play.service.registry.api.Constants.METADATA);
-		} catch (RegistryException e1) {
-			e1.printStackTrace();
-			throw new GovernanceExeption(e1);
-		}
-
-		if (endpoint == null) {
-			throw new GovernanceExeption(
-					"Can not get the metadata provider endpoint from the service registry");
-		}
-
 		Resource resource = Helper.getResource(topic);
-		MetadataService client = getMetadataClient(endpoint);
-
 		try {
-			boolean exists = client.exists(resource);
+			boolean exists = metadataService.exists(resource);
 			if (exists) {
 				result = new MetaResource(resource,
-						client.getMetaData(resource));
+						metadataService.getMetaData(resource));
 			} else {
 				// let's do it...
 				logger.warning("Can not find the resource in the repository "
@@ -221,22 +195,11 @@ public class TopicRegistryService implements TopicRegistry {
 		return result;
 	}
 
-	/**
-	 * @param endpoint
-	 * @return
-	 */
-	protected MetadataService getMetadataClient(String endpoint) {
-		return CXFHelper.getClientFromFinalURL(endpoint, MetadataService.class);
-	}
-
 	protected MetaResource createMetaResource(MetaResource metaresource)
 			throws GovernanceExeption {
-		String endpoint = getEndpoint(org.ow2.play.service.registry.api.Constants.METADATA);
-
-		MetadataService client = getMetadataClient(endpoint);
 		boolean created = false;
 		try {
-			created = client.create(metaresource);
+			created = metadataService.create(metaresource);
 		} catch (MetadataException e) {
 			throw new GovernanceExeption(
 					"Can not create the metaresource in the repository", e);
@@ -249,27 +212,10 @@ public class TopicRegistryService implements TopicRegistry {
 		return metaresource;
 	}
 
-	protected String getEndpoint(String id) throws GovernanceExeption {
-		String url = null;
-		try {
-			url = serviceRegistry.get(id);
-		} catch (RegistryException e) {
-			throw new GovernanceExeption(e);
-		}
-
-		if (url == null) {
-			throw new GovernanceExeption(
-					"Can not find the service associated to " + id);
-
-		}
-		return url;
-	}
-
-	/**
-	 * @param serviceRegistry
-	 *            the serviceRegistry to set
+    /**
+	 * @param metadataService the metadataService to set
 	 */
-	public void setServiceRegistry(Registry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
+	public void setMetadataService(MetadataService metadataService) {
+		this.metadataService = metadataService;
 	}
 }

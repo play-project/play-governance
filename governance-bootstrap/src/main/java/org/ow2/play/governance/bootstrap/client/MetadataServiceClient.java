@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -31,7 +32,6 @@ import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
  * @author chamerling

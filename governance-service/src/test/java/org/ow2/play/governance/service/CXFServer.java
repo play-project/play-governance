@@ -6,8 +6,8 @@ package org.ow2.play.governance.service;
 import java.util.concurrent.TimeUnit;
 
 import org.ow2.play.governance.api.EventGovernance;
-import org.petalslink.dsb.commons.service.api.Service;
-import org.petalslink.dsb.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.Service;
 
 
 /**

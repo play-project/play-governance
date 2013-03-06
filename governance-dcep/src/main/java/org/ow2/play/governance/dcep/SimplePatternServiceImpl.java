@@ -31,13 +31,13 @@ import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SimplePatternService;
 import org.ow2.play.governance.api.bean.Pattern;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
 import org.ow2.play.service.registry.api.Constants;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -60,6 +60,8 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 			.getLogger(SimplePatternServiceImpl.class.getName());
 
 	private Registry registry;
+	
+	private MetadataService metadataService;
 
 	/*
 	 * (non-Javadoc)
@@ -248,8 +250,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		
 		// get the NS from the metadataservice, only useful if the topic already exists
 		try {
-			MetadataService client = getMetadataClient(registry.get(Constants.METADATA));
-			Metadata md = client.getMetadataValue(r, org.ow2.play.governance.api.Constants.QNAME_PREFIX_URL);
+			Metadata md = metadataService.getMetadataValue(r, org.ow2.play.governance.api.Constants.QNAME_PREFIX_URL);
 			if (md != null && md.getData() != null
 					&& md.getData().size() == 1
 					&& md.getData().get(0).getValue() != null) {
@@ -275,8 +276,11 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		return "http://play.ow2.org/pattern/" + UUID.randomUUID().toString();
 	}
 	
-	protected MetadataService getMetadataClient(String endpoint) {
-		return CXFHelper.getClientFromFinalURL(endpoint, MetadataService.class);
+	/**
+	 * @param metadataService the metadataService to set
+	 */
+	public void setMetadataService(MetadataService metadataService) {
+		this.metadataService = metadataService;
 	}
 
 	public void setRegistry(Registry registry) {

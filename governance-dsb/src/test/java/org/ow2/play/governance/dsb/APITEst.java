@@ -21,7 +21,7 @@ package org.ow2.play.governance.dsb;
 
 import junit.framework.TestCase;
 
-import org.petalslink.dsb.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.petalslink.dsb.jbi.se.wsn.api.ManagementService;
 import org.petalslink.dsb.jbi.se.wsn.api.Subscription;
 import org.petalslink.dsb.jbi.se.wsn.api.SubscriptionManagementService;

@@ -12,7 +12,6 @@
 
 	<groupId>org.ow2.play</groupId>
 	<artifactId>governance-pubsubbootstrap</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>governance-pubsubbootstrap</name>
 	<packaging>war</packaging>
 
@@ -26,14 +25,14 @@
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-metadata-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-metadata-json</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -46,43 +45,43 @@
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-metadata-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-serviceregistry-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-			<version>2.5.0</version>
+			<version>${cxf.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>2.5.0</version>
+			<version>${cxf.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>fr.inria.eventcloud</groupId>
 			<artifactId>eventcloud-webservices-api</artifactId>
-			<version>1.3.0</version>
+			<version>${eventcloud.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>eventcloud-translators-wsn</artifactId>
@@ -98,9 +97,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.ow2.petals.dsb</groupId>
-			<artifactId>dsb-cxfutils</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-cxf</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>

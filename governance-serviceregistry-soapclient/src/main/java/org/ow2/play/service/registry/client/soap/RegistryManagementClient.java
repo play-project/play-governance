@@ -19,9 +19,9 @@
  */
 package org.ow2.play.service.registry.client.soap;
 
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.ow2.play.service.registry.api.RegistryManagement;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
  * @author chamerling

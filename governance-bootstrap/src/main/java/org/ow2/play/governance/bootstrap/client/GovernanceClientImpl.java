@@ -22,7 +22,6 @@ package org.ow2.play.governance.bootstrap.client;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
@@ -30,9 +29,9 @@ import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.bootstrap.api.GovernanceClient;
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.service.registry.api.Constants;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 
 /**

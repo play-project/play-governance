@@ -7,11 +7,11 @@
 		<artifactId>play-governance</artifactId>
 		<groupId>org.ow2.play</groupId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.ow2.play</groupId>
 	<artifactId>governance-serviceregistry-mongo</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>governance-serviceregistry-mongo</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +26,6 @@
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
-			<version>2.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.play</groupId>

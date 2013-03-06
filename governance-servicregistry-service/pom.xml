@@ -6,11 +6,11 @@
     <artifactId>play-governance</artifactId>
     <groupId>org.ow2.play</groupId>
     <version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.ow2.play</groupId>
   <artifactId>governance-servicregistry-service</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <name>governance-servicregistry-service</name>
 
   <properties>

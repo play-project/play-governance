@@ -3,7 +3,6 @@
 	xmlns:cxf="http://cxf.apache.org/core" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration"
 	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
 	xmlns:sec="http://cxf.apache.org/configuration/security"
@@ -13,73 +12,39 @@
 		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
 		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-		http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/beans                 http://www.springframework.org/schema/beans/spring-beans.xsd
         http://cxf.apache.org/transports/http/configuration         http://cxf.apache.org/schemas/configuration/http-conf.xsd
         http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-        http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd
-        http://www.springframework.org/schema/data/jpa              http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-        http://www.springframework.org/schema/data/mongo            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+        http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd">
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
-
+	
 	<cxf:bus>
 		<cxf:features>
 			<cxf:logging />
 		</cxf:features>
 	</cxf:bus>
-	
-	<mongo:db-factory host="localhost" port="27017"
-		dbname="play" />
-		
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
-	</bean>
-	
-	<bean id="metadataservice" class="org.ow2.play.metadata.service.MetadataServiceImpl">
-		<property name="mongoTemplate" ref="mongoTemplate"/>
-	</bean>
 
-	<bean id="metadatarestservice" class="org.ow2.play.metadata.service.rest.MetadataServiceImpl">
-		<property name="metadataService" ref="metadataservice"/>
-	</bean>
-	
-	<bean id="metaloader" class="org.ow2.play.metadata.json.JSONMetadataLoaderImpl" />
-
-	<bean id="bootservice" class="org.ow2.play.metadata.service.BootstrapServiceImpl">
-		<property name="metadataService" ref="metadataservice" />
-		<property name="metadataLoader" ref="metaloader" />
-	</bean>
-
-	<!-- REST stuff -->
-	<bean id="managerestservice" class="org.ow2.play.metadata.service.rest.MetadataManagementServiceImpl">
-		<property name="bootstrap" ref="bootservice"/>
-		<property name="metadataService" ref="metadataservice"/>
-	</bean>
-	
-	<!--  SOAP -->
-	<jaxws:endpoint id="metadataservicendpoint" implementor="#metadataservice"
-		address="/MetadataService" />
-		
-	<jaxws:endpoint id="boot" implementor="#bootservice"
-		address="/BootService" />
-		
 	<util:list id="jsonkeys">
 		<value>accounts</value>
 	</util:list>
-
-	<!--  REST -->
+	
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="dropRootElement" value="true" />
 		<property name="supportUnwrapped" value="true" />
 		<property name="serializeAsArray" value="true" />
-		<property name="arrayKeys" ref="jsonkeys"/>
+		<property name="arrayKeys" ref="jsonkeys" />
 	</bean>
-	 
+
 	<jaxrs:server id="restContainer" address="/rest/">
 		<jaxrs:serviceBeans>
+			<!-- Registry -->
+			<ref bean="restregistryservice" />
+
+			<!-- metadata -->
 			<ref bean="metadatarestservice" />
-			<ref bean="managerestservice"/>
+			<ref bean="metadatamanagerestservice" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />

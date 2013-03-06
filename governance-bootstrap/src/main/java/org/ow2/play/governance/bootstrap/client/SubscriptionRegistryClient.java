@@ -29,8 +29,8 @@ import javax.jws.WebParam;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.bean.Subscription;
+import org.ow2.play.governance.cxf.CXFHelper;
 import org.ow2.play.service.registry.api.RegistryException;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
  * A Web service client to the registry

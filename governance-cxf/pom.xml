@@ -10,8 +10,8 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>org.ow2.play</groupId>
-	<artifactId>governance-wsn</artifactId>
-	<name>governance-wsn</name>
+	<artifactId>governance-cxf</artifactId>
+	<name>governance-cxf</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -22,23 +22,9 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-	
 		<dependency>
-			<groupId>org.ow2.play</groupId>
-			<artifactId>governance-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ow2.petals.dsb</groupId>
-			<artifactId>dsb-notification-httpclient</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ow2.play</groupId>
-			<artifactId>governance-cxf</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle-minimal</artifactId>
 		</dependency>
 	</dependencies>
 </project>

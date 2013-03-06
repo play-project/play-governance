@@ -9,15 +9,6 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="serviceregistry" class="org.ow2.play.governance.client.ServiceRegistry">
-		<property name="url" value="http://localhost:8080/registry/RegistryService"/>
-	</bean>
-	
-	<!-- Metadata Client, to be replaced by the real one instaed of a client -->
-	<bean id="metadataservice" class="org.ow2.play.governance.client.MetadataService">
-		<property name="serviceRegistry" ref="serviceregistry"/>
-	</bean>
-
 	<bean id="managementservice"
 		class="org.ow2.play.governance.service.GovernanceManagementService">
 	</bean>
@@ -38,24 +29,26 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		class="org.ow2.play.governance.service.SubscriptionManagementService">
 		<property name="subscriptionService" ref="wsnsubscriptionservice"/>
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice"/>
-		<property name="serviceRegistry" ref="serviceregistry"/>
+		<property name="serviceRegistry" ref="registryservice"/>
 	</bean>
 	
 	<bean id="eventservice"
 		class="org.ow2.play.governance.service.EventGovernanceService">
-		<property name="serviceRegistry" ref="serviceregistry" />
+		<property name="serviceRegistry" ref="registryservice" />
 		<property name="subscriptionService" ref="wsnsubscriptionservice" />
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice" />
+		<property name="metadataService" ref="metadataservice" />
 	</bean>
 	
 	<bean id="topicregistryservice"
 		class="org.ow2.play.governance.service.TopicRegistryService">
-		<property name="serviceRegistry" ref="serviceregistry" />
+		<property name="metadataService" ref="metadataservice" />
 	</bean>
 	
 	<!-- DCEP Governance -->
 	<bean id="simplepatternservice" class="org.ow2.play.governance.dcep.SimplePatternServiceImpl">
-		<property name="registry" ref="serviceregistry" />
+		<property name="registry" ref="registryservice" />
+		<property name="metadataService" ref="metadataservice" />
 	</bean>
 	
 	<bean id="patternregistry" class="org.ow2.play.governance.storage.MongoPatternRegistry"
@@ -75,7 +68,7 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	
 	<!-- EC Wrapper -->
 	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudsManagementWsImpl">
-		<property name="registry" ref="serviceregistry" />
+		<property name="registry" ref="registryservice" />
 	</bean>
 	
 	<!-- User Management -->
@@ -83,43 +76,4 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 		<property name="metadataService" ref="metadataservice"/>
 	</bean>
 		
-	<!-- JAXWS -->
-	<jaxws:endpoint id="event" implementor="#eventservice"
-		address="/EventGovernance" />
-
-	<jaxws:endpoint id="management" implementor="#managementservice"
-		address="/ManagementService" />
-		
-	<jaxws:endpoint id="subscriptionstorage" implementor="#subscriptionstorageservice"
-		address="/SubscriptionStorageService" />
-		
-	<jaxws:endpoint id="bootsubscriptionstorage" implementor="#bootsubscriptionstorageservice"
-		address="/BootSubscriptionStorageService" />
-		
-	<jaxws:endpoint id="subscriptionservice" implementor="#wsnsubscriptionservice"
-		address="/SubscriptionService" />
-
-	<jaxws:endpoint id="subscriptionmanagement" implementor="#subscriptionmanagementservice"
-		address="/SubscriptionManagementService" />
-
-	<jaxws:endpoint id="topicregistry" implementor="#topicregistryservice"
-		address="/TopicRegistryService" />
-		
-	<jaxws:endpoint id="patternregistryservice" implementor="#patternregistry"
-		address="/PatternRegistryService" />
-
-	<jaxws:endpoint id="simplepatternserviceservice" implementor="#simplepatternservice"
-		address="/SimplePatternService" />
-		
-	<jaxws:endpoint id="complexpatternserviceservice" implementor="#complexpatternservice"
-		address="/ComplexPatternService" />
-		
-	<jaxws:endpoint id="patternserviceservice" implementor="#patternservice"
-		address="/PatternService" />
-		
-	<jaxws:endpoint id="ecserviceservice" implementor="#ecservice"
-		address="/EventCloudService" />
-		
-	<jaxws:endpoint id="groupserviceservice" implementor="#groupservice"
-		address="/GroupService" />
 </beans>

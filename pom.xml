@@ -13,12 +13,19 @@
   <groupId>org.ow2.play</groupId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+  
+  <properties>
+    <cxf.version>2.6.0</cxf.version>
+    <guava.version>13.0.1</guava.version>
+    <eventcloud.version>1.3.0</eventcloud.version>
+    <mongo.java.driver.version>2.8.0</mongo.java.driver.version>
+  </properties>
+  
   <modules>
     <!-- Governance Runtime -->
     <module>governance-api</module>
     <module>governance-service</module>
     <module>governance-mongostorage</module>
-    <module>governance-mongodb-war</module>
     <module>governance-mocks</module>
     <module>governance-migrator</module>
     <module>governance-wsn</module>
@@ -33,25 +40,52 @@
 		<module>governance-metadata-api</module>
 		<module>governance-metadata-client</module>
 		<module>governance-metadata-service</module>
-		<module>governance-metadata-war</module>
     <module>governance-metadata-json</module>
     <module>governance-metadata-inject</module>
     <!-- Governance Registry -->
     <module>governance-serviceregistry-api</module>
     <module>governance-servicregistry-service</module>
-    <module>governance-serviceregistry-war</module>
     <module>governance-serviceregistry-soapclient</module>
     <module>governance-serviceregistry-mongo</module>
-    <module>governance-serviceregistry-mongo-war</module>
     <!-- User Management -->
     <module>governance-user-api</module>
     <module>governance-user-service</module>
     <module>governance-user-war</module>
     <module>governance-groups</module>
+    <!-- Utils -->
+    <module>governance-cxf</module>
+    <!-- Finals -->
+    <module>governance-war</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
+  
+  <dependencyManagement>
+    <dependencies>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle-minimal</artifactId>
+      <version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+    <dependency>
+      <groupId>fr.inria.eventcloud</groupId>
+      <artifactId>eventcloud-webservices-api</artifactId>
+      <version>${eventcloud.version}</version>
+    </dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo.java.driver.version}</version>
+		</dependency>
+  </dependencies>
+  </dependencyManagement>
+  
   <repositories>
     <repository>
       <id>ow2.release</id>

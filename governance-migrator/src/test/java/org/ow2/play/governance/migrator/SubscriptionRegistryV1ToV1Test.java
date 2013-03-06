@@ -11,9 +11,9 @@ import junit.framework.TestCase;
 import org.ow2.play.governance.api.SubscriptionRegistry;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.cxf.CXFHelper;
+import org.ow2.play.governance.cxf.Service;
 import org.ow2.play.governance.service.InMemorySubscriptionRegistryService;
-import org.petalslink.dsb.commons.service.api.Service;
-import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
  * @author chamerling

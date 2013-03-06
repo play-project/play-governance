@@ -15,7 +15,6 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.client.ServiceRegistry;
 import org.ow2.play.service.registry.api.Registry;
 import org.ow2.play.service.registry.api.RegistryException;
 import org.petalslink.dsb.notification.client.http.simple.HTTPProducerRPClient;
@@ -205,7 +204,7 @@ public class DSBEventGovernanceService implements EventGovernance {
 	 * @param serviceRegistry
 	 *            the serviceRegistry to set
 	 */
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+	public void setServiceRegistry(Registry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
 	}
 

@@ -3,16 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
-	  <artifactId>play-governance</artifactId>
-	  <groupId>org.ow2.play</groupId>
-	  <version>1.0-SNAPSHOT</version>
+		<artifactId>play-governance</artifactId>
+		<groupId>org.ow2.play</groupId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>org.ow2.play</groupId>
 	<artifactId>governance-war</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>governance-war</name>
 
 	<packaging>war</packaging>
@@ -27,15 +27,94 @@
 
 		<dependency>
 			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-serviceregistry-mongo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-metadata-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-metadata-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-metadata-json</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-dcep</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-ec</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-mongostorage</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-groups</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-minimal</artifactId>
-			<version>2.5.0</version>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>${cxf.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-extension-providers</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>3.0.7.RELEASE</version>
+		</dependency>
+
+		<!-- Exculdes on the DCEP breaks all and ElementTraversal is no more found. 
+			This hack seems to fix that... -->
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+		</dependency>
+
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +137,7 @@
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-							<port>8080</port>
+							<port>8083</port>
 							<maxIdleTime>60000</maxIdleTime>
 						</connector>
 					</connectors>
@@ -67,26 +146,26 @@
 		</plugins>
 	</build>
 	<repositories>
-    <repository>
-      <id>play-private.release</id>
-      <url>http://maven.petalslink.com/private-play-release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>play-private.snapshot</id>
-      <url>http://maven.petalslink.com/private-play-snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-	
+		<repository>
+			<id>play-private.release</id>
+			<url>http://maven.petalslink.com/private-play-release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>play-private.snapshot</id>
+			<url>http://maven.petalslink.com/private-play-snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 </project>
