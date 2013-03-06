@@ -45,6 +45,10 @@
 			<!-- metadata -->
 			<ref bean="metadatarestservice" />
 			<ref bean="metadatamanagerestservice" />
+			
+			<!-- user -->
+			<ref bean="userrestservice" />
+			
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />

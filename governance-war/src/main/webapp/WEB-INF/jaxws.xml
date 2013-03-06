@@ -70,4 +70,8 @@
 		
 	<jaxws:endpoint id="groupserviceserviceendpoint" implementor="#groupservice"
 		address="/GroupService" />
+
+	<!-- User -->
+	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
+		address="/UserService" />
 </beans>

@@ -50,7 +50,6 @@
     <!-- User Management -->
     <module>governance-user-api</module>
     <module>governance-user-service</module>
-    <module>governance-user-war</module>
     <module>governance-groups</module>
     <!-- Utils -->
     <module>governance-cxf</module>

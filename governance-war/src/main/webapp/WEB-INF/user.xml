@@ -20,15 +20,6 @@
         http://www.springframework.org/schema/data/jpa              http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         http://www.springframework.org/schema/data/mongo            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-	<import resource="classpath:META-INF/cxf/cxf.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
-
-	<cxf:bus>
-		<cxf:features>
-			<cxf:logging />
-		</cxf:features>
-	</cxf:bus>
-	
 	<mongo:db-factory host="localhost" port="27017"
 		dbname="play" />
 		
@@ -48,29 +39,4 @@
 		<property name="userService" ref="userservice"/>
 	</bean>
 	
-	<!--  SOAP -->
-	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
-		address="/UserService" />
-		
-	<util:list id="jsonkeys">
-		<value>accounts</value>
-	</util:list>
-
-	<!--  REST -->
-	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-		<property name="dropRootElement" value="true" />
-		<property name="supportUnwrapped" value="true" />
-		<property name="serializeAsArray" value="true" />
-		<property name="arrayKeys" ref="jsonkeys"/>
-	</bean>
-	 
-	<jaxrs:server id="restContainer" address="/rest/">
-		<jaxrs:serviceBeans>
-			<ref bean="userrestservice" />
-		</jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<ref bean="jsonprovider" />
-		</jaxrs:providers>
-	</jaxrs:server>
-
 </beans>
