@@ -51,6 +51,15 @@ public interface UserService {
 	 * @throws UserException if something is bad
 	 */
 	User getUserFromProvider(String provider, String login) throws UserException;
+	
+	/**
+	 * Get a user from the api token
+	 * 
+	 * @param token
+	 * @return the user or null if not found
+	 * @throws UserException
+	 */
+	User getUserFromToken(String token) throws UserException;
 
 	/**
 	 * Update a user (but not its name...). In order to update, name and

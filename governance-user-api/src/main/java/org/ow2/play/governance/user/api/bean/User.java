@@ -36,6 +36,11 @@ public class User {
 	public String avatarURL;
 	
 	/**
+	 * The API token while waiting for a OAuth provider
+	 */
+	public String apiToken;
+	
+	/**
 	 * Providers accounts for the user
 	 */
 	public List<Account> accounts = new ArrayList<Account>();

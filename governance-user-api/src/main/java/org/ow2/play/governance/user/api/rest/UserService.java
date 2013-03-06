@@ -32,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.governance.user.api.Provider;
+import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.bean.User;
 
 /**
@@ -75,6 +76,18 @@ public interface UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response getUserFromProvider(@QueryParam("login") String login,
 			@QueryParam("provider") String provider);
+	
+	/**
+	 * Get the user from the given token
+	 * 
+	 * @param token
+	 * @return
+	 * @throws UserException
+	 */
+	@GET
+	@Path("/token/{token}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response getUserFromToken(@PathParam("token") String token);
 
 	/**
 	 * Authenticate user from login/password. Password is not hashed

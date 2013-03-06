@@ -25,6 +25,9 @@ public interface UserService {
 	User getUserFromProvider(String provider, String login) throws UserException;
 
 	@WebMethod
+	User getUserFromToken(String token) throws UserException;
+
+	@WebMethod
 	User update(User user) throws UserException;
 
 	@WebMethod

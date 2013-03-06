@@ -21,6 +21,10 @@ package org.ow2.play.governance.user.rest;
 
 import java.util.logging.Logger;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.commons.rest.error.ResponseBuilder;
@@ -78,6 +82,23 @@ public class UserServiceImpl implements UserService {
 			User user = userService.getUserFromProvider(provider, login);
 			if (user == null) {
 				return ResponseBuilder.error("User '%s' Not found", login)
+						.build();
+			}
+
+			return ok(user);
+
+		} catch (UserException e) {
+			return ResponseBuilder.error(e).build();
+		}
+	}
+	
+	public Response getUserFromToken(String token) {
+		logger.info("Get user from token " + token);
+
+		try {
+			User user = userService.getUserFromToken(token);
+			if (user == null) {
+				return ResponseBuilder.error("User '%s' Not found", token)
 						.build();
 			}
 

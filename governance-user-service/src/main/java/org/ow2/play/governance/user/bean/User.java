@@ -33,6 +33,8 @@ public class User {
 
 	public String avatarURL;
 	
+	public String apitoken;
+	
 	public List<Account> accounts = new ArrayList<Account>();
 
 	public List<String> groups = new ArrayList<String>();

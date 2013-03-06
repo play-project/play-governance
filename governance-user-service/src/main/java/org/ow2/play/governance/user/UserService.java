@@ -6,9 +6,13 @@ package org.ow2.play.governance.user;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
+
 import org.ow2.play.commons.security.Crypto;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.bean.User;
+import org.ow2.play.governance.user.utils.TokenHelper;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,6 +28,8 @@ public class UserService implements
 		org.ow2.play.governance.user.api.UserService {
 
 	static String LOGIN = "login";
+	
+	static String APITOKEN = "apitoken";
 
 	private MongoTemplate mongoTemplate;
 
@@ -56,8 +62,13 @@ public class UserService implements
 		}
 
 		user.password = Crypto.passwordHash(user.password);
-		// check if the user does not already exists
-		// TODO
+
+		try {
+			// create an unique API token...
+			user.apiToken = TokenHelper.generate(UUID.randomUUID().toString().getBytes("UTF-8"));
+		} catch (Exception e) {
+		}
+		
 		mongoTemplate.save(fromAPI(user));
 		return user;
 	}
@@ -91,6 +102,17 @@ public class UserService implements
 	public User getUserFromID(String id) throws UserException {
 		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
 				query(where("_id").is(id)),
+				org.ow2.play.governance.user.bean.User.class);
+		if (user == null) {
+			throw new UserException("User not found");
+		}
+		return toAPI(user);
+	}
+	
+	@Override
+	public User getUserFromToken(String token) throws UserException {
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
+				query(where(APITOKEN).is(token)),
 				org.ow2.play.governance.user.bean.User.class);
 		if (user == null) {
 			throw new UserException("User not found");
@@ -156,6 +178,7 @@ public class UserService implements
 	private User toAPI(org.ow2.play.governance.user.bean.User user) {
 		User result = new User();
 		result.id = user.id.toStringMongod();
+		result.apiToken = user.apitoken;
 		result.accounts = user.accounts;
 		result.email = user.email;
 		result.fullName = user.fullName;
@@ -169,6 +192,7 @@ public class UserService implements
 	private org.ow2.play.governance.user.bean.User fromAPI(User user) {
 		org.ow2.play.governance.user.bean.User result = new org.ow2.play.governance.user.bean.User();
 		result.accounts = user.accounts;
+		result.apitoken = user.apiToken;
 		result.email = user.email;
 		result.fullName = user.fullName;
 		result.groups = user.groups;

@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
 			throws UserException {
 		return userService.getUserFromProvider(provider, login);
 	}
+	
+	@Override
+	@WebMethod
+	public User getUserFromToken(String token) throws UserException {
+		return userService.getUserFromToken(token);
+	}
 
 	@Override
 	@WebMethod
