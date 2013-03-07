@@ -25,14 +25,18 @@ import javax.ws.rs.core.Response;
 
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
-import org.ow2.play.metadata.api.service.rest.MetadataContainer;
 import org.ow2.play.metadata.api.service.rest.MetadataService;
+import org.ow2.play.metadata.service.provider.MetadataProvider;
 
 /**
+ * Get Metadata as JSON/RDF. Almost a clone of {@link MetadataServiceImpl} but
+ * it uses {@link MetadataProvider} to serialize data and does not care about
+ * Arrays like in {@link MetadataServiceImpl}.
+ * 
  * @author chamerling
  * 
  */
-public class MetadataServiceImpl implements MetadataService {
+public class MetadataRDFServiceImpl implements MetadataService {
 
 	private org.ow2.play.metadata.api.service.MetadataService metadataService;
 
@@ -45,9 +49,9 @@ public class MetadataServiceImpl implements MetadataService {
 			e.printStackTrace();
 			return Response.serverError().build();
 		}
-		return Response.ok(new MetadataContainer(result)).build();
+		return Response.ok(result).build();
 	}
-	
+
 	@Override
 	public Response get(String id) {
 		MetaResource result = null;
@@ -59,7 +63,7 @@ public class MetadataServiceImpl implements MetadataService {
 		}
 		return Response.ok(result).build();
 	}
-	
+
 	@Override
 	public Response getResources(String name, String url) {
 		List<MetaResource> result = null;
@@ -68,7 +72,7 @@ public class MetadataServiceImpl implements MetadataService {
 		} catch (MetadataException e) {
 			return Response.serverError().build();
 		}
-		return Response.ok(new MetadataContainer(result)).build();
+		return Response.ok(result).build();
 	}
 
 	public void setMetadataService(
