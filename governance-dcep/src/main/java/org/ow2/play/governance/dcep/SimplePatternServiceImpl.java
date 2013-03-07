@@ -149,7 +149,11 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		}
 		String result = null;
 		try {
-			result = getQueryDispatchApiClient().registerQuery(id, statement);
+			try {
+				result = getQueryDispatchApiClient().registerQuery(id, statement);
+			} catch (QueryDispatchException e) {
+				throw new GovernanceExeption("Can not register pattern", e);
+			}
 		} catch (Exception e) {
 			throw new GovernanceExeption(e);
 		}
