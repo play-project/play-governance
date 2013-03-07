@@ -54,6 +54,11 @@ public class Group {
 	public String description;
 	
 	/**
+	 * The group resource URI
+	 */
+	public String resourceURI;
+	
+	/**
 	 * Additional information as key/value...
 	 */
 	public List<Meta> metadata = new ArrayList<Meta>();

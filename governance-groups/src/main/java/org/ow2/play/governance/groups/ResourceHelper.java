@@ -51,6 +51,7 @@ public class ResourceHelper {
 		result.description = ResourceHelper.getDescription(metaResource);
 		result.title = ResourceHelper.getTitle(metaResource);
 		result.name = ResourceHelper.getGroupName(metaResource.getResource());
+		result.resourceURI = metaResource.getResource().toString();
 
 		for (Metadata metadata : metaResource.getMetadata()) {
 			if (metadata.getData() != null && metadata.getData().size() > 0) {
