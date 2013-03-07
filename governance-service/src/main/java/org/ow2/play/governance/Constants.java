@@ -14,5 +14,7 @@ public interface Constants {
 	String TOPIC_ENDPOINT = "endpoint.topic";
 	
 	String BUSINESS_URL = "dsb.businessurl";
+	
+	String HAS_USERGROUP_META = "http://rdfs.org/sioc/ns#has_usergroup";
 
 }

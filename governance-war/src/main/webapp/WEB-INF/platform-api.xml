@@ -17,59 +17,22 @@
         http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
         http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd">
 
-	<import resource="classpath:META-INF/cxf/cxf.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
-	
-	<cxf:bus>
-		<cxf:features>
-			<cxf:logging />
-		</cxf:features>
-	</cxf:bus>
-
-	<util:list id="jsonkeys">
-		<value>accounts</value>
-		<value>resources</value>
-	</util:list>
-	
-	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-		<property name="dropRootElement" value="true" />
-		<property name="supportUnwrapped" value="true" />
-		<property name="serializeAsArray" value="true" />
-		<property name="arrayKeys" ref="jsonkeys" />
-		<property name="dropCollectionWrapperElement" value="true" />
+	<bean id="platformoauthmanager"
+		class="org.ow2.play.governance.platform.user.service.oauth.OAuthManager">
+		<property name="userService" ref="userservice" />
 	</bean>
-	
-	<bean id="metadataprovider" class="org.ow2.play.metadata.service.provider.MetadataProvider" />
 
-	<jaxrs:server id="restContainer" address="/api/v1/governance/">
-		<jaxrs:serviceBeans>
-			<!-- Registry -->
-			<ref bean="restregistryservice" />
+	<bean id="platformsubscriptionrestapi"
+		class="org.ow2.play.governance.platform.user.service.rest.SubscriptionService">
+		<property name="userService" ref="userservice" />
+	</bean>
 
-			<!-- metadata -->
-			<ref bean="metadatamanagerestservice" />
-			<ref bean="metadatarestservice" />
-			
-			<!-- user -->
-			<ref bean="userrestservice" />
-			
-			<!-- permission -->
-			<ref bean="permissionrestservice" />
-			
-		</jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<ref bean="jsonprovider" />
-		</jaxrs:providers>
-	</jaxrs:server>
-	
-	<!-- Specific serialization for metadata -->
-	<jaxrs:server id="JSONRDFContainer" address="/api/v1/rdf/">
-		<jaxrs:serviceBeans>
-			<!-- metadata -->
-			<ref bean="rdfmetadatarestservice" />
-		</jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<ref bean="metadataprovider" />
-		</jaxrs:providers>
-	</jaxrs:server>
+	<bean id="platformtopicrestapi"
+		class="org.ow2.play.governance.platform.user.service.rest.TopicService">
+		<property name="userService" ref="userservice" />
+		<property name="eventGovernance" ref="eventservice" />
+	</bean>
+
+	<import resource="platform-api-rest.xml" />
+
 </beans>

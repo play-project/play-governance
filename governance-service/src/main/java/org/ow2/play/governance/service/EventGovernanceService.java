@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.ow2.play.commons.utils.StreamHelper;
@@ -59,7 +60,9 @@ public class EventGovernanceService implements EventGovernance {
     private SubscriptionService subscriptionService;
 
     private SubscriptionRegistry subscriptionRegistry;
-
+    
+    protected WebServiceContext context;
+    
     /**
      * 
      */
@@ -348,7 +351,7 @@ public class EventGovernanceService implements EventGovernance {
     @Override
     public List<Topic> getTopics() throws GovernanceExeption {
         logger.fine("Get topics from metadata service...");
-
+        
         List<Topic> result = new ArrayList<Topic>();
         List<MetaResource> resources = null;
         try {

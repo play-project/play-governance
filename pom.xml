@@ -55,6 +55,10 @@
     <module>governance-cxf</module>
     <!-- Finals -->
     <module>governance-war</module>
+    <module>governance-platform-userapi</module>
+    <module>governance-platform-userservice</module>
+    <module>governance-permission-api</module>
+    <module>governance-permission-service</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

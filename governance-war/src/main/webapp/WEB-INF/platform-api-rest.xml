@@ -19,18 +19,17 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-extension-http.xml" />
-	
+
 	<cxf:bus>
 		<cxf:features>
 			<cxf:logging />
 		</cxf:features>
 	</cxf:bus>
-
-	<util:list id="jsonkeys">
-		<value>accounts</value>
-		<value>resources</value>
-	</util:list>
 	
+	<util:list id="jsonkeys">
+		<value>topic</value>
+	</util:list>
+
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="dropRootElement" value="true" />
 		<property name="supportUnwrapped" value="true" />
@@ -38,38 +37,22 @@
 		<property name="arrayKeys" ref="jsonkeys" />
 		<property name="dropCollectionWrapperElement" value="true" />
 	</bean>
-	
-	<bean id="metadataprovider" class="org.ow2.play.metadata.service.provider.MetadataProvider" />
 
-	<jaxrs:server id="restContainer" address="/api/v1/governance/">
+	<bean id="oauthFilter"
+		class="org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter">
+		<property name="dataProvider" ref="platformoauthmanager" />
+	</bean>
+
+	<jaxrs:server id="platformAPIV1" address="/api/v1/platform/">
 		<jaxrs:serviceBeans>
-			<!-- Registry -->
-			<ref bean="restregistryservice" />
-
-			<!-- metadata -->
-			<ref bean="metadatamanagerestservice" />
-			<ref bean="metadatarestservice" />
-			
-			<!-- user -->
-			<ref bean="userrestservice" />
-			
-			<!-- permission -->
-			<ref bean="permissionrestservice" />
-			
+			<ref bean="platformsubscriptionrestapi" />
+			<ref bean="platformtopicrestapi" />
 		</jaxrs:serviceBeans>
+
 		<jaxrs:providers>
+			<ref bean="oauthFilter" />
 			<ref bean="jsonprovider" />
 		</jaxrs:providers>
 	</jaxrs:server>
-	
-	<!-- Specific serialization for metadata -->
-	<jaxrs:server id="JSONRDFContainer" address="/api/v1/rdf/">
-		<jaxrs:serviceBeans>
-			<!-- metadata -->
-			<ref bean="rdfmetadatarestservice" />
-		</jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<ref bean="metadataprovider" />
-		</jaxrs:providers>
-	</jaxrs:server>
+
 </beans>

@@ -20,35 +20,13 @@
         http://www.springframework.org/schema/data/jpa              http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         http://www.springframework.org/schema/data/mongo            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-	<mongo:db-factory host="localhost" port="27017"
-		dbname="play" />
-		
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
-	</bean>
 	
-	<bean id="metadataservice" class="org.ow2.play.metadata.service.MetadataServiceImpl">
-		<property name="mongoTemplate" ref="mongoTemplate"/>
-	</bean>
-
-	<bean id="metadatarestservice" class="org.ow2.play.metadata.service.rest.MetadataServiceImpl">
+	<bean id="permissionservice" class="org.ow2.play.governance.permission.service.PermissionService">
 		<property name="metadataService" ref="metadataservice"/>
 	</bean>
-	
-	<bean id="rdfmetadatarestservice" class="org.ow2.play.metadata.service.rest.MetadataRDFServiceImpl">
-		<property name="metadataService" ref="metadataservice"/>
-	</bean>
-	
-	<bean id="metadataloader" class="org.ow2.play.metadata.json.JSONMetadataLoaderImpl" />
 
-	<bean id="metadatabootservice" class="org.ow2.play.metadata.service.BootstrapServiceImpl">
-		<property name="metadataService" ref="metadataservice" />
-		<property name="metadataLoader" ref="metadataloader" />
-	</bean>
-
-	<bean id="metadatamanagerestservice" class="org.ow2.play.metadata.service.rest.MetadataManagementServiceImpl">
-		<property name="bootstrap" ref="metadatabootservice"/>
-		<property name="metadataService" ref="metadataservice"/>
+	<bean id="permissionrestservice" class="org.ow2.play.governance.permission.service.rest.PermissionService">
+		<property name="permissionService" ref="permissionservice"/>
 	</bean>
 		
 </beans>

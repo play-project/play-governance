@@ -12,8 +12,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<import resource="registry.xml" />
 	<import resource="metadata.xml" />
 	<import resource="core.xml" />
+	<import resource="permission.xml"/>
 	
 	<import resource="user.xml"/>
+
+	<import resource="platform-api.xml"/>
 
 	<import resource="rest.xml" />
 	<import resource="jaxws.xml" />

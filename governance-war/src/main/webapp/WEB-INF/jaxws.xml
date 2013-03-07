@@ -22,56 +22,59 @@
 
 	<!-- Registry -->
 	<jaxws:endpoint id="registry" implementor="#registryservice"
-		address="/RegistryService" />
+		address="/registry/RegistryService" />
 
 	<!-- Metadata -->
 	<jaxws:endpoint id="metadataservicendpoint" implementor="#metadataservice"
-		address="/MetadataService" />
+		address="/metadata/MetadataService" />
 
 	<jaxws:endpoint id="metadatabootserviceendpoint" implementor="#metadatabootservice"
-		address="/MetadataBootService" />
+		address="/metadata/MetadataBootService" />
 		
 	<!-- Core -->
 	<jaxws:endpoint id="eventserviceendpoint" implementor="#eventservice"
-		address="/EventGovernance" />
+		address="/governance/EventGovernance" />
 
 	<jaxws:endpoint id="managementserviceendpoint" implementor="#managementservice"
-		address="/ManagementService" />
+		address="/governance/ManagementService" />
 		
 	<jaxws:endpoint id="subscriptionstorageendpoint" implementor="#subscriptionstorageservice"
-		address="/SubscriptionStorageService" />
+		address="/governance/SubscriptionStorageService" />
 		
 	<jaxws:endpoint id="bootsubscriptionstorageendpoint" implementor="#bootsubscriptionstorageservice"
-		address="/BootSubscriptionStorageService" />
+		address="/governance/BootSubscriptionStorageService" />
 		
 	<jaxws:endpoint id="subscriptionserviceendpoint" implementor="#wsnsubscriptionservice"
-		address="/SubscriptionService" />
+		address="/governance/SubscriptionService" />
 
 	<jaxws:endpoint id="subscriptionmanagementendpoint" implementor="#subscriptionmanagementservice"
-		address="/SubscriptionManagementService" />
+		address="/governance/SubscriptionManagementService" />
 
 	<jaxws:endpoint id="topicregistryendpoint" implementor="#topicregistryservice"
-		address="/TopicRegistryService" />
+		address="/governance/TopicRegistryService" />
 		
 	<jaxws:endpoint id="patternregistryserviceendpoint" implementor="#patternregistry"
-		address="/PatternRegistryService" />
+		address="/governance/PatternRegistryService" />
 
 	<jaxws:endpoint id="simplepatternserviceserviceendpoint" implementor="#simplepatternservice"
-		address="/SimplePatternService" />
+		address="/governance/SimplePatternService" />
 		
 	<jaxws:endpoint id="complexpatternserviceserviceendpoint" implementor="#complexpatternservice"
-		address="/ComplexPatternService" />
+		address="/governance/ComplexPatternService" />
 		
 	<jaxws:endpoint id="patternserviceserviceendpoint" implementor="#patternservice"
-		address="/PatternService" />
+		address="/governance/PatternService" />
 		
 	<jaxws:endpoint id="ecserviceserviceendpoint" implementor="#ecservice"
-		address="/EventCloudService" />
+		address="/governance/EventCloudService" />
 		
 	<jaxws:endpoint id="groupserviceserviceendpoint" implementor="#groupservice"
-		address="/GroupService" />
+		address="/governance/GroupService" />
 
 	<!-- User -->
 	<jaxws:endpoint id="userservicendpoint" implementor="#userwebservice"
-		address="/UserService" />
+		address="/governance/UserService" />
+		
+	<jaxws:endpoint id="permissionservicendpoint" implementor="#permissionservice"
+		address="/governance/PermissionService" />
 </beans>
