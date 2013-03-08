@@ -19,10 +19,31 @@
  */
 package org.ow2.play.governance.permission.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
+ * Core permission object
+ * 
  * @author chamerling
- *
+ * 
  */
+@XmlRootElement
 public class Permission {
 
+	public String name;
+
+	public List<String> accessTo = new ArrayList<String>();
+
+	public List<String> agent = new ArrayList<String>();
+
+	public List<String> mode = new ArrayList<String>();
+	
+	/**
+	 * 
+	 */
+	public Permission() {
+	}
 }

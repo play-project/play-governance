@@ -39,4 +39,12 @@ public interface Constants {
 
 	public static String TYPE_VALUE = "http://www.w3.org/ns/auth/acl#Authorization";
 	
+	public static String WRITE = "http://www.w3.org/ns/auth/acl#Write";
+	
+	public static String READ = "http://www.w3.org/ns/auth/acl#Read";
+
+	public static String SUBSCRIBE = "http://www.w3.org/ns/auth/acl#Subscribe";
+
+	public static String NOTIFY = "http://www.w3.org/ns/auth/acl#Notify";
+
 }
