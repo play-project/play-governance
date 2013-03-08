@@ -112,5 +112,7 @@ public interface Constants {
 	public static final String GOVERNANCE_BOOTSTRAP_REST = "org.ow2.play.governance.bootstrap.rest";
 	
 	public static final String GOVERNANCE_GROUP = "org.ow2.play.governance.group.service";
-	
+
+	public static final String GOVERNANCE_PERMISSION = "org.ow2.play.governance.permission.service";
+
 }
