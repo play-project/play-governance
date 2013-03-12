@@ -41,16 +41,4 @@ public class UserException extends Exception {
 	public UserException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
-	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public UserException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
 }
