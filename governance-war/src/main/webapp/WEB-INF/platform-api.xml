@@ -33,6 +33,9 @@
 		<property name="eventGovernance" ref="eventservice" />
 	</bean>
 
+	<bean id="platformpatternrestapi"
+		class="org.ow2.play.governance.platform.user.service.rest.PatternService" />
+
 	<import resource="platform-api-rest.xml" />
 
 </beans>
