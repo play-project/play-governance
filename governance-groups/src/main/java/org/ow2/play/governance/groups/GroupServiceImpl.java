@@ -27,6 +27,7 @@ import org.ow2.play.governance.api.GroupService;
 import org.ow2.play.governance.api.bean.Group;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
+import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.MetadataService;
 
 /**
@@ -93,6 +94,22 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public Group getGroupFromID(String id) throws GovernanceExeption {
 		throw new GovernanceExeption("Not implemented");
+	}
+	
+	@Override
+	public Group getGroupFromURI(String uri) throws GovernanceExeption {
+		Resource resource = ResourceHelper.getResource(uri);
+		try {
+			List<MetaResource> list = metadataService.listWhere(resource.getName(), resource.getUrl());
+			
+			if (list != null && list.size() > 0) {
+				return ResourceHelper.toGroup(list.get(0));
+			}
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			throw new GovernanceExeption(e);
+		}
+		throw new GovernanceExeption("Not found");
 	}
 
 	@Override

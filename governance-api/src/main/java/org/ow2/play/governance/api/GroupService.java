@@ -58,6 +58,16 @@ public interface GroupService {
 	Group getGroupFromID(String id) throws GovernanceExeption;
 
 	/**
+	 * Get group from its unique URI identifier
+	 * 
+	 * @param uri
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	Group getGroupFromURI(String uri) throws GovernanceExeption;
+
+	/**
 	 * Get group from its name (QName are better...)
 	 * 
 	 * @param name

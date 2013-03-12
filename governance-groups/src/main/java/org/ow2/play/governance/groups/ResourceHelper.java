@@ -139,6 +139,19 @@ public class ResourceHelper {
 		return resource.getUrl().substring(0,
 				resource.getUrl().lastIndexOf('/') + 1);
 	}
+	
+	/**
+	 * Get the resource from the URI
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public static final Resource getResource(String uri) {
+		checkArgument(uri != null);
+		checkArgument(uri.endsWith("#" + Constants.RESOURCE_NAME));
+		checkArgument(uri.startsWith(Constants.PREFIX));
+		return new Resource(Constants.RESOURCE_NAME, uri.substring(0, uri.indexOf('#')));
+	}
 
 	/**
 	 * 

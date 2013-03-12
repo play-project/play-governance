@@ -66,5 +66,14 @@ public class ResourceHelperTest {
 		
 		assertEquals("The title", ResourceHelper.getTitle(mr));
 	}
+	
+	@Test
+	public void getResource() {
+		String uri = Constants.PREFIX + "foo" + "#" + Constants.RESOURCE_NAME;
+		System.out.println(uri);
+		
+		assertEquals(Constants.PREFIX + "foo", ResourceHelper.getResource(uri).getUrl());
+		assertEquals(Constants.RESOURCE_NAME, ResourceHelper.getResource(uri).getName());
+	}
 
 }
