@@ -21,6 +21,7 @@ package org.ow2.play.governance.dcep;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +84,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 				throw new GovernanceExeption(e);
 			}
 			if (details != null) {
-				List<String> input = details.getInputStreams();
+				Set<String> input = details.getInputStreams();
 				result.addAll(Collections2.transform(input,
 						new Function<String, Topic>() {
 							public Topic apply(String in) {
