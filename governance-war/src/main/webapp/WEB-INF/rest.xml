@@ -29,6 +29,7 @@
 	<util:list id="jsonkeys">
 		<value>accounts</value>
 		<value>resources</value>
+		<value>groups</value>
 	</util:list>
 	
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
@@ -52,6 +53,8 @@
 			
 			<!-- user -->
 			<ref bean="userrestservice" />
+			
+			<ref bean="grouprestservice"/>
 			
 			<!-- permission -->
 			<ref bean="permissionrestservice" />

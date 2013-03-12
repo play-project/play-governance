@@ -111,7 +111,7 @@ public interface UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	Response update(User user);
-
+	
 	/**
 	 * Register a user. Input data is User to register as JSON
 	 * 

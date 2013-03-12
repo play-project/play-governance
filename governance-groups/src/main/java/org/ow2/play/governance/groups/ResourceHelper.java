@@ -68,17 +68,23 @@ public class ResourceHelper {
 	public static MetaResource toMeta(Group group) {
 		MetaResource result = new MetaResource();
 		result.setResource(getGroupResource(group));
+		if (group.description == null) {
+			group.description = "";
+		}
 		Metadata description = new Metadata(Constants.DESCRIPTION, new Data(
 				"literal", group.description));
-		Metadata title = new Metadata(Constants.TITLE, new Data("literal",
-				group.title));
+		result.getMetadata().add(description);
+
+		if (group.title != null) {
+			Metadata title = new Metadata(Constants.TITLE, new Data("literal",
+					group.title));
+			result.getMetadata().add(title);
+		}
+		
 		Metadata type = new Metadata(Constants.RDF_TYPE, new Data("uri",
 				Constants.RDFS_USERGROUP));
-		
-		result.getMetadata().add(description);
-		result.getMetadata().add(title);
 		result.getMetadata().add(type);
-		
+
 		return result;
 	}
 

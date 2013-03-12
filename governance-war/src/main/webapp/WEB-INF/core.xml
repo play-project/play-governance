@@ -75,5 +75,9 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="groupservice" class="org.ow2.play.governance.groups.GroupServiceImpl">
 		<property name="metadataService" ref="metadataservice"/>
 	</bean>
+	
+	<bean id="grouprestservice" class="org.ow2.play.governance.groups.rest.GroupService">
+		<property name="groupService" ref="groupservice"/>
+	</bean>
 		
 </beans>
