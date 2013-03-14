@@ -35,6 +35,7 @@ import org.ow2.play.metadata.api.MetaResource;
 public interface PermissionService {
 
 	/**
+	 * Get all the permissions
 	 * 
 	 * @return
 	 * @throws GovernanceExeption
@@ -43,6 +44,7 @@ public interface PermissionService {
 	List<MetaResource> getPermissions() throws GovernanceExeption;
 
 	/**
+	 * Get permission from name
 	 * 
 	 * @return
 	 * @throws GovernanceExeption
@@ -80,6 +82,15 @@ public interface PermissionService {
 	
 	/**
 	 * 
+	 * @param mode
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	List<MetaResource> getWhereMode(String mode) throws GovernanceExeption;
+	
+	/**
+	 * 
 	 * @param name
 	 * @param accessTo
 	 * @throws GovernanceExeption
@@ -89,12 +100,31 @@ public interface PermissionService {
 	
 	/**
 	 * 
+	 * @param accessTo
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	List<MetaResource> getWhereAccessTo(String accessTo) throws GovernanceExeption;
+	
+	
+	/**
+	 * 
 	 * @param name
 	 * @param accessTo
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
 	void setAgent(String name, List<String> agents) throws GovernanceExeption;
+
+	/**
+	 * 
+	 * @param agent
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	List<MetaResource> getWhereAgent(String agent) throws GovernanceExeption;
 
 	/**
 	 * 

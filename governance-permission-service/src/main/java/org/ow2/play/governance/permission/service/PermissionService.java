@@ -24,6 +24,7 @@ import java.util.List;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.permission.api.Constants;
 import org.ow2.play.governance.permission.api.Permission;
+import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -196,6 +197,54 @@ public class PermissionService implements
 		try {
 			metadataService.setMetadata(meta.getResource(),
 					ResourceHelper.toMetaAgent(agent));
+		} catch (MetadataException e) {
+			throw new GovernanceExeption(e);
+		}
+	}
+
+	public List<MetaResource> getWhereAccessTo(String accessTo)
+			throws GovernanceExeption {
+		if (accessTo == null) {
+			throw new GovernanceExeption("Null accessTo is not alloawed");
+		}
+
+		try {
+			return metadataService.listWhereData(Constants.PERMISSION_RESOURCE,
+					org.ow2.play.governance.permission.api.Constants.ACCESS_TO,
+					new Data(org.ow2.play.metadata.api.Type.URI, accessTo));
+
+		} catch (MetadataException e) {
+			throw new GovernanceExeption(e);
+		}
+	}
+
+	public List<MetaResource> getWhereAgent(String agent)
+			throws GovernanceExeption {
+		if (agent == null) {
+			throw new GovernanceExeption("Null agent is not alloawed");
+		}
+
+		try {
+			return metadataService.listWhereData(Constants.PERMISSION_RESOURCE,
+					org.ow2.play.governance.permission.api.Constants.AGENT,
+					new Data(org.ow2.play.metadata.api.Type.URI, agent));
+
+		} catch (MetadataException e) {
+			throw new GovernanceExeption(e);
+		}	
+	}
+
+	public List<MetaResource> getWhereMode(String mode)
+			throws GovernanceExeption {
+		if (mode == null) {
+			throw new GovernanceExeption("Null mode is not alloawed");
+		}
+
+		try {
+			return metadataService.listWhereData(Constants.PERMISSION_RESOURCE,
+					org.ow2.play.governance.permission.api.Constants.MODE,
+					new Data(org.ow2.play.metadata.api.Type.URI, mode));
+
 		} catch (MetadataException e) {
 			throw new GovernanceExeption(e);
 		}
