@@ -19,10 +19,10 @@
  */
 package org.ow2.play.metadata.service;
 
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
@@ -43,10 +43,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Sets;
 
 /**
  * @author chamerling
@@ -406,6 +402,136 @@ public class MetadataServiceTest {
 			
 			md = metadataService.getMetadataValue(new Resource("foo", "bar"), "baz");
 			assertNull(md);
+			
+		} catch (MetadataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void getlistWhereDataIn() {
+		Data data = new Data("mytype", "myvalue");
+		String name = UUID.randomUUID().toString();
+		
+		Resource foo = new Resource(name, "http://foo");
+		org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource(
+				foo, new ArrayList<Metadata>());
+		Metadata m = new Metadata("foo", data);
+		mr.getMetadata().add(m);
+
+		try {
+			metadataService.create(mr);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			List<org.ow2.play.metadata.api.MetaResource> list = metadataService.listWhereData(foo.getName(), "foo", data);
+			assertNotNull(list);
+			assertEquals(list.size(), 1);
+			
+		} catch (MetadataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void getlistWhereDataNotIn() {
+		Data data = new Data("mytype", "myvalue");
+		String name = UUID.randomUUID().toString();
+		
+		Resource foo = new Resource(name, "http://foo");
+		org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource(
+				foo, new ArrayList<Metadata>());
+		Metadata m = new Metadata("foo", data);
+		mr.getMetadata().add(m);
+
+		try {
+			metadataService.create(mr);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			List<org.ow2.play.metadata.api.MetaResource> list = metadataService.listWhereData("A", "foo", data);
+			assertNotNull(list);
+			assertEquals(list.size(), 0);
+			
+		} catch (MetadataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void getlistWhereDataList() {
+		Data data = new Data("mytype", "myvalue");
+		String name = UUID.randomUUID().toString();
+		
+		Resource foo = new Resource(name, "http://foo");
+		org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource(
+				foo, new ArrayList<Metadata>());
+		
+		mr.getMetadata().add(new Metadata("foo", data));
+		mr.getMetadata().add(new Metadata("bar", data));
+		
+		int size = 10;
+		
+		try {
+			for (int i = 0; i < size; i++) {
+				metadataService.create(mr);
+			}
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			List<org.ow2.play.metadata.api.MetaResource> list = metadataService.listWhereData(name, "foo", data);
+			assertNotNull(list);
+			assertEquals(10, list.size());
+			
+		} catch (MetadataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void getlistWhereDataNotInList() {
+		Data data = new Data("mytype", "myvalue");
+		String name = UUID.randomUUID().toString();
+		
+		Resource foo = new Resource(name, "http://foo");
+		org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource(
+				foo, new ArrayList<Metadata>());
+		
+		mr.getMetadata().add(new Metadata("foo", data));
+		mr.getMetadata().add(new Metadata("bar", data));
+		
+		int size = 10;
+		
+		try {
+			for (int i = 0; i < size; i++) {
+				metadataService.create(mr);
+			}
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			List<org.ow2.play.metadata.api.MetaResource> list = metadataService.listWhereData(name, "foo", new Data("foo", "bar"));
+			assertNotNull(list);
+			assertEquals(0, list.size());
 			
 		} catch (MetadataException e) {
 			// TODO Auto-generated catch block

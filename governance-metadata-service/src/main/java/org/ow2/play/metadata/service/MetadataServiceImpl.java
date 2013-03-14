@@ -196,6 +196,31 @@ public class MetadataServiceImpl implements MetadataService {
 			};
 		});
 	}
+	
+	@Override
+	@WebMethod
+	public List<MetaResource> listWhereData(String resourceName, String metadataName, Data data) throws MetadataException {
+		if (resourceName == null || metadataName == null || data == null) {
+			// name can be null
+			throw new MetadataException("Nulls parameter(s)");
+		}
+		
+		List<org.ow2.play.metadata.service.document.MetaResource> list = mongoTemplate
+				.find(
+						query(where("resource.name").is(resourceName).and("metadata")
+								.elemMatch(where("name").is(metadataName).and("data.type").is(data.getType()).and("data.value").is(data.getValue()))),
+						org.ow2.play.metadata.service.document.MetaResource.class);
+
+		List<MetaResource> result = new ArrayList<MetaResource>();
+		if (list == null) {
+			return result;
+		}
+		
+		for (org.ow2.play.metadata.service.document.MetaResource metaResource : list) {
+			result.add(toAPI(metaResource));
+		}
+		return result;
+	}
 
 	@Override
 	@WebMethod

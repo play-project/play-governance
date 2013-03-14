@@ -24,6 +24,7 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -140,6 +141,10 @@ public interface MetadataService {
 	@WebMethod
 	List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException;
+	
+	@WebMethod
+	List<MetaResource> listWhereData(String resourceName, String metadataName,
+			Data data) throws MetadataException;
 
 	/**
 	 * Get all...
@@ -159,7 +164,7 @@ public interface MetadataService {
 	 */
 	@WebMethod
 	List<MetaResource> listWhere(String name, String url) throws MetadataException;
-	
+
 	/**
 	 * Check if a resource exists in the repository
 	 * 
