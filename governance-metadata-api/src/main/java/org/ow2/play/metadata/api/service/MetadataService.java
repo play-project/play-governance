@@ -73,6 +73,7 @@ public interface MetadataService {
 	 * @param metadata
 	 * @throws MetadataException
 	 */
+	@WebMethod
 	void setMetadata(Resource resource, Metadata metadata) throws MetadataException;
 	
 	/**
