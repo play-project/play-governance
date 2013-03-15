@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javax.jws.WebMethod;
 
 import org.ow2.play.governance.cxf.CXFHelper;
+import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -239,6 +240,16 @@ public class MetadataServiceClient implements MetadataService {
 	public void setMetadata(Resource arg0, Metadata arg1)
 			throws MetadataException {
 		getClient().setMetadata(arg0, arg1);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#listWhereData(java.lang.String, java.lang.String, org.ow2.play.metadata.api.Data)
+	 */
+	@Override
+	@WebMethod
+	public List<MetaResource> listWhereData(String resourceName, String metadataName,
+			Data data) throws MetadataException {
+		return getClient().listWhereData(resourceName, metadataName, data);
 	}
 	
 	/**

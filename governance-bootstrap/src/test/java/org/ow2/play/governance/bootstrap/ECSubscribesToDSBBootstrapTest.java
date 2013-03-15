@@ -28,7 +28,7 @@ import org.ow2.play.governance.bootstrap.ECSubscribesToDSBBootstrapServiceImpl;
 import org.ow2.play.metadata.api.service.MetadataLoader;
 import org.ow2.play.metadata.json.JSONMetadataLoaderImpl;
 import org.ow2.play.metadata.service.BootstrapServiceImpl;
-import org.ow2.play.metadata.service.InMemoryMetadataServiceImpl;
+//import org.ow2.play.metadata.service.InMemoryMetadataServiceImpl;
 
 /**
  * @author chamerling
@@ -39,6 +39,8 @@ public class ECSubscribesToDSBBootstrapTest extends TestCase {
 	public void testNeedsToSubscribe() throws Exception {
 		ECSubscribesToDSBBootstrapServiceImpl bootstrap = new ECSubscribesToDSBBootstrapServiceImpl();
 
+		fail();
+		/*
 		InMemoryMetadataServiceImpl metadataService = new InMemoryMetadataServiceImpl();
 		BootstrapServiceImpl bootstrapServiceImpl = new BootstrapServiceImpl();
 		MetadataLoader loader = new JSONMetadataLoaderImpl();
@@ -57,6 +59,7 @@ public class ECSubscribesToDSBBootstrapTest extends TestCase {
 				.needsToSubscribe("http://streams.event-processing.org/ids/FacebookCepResults"));
 		assertTrue(bootstrap
 				.needsToSubscribe("http://streams.event-processing.org/ids/FacebookStatusFeed"));
+				*/
 	}
 
 }

@@ -261,6 +261,13 @@ public class CreationTest extends TestCase {
                 return false;
             }
 
+			@Override
+			@WebMethod
+			public List<MetaResource> listWhereData(String resourceName,
+					String metadataName, Data data) throws MetadataException {
+				return null;
+			}
+
 
         });
 
