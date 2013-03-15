@@ -23,6 +23,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
+import org.ow2.play.governance.permission.api.PermissionChecker;
 import org.ow2.play.governance.platform.user.service.oauth.OAuthHelper;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.UserService;
@@ -35,6 +36,8 @@ import org.ow2.play.governance.user.api.bean.User;
 public abstract class AbstractService {
 
 	protected UserService userService;
+	
+	protected PermissionChecker permissionChecker;
 
 	protected User getUser(MessageContext mc) {
 		String endUserName = OAuthHelper.resolveUserName(mc);
@@ -51,6 +54,13 @@ public abstract class AbstractService {
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	/**
+	 * @param permissionChecker the permissionChecker to set
+	 */
+	public void setPermissionChecker(PermissionChecker permissionChecker) {
+		this.permissionChecker = permissionChecker;
 	}
 
 }

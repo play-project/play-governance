@@ -49,6 +49,11 @@ public class TopicService extends AbstractService implements
 
 	@Override
 	public Response topics() {
+		
+		// get the user from the context and its topics
+		// topics from public streams are also available
+		// TODO
+		
 		List<Topic> topics = null;
 		try {
 			topics = eventGovernance.getTopics();

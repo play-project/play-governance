@@ -17,6 +17,12 @@
         http://cxf.apache.org/transports/http-jetty/configuration   http://cxf.apache.org/schemas/configuration/http-jetty.xsd
         http://cxf.apache.org/configuration/security                http://cxf.apache.org/schemas/configuration/security.xsd">
 
+	<bean id="permissionchecker"
+		class="org.ow2.play.governance.platform.user.service.PermissionCheck">
+		<property name="permissionService" ref="permissionservice" />
+		<property name="userService" ref="userservice"/>
+	</bean>
+
 	<bean id="platformoauthmanager"
 		class="org.ow2.play.governance.platform.user.service.oauth.OAuthManager">
 		<property name="userService" ref="userservice" />
@@ -25,16 +31,20 @@
 	<bean id="platformsubscriptionrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.SubscriptionService">
 		<property name="userService" ref="userservice" />
+		<property name="permissionChecker" ref="permissionchecker" />
 	</bean>
 
 	<bean id="platformtopicrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.TopicService">
 		<property name="userService" ref="userservice" />
+		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="eventGovernance" ref="eventservice" />
 	</bean>
 
 	<bean id="platformpatternrestapi"
-		class="org.ow2.play.governance.platform.user.service.rest.PatternService" />
+		class="org.ow2.play.governance.platform.user.service.rest.PatternService">
+		<property name="permissionChecker" ref="permissionchecker" />
+	</bean>
 
 	<import resource="platform-api-rest.xml" />
 
