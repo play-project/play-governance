@@ -24,6 +24,7 @@ import java.util.List;
 import javax.jws.WebMethod;
 
 import org.ow2.play.governance.cxf.CXFHelper;
+import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -215,6 +216,15 @@ public class MetadataClient implements MetadataService {
 	public List<MetaResource> listWhere(String name, String url)
 			throws MetadataException {
 		return getClient().listWhere(name, url);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#listWhereData(java.lang.String, java.lang.String, org.ow2.play.metadata.api.Data)
+	 */
+	@Override
+	public List<MetaResource> listWhereData(String resourceName, String metadataName,
+			Data data) throws MetadataException {
+		return getClient().listWhereData(resourceName, metadataName, data);
 	}
 
 }
