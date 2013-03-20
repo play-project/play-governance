@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement(name = "pattern")
-public class Pattern {
+public class Pattern extends Resource {
 
 	@XmlElement(name = "data")
 	public String data;
 
-	@XmlElement(name = "id")
+	@XmlElement(name = "pattern_id")
 	public String id;
 
 	public Pattern() {

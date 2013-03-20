@@ -31,22 +31,23 @@ import javax.ws.rs.core.Response;
 
 import org.ow2.play.governance.platform.user.api.rest.bean.Pattern;
 import org.ow2.play.governance.platform.user.api.rest.bean.PatternResult;
-import org.ow2.play.governance.platform.user.api.rest.bean.Patterns;
 
 /**
  * @author chamerling
  * 
  */
-@Path("/patterns")
+@Path(PatternService.PATH)
 public interface PatternService {
+	
+	public static final String PATH = "/patterns";
 
 	/**
 	 * Get all the patterns the user deployed.
 	 * 
-	 * @return {@link Patterns} as JSON
+	 * @return {@link Pattern} list as JSON array
 	 */
 	@GET
-	@Path("/")
+	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response patterns();
 
@@ -58,19 +59,21 @@ public interface PatternService {
 	 * @return {@link Pattern} as JSON if available and if user has access to
 	 */
 	@GET
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response pattern(@PathParam("id") String id);
 
 	/**
-	 * Deploy a new pattern to the platform
+	 * Deploy a new pattern to the platform. JSON input is:
+	 * 
+	 * <pre>{"data" : "YOUR PATTERN"}</pre>
 	 * 
 	 * @param the
 	 *            pattern to deploy
 	 * @return the pattern deployment result as {@link PatternResult}
 	 */
 	@POST
-	@Path("/")
+	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response deploy(Pattern pattern);
@@ -83,7 +86,7 @@ public interface PatternService {
 	 * @return {@link PatternResult} as JSON
 	 */
 	@DELETE
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response undeploy(@PathParam("id") String id);
 }

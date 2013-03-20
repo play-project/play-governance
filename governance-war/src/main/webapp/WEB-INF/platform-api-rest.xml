@@ -28,6 +28,7 @@
 	
 	<util:list id="jsonkeys">
 		<value>topic</value>
+		<value>wrapper</value>
 	</util:list>
 
 	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
@@ -48,6 +49,7 @@
 			<ref bean="platformsubscriptionrestapi" />
 			<ref bean="platformtopicrestapi" />
 			<ref bean="platformpatternrestapi" />
+			<ref bean="platformublishrestapi"/>
 		</jaxrs:serviceBeans>
 
 		<jaxrs:providers>

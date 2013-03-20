@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class Topic {
+public class Topic extends Resource {
 	
 	public String name;
 	
@@ -34,8 +34,10 @@ public class Topic {
 	
 	public String prefix;
 	
+	/**
+	 * 
+	 */
 	public Topic() {
-		
 	}
 
 }

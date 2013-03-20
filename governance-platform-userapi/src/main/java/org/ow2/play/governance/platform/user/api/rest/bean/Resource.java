@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2012, PetalsLink
+ * Copyright (c) 2013, Linagora
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,29 +19,21 @@
  */
 package org.ow2.play.governance.platform.user.api.rest.bean;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * A Play platform resource
+ * 
  * @author chamerling
- *
+ * 
  */
-@XmlRootElement
-public class SubscriptionResult {
-	
-	/**
-	 * The initial subscription
-	 */
-	public Subscription initialSubscription;
-	
-	/**
-	 * The subscription ID to be used to unsubscribe
-	 */
-	public String subscriptionID;
+public abstract class Resource {
 
 	/**
-	 * 
+	 * The resource URL in the platform. Based on auth mechanism, clients can
+	 * access to resource directly by directly going to the provided URL.
 	 */
-	public SubscriptionResult() {
-	}
-	
+	@XmlElement(name = "resource_url")
+	public String resourceUrl;
+
 }

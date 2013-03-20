@@ -19,6 +19,8 @@
  */
 package org.ow2.play.governance.platform.user.service.rest;
 
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
+
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.governance.platform.user.api.rest.bean.Notification;
@@ -27,10 +29,12 @@ import org.ow2.play.governance.platform.user.api.rest.bean.Notification;
  * @author chamerling
  *
  */
-public class PublishService implements org.ow2.play.governance.platform.user.api.rest.PublishService {
+public class PublishService extends AbstractService implements org.ow2.play.governance.platform.user.api.rest.PublishService {
 
 	public Response notify(Notification notification) {
-		return Response.ok("Not implemented").build();
+		System.out.println(">>>>>>>> N RESOURCE " + notification.resource);
+		System.out.println(">>>>>>>> N MESSAGE " + notification.message);
+		
+		return ok();
 	}
-
 }

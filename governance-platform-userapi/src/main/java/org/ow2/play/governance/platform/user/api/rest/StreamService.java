@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2012, PetalsLink
+ * Copyright (c) 2013, Linagora
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,73 +19,44 @@
  */
 package org.ow2.play.governance.platform.user.api.rest;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.ow2.play.governance.platform.user.api.rest.bean.Subscription;
-
 /**
- * Subscription Service is User-contextualized.
+ * Access to the stream recources. The implementation will take care about auth
+ * and permissions i.e. only topics a user can access will be available in
+ * different operations.
  * 
  * @author chamerling
  * 
  */
-@Path(SubscriptionService.PATH)
-public interface SubscriptionService {
+@Path(StreamService.PATH)
+public interface StreamService {
 	
-	public static final String PATH = "/subscriptions";
+	public static final String PATH = "/streams";
 
 	/**
-	 * Subscribe to the platform.
+	 * Get all the streams the user can access to as JSON array.
 	 * 
-	 * @param subscription
-	 * @return a {@link SubscriptionResult} as JSON
-	 * 
-	 */
-	@POST
-	@Path("")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	Response subscribe(Subscription subscription);
-
-	/**
-	 * Send unsubscribe with the subscription ID received in
-	 * {@link #subscribe(Subscription)} result.
-	 * 
-	 * @param subscriptionID
-	 * @return
-	 */
-	@DELETE
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Response unsubscribe(@PathParam("id") String subscriptionID);
-
-	/**
-	 * Get the current user subscriptions
-	 * 
-	 * @return a list of {@link Subscription} as JSON array.
-	 * 
+	 * @return the list of topics
 	 */
 	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response subscriptions();
+	Response streams();
 	
 	/**
-	 * Get a subscription from its ID
+	 * Get a stream from its ID
 	 * 
 	 * @param id
-	 * @return a {@link Subscription} as JSON
+	 * @return
 	 */
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response subscription(@PathParam("id") String id);
+	Response stream(@PathParam("id") String id);
 }

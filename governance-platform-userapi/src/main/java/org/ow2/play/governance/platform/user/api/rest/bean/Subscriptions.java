@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author chamerling
  * 
  */
-@XmlRootElement(name = "subscriptions")
+@XmlRootElement(name = "wrapper")
 public class Subscriptions {
 
-	@XmlElement(name = "subscription")
+	@XmlElement(name = "subscriptions")
 	public List<Subscription> e;
 
 	public Subscriptions() {

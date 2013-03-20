@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author chamerling
  * 
  */
-@XmlRootElement(name = "patterns")
+@XmlRootElement(name = "wrapper")
 public class Patterns {
 
-	@XmlElement(name = "pattern")
+	@XmlElement(name = "patterns")
 	public List<Pattern> e;
 
 	public Patterns() {

@@ -21,33 +21,42 @@ package org.ow2.play.governance.platform.user.api.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Access to the topic recources. The implementation will take care about auth
+ * and permissions i.e. only topics a user can access will be available in
+ * different operations.
+ * 
  * @author chamerling
- *
+ * 
  */
-@Path("/topics")
+@Path(TopicService.PATH)
 public interface TopicService {
+	
+	public static final String PATH = "/topics";
 
 	/**
-	 * Get all the topics the user can access
-	 * @return
+	 * Get all the topics the user can access to.
+	 * 
+	 * @return the list of topics
 	 */
 	@GET
-	@Path("/")
+	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response topics();
 	
 	/**
-	 * Get a topic from its ID; The topic is only returned if the user has access to it
+	 * Get a topic from its ID
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response topic(String id);
+	Response topic(@PathParam("id") String id);
 }

@@ -19,21 +19,25 @@
  */
 package org.ow2.play.governance.platform.user.service.rest;
 
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.error;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.notFound;
+
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
-import org.ow2.play.governance.platform.user.api.rest.bean.Topics;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
 /**
  * @author chamerling
@@ -49,11 +53,11 @@ public class TopicService extends AbstractService implements
 
 	@Override
 	public Response topics() {
-		
+
 		// get the user from the context and its topics
 		// topics from public streams are also available
 		// TODO
-		
+
 		List<Topic> topics = null;
 		try {
 			topics = eventGovernance.getTopics();
@@ -73,18 +77,44 @@ public class TopicService extends AbstractService implements
 								topic.name = input.getName();
 								topic.ns = input.getNs();
 								topic.prefix = input.getPrefix();
+								topic.resourceUrl = getResourceURI(input);
 								return topic;
 							}
 						});
-		return Response.ok(new Topics(Lists.newArrayList(out))).build();
+		
+		return ok(out
+				.toArray(new org.ow2.play.governance.platform.user.api.rest.bean.Topic[out
+						.size()]));
 	}
 
 	@Override
 	public Response topic(String id) {
-		org.ow2.play.governance.platform.user.api.rest.bean.Error error = new org.ow2.play.governance.platform.user.api.rest.bean.Error();
-		error.message = "Can not get topic " + id;
-		error.cause = "Not implemented";
-		return Response.serverError().entity(error).build();
+		
+		List<Topic> topics = null;
+		try {
+			topics = eventGovernance.getTopicsFromName(id);
+		} catch (GovernanceExeption e) {
+			return error(Status.BAD_REQUEST, "Can not get topic with ID " + id);
+		}
+		
+		if (topics.size() == 0) {
+			return notFound();
+		}
+		
+		// get the first one...
+		Topic input = topics.get(0);
+		org.ow2.play.governance.platform.user.api.rest.bean.Topic topic = new org.ow2.play.governance.platform.user.api.rest.bean.Topic();
+		topic.name = input.getName();
+		topic.ns = input.getNs();
+		topic.prefix = input.getPrefix();
+		topic.resourceUrl = getResourceURI(input);
+		
+		return ok(topic);
+	}
+
+	protected String getResourceURI(Topic topic) {
+		URI uri = mc.getUriInfo().getBaseUri();
+		return uri.toString() + "topics/" + topic.getName();
 	}
 
 	/**

@@ -34,13 +34,18 @@ import org.ow2.play.governance.platform.user.api.rest.bean.Notification;
  * @author chamerling
  * 
  */
-@Path("/publish")
+@Path(PublishService.PATH)
 public interface PublishService {
 
+	public static final String PATH = "/publish";
+
 	/**
-	 * Push a new message into the platform
+	 * Push a new message into the platform.
 	 * 
-	 * @param subscription
+	 * Input JSON message is:
+	 * <pre>{"resource": "Myresource", "message" : "mymessage"}</pre>
+	 * 
+	 * @param notification
 	 * @return
 	 */
 	@POST

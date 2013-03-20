@@ -32,6 +32,7 @@ public interface EventGovernance {
 	 * @param topicNameSpaceInputStream
 	 * @throws GovernanceExeption
 	 */
+	@Deprecated
 	void loadResources(InputStream topicNameSpaceInputStream)
 			throws GovernanceExeption;
 
@@ -93,6 +94,16 @@ public interface EventGovernance {
 	 */
 	@WebMethod
 	List<Topic> getTopics() throws GovernanceExeption;
+	
+	/**
+	 * Get a single topic from its name
+	 * 
+	 * @param name
+	 * @return
+	 * @throws GovernanceExeption
+	 */
+	@WebMethod
+	List<Topic> getTopicsFromName(String name) throws GovernanceExeption;
 
 	/**
 	 * 
@@ -112,6 +123,7 @@ public interface EventGovernance {
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
+	@Deprecated
 	List<W3CEndpointReference> findEventProducersByTopics(List<QName> topics)
 			throws GovernanceExeption;
 
@@ -123,6 +135,7 @@ public interface EventGovernance {
 	 * @throws GovernanceExeption
 	 */
 	@WebMethod
+	@Deprecated
 	List<W3CEndpointReference> findEventProducersByElements(List<QName> element)
 			throws GovernanceExeption;
 

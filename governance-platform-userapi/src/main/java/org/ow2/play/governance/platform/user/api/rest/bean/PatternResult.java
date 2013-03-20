@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author chamerling
  * 
  */
-@XmlRootElement(name = "result")
+@XmlRootElement(name = "wrapper")
 public class PatternResult {
 
 	@XmlElement(name = "pattern")

@@ -19,6 +19,7 @@
  */
 package org.ow2.play.governance.platform.user.api.rest.bean;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,21 +27,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class Subscription {
+public class Subscription extends Resource {
 	
 	/**
-	 * Which topic to subscribe
+	 * Which resource to subscribe to
 	 */
-	public Topic topic;
+	public String resource;
 	
 	/**
-	 * Who wants to receive notifications?
+	 * Who wants to receive notifications ie URL?
 	 */
 	public String subscriber;
 	
 	/**
+	 * The subscription ID. Set by the API engine
+	 */
+	@XmlElement(name = "subscription_id")
+	public String subscriptionID;
+	
+	/**
 	 * In which format the subscriber wants to receive notifications? XML, JSON, WSN, ...
 	 */
+	@XmlElement(name = "out_format")
 	public String outFormat;
 	
 	/**

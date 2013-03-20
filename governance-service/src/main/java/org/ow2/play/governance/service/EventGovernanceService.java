@@ -402,6 +402,25 @@ public class EventGovernanceService implements EventGovernance {
         }
         return result;
     }
+    
+    /* (non-Javadoc)
+     * @see org.ow2.play.governance.api.EventGovernance#getTopicsFromName(java.lang.String)
+     */
+    @Override
+    public List<Topic> getTopicsFromName(final String topicName) throws GovernanceExeption {
+        logger.fine("Get topics with name " + topicName + " from metadata service...");
+        List<Topic> result = new ArrayList<Topic>();
+       
+        // TODO : Real query...
+        result.addAll(Collections2.filter(getTopics(), new Predicate<Topic>() {
+        	public boolean apply(Topic topic) {
+        		System.out.println(topic.getName() + " " + topicName);
+        		return topic.getName().equals(topicName);
+        	}
+		}));
+
+    	return result;
+    }
 
     /*
      * (non-Javadoc)

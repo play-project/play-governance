@@ -84,6 +84,16 @@ public class CreationTest extends TestCase {
 			public List<Topic> getTopics() {
 				return topics;
 			}
+			
+			/* (non-Javadoc)
+			 * @see org.ow2.play.governance.api.EventGovernance#getTopicsFromName(java.lang.String)
+			 */
+			@Override
+			public List<Topic> getTopicsFromName(String name)
+					throws GovernanceExeption {
+				// TODO Auto-generated method stub
+				return null;
+			}
 
 			@Override
 			public List<QName> findTopicsByElement(QName arg0)

@@ -22,6 +22,7 @@ package org.ow2.play.governance.bootstrap.client;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.xml.namespace.QName;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
@@ -90,6 +91,11 @@ public class GovernanceClientImpl implements GovernanceClient {
 	@Override
 	public List<Topic> getTopics() throws GovernanceExeption {
 		return getEventClient().getTopics();
+	}
+	
+	@Override
+	public List<Topic> getTopicsFromName(String name) throws GovernanceExeption {
+		return getEventClient().getTopicsFromName(name);
 	}
 
 	@Override

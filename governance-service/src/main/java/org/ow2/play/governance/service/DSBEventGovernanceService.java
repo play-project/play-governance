@@ -160,6 +160,15 @@ public class DSBEventGovernanceService implements EventGovernance {
 
 		return result;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.ow2.play.governance.api.EventGovernance#getTopicsFromName(java.lang.String)
+	 */
+	@Override
+	public List<Topic> getTopicsFromName(String name) throws GovernanceExeption {
+		throw new GovernanceExeption("Not implemented");
+	}
 
 	/*
 	 * (non-Javadoc)

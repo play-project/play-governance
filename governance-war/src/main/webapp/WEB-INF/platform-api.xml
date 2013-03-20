@@ -45,6 +45,12 @@
 		class="org.ow2.play.governance.platform.user.service.rest.PatternService">
 		<property name="permissionChecker" ref="permissionchecker" />
 	</bean>
+	
+	<bean id="platformublishrestapi"
+		class="org.ow2.play.governance.platform.user.service.rest.PublishService">
+		<property name="userService" ref="userservice" />
+		<property name="permissionChecker" ref="permissionchecker" />
+	</bean>
 
 	<import resource="platform-api-rest.xml" />
 

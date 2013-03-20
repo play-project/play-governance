@@ -19,6 +19,13 @@
  */
 package org.ow2.play.governance.platform.user.service.rest;
 
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.created;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.deleted;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.error;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.notFound;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +38,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.ow2.play.governance.platform.user.api.rest.bean.Subscription;
-import org.ow2.play.governance.platform.user.api.rest.bean.SubscriptionResult;
-import org.ow2.play.governance.platform.user.api.rest.bean.Subscriptions;
 import org.ow2.play.governance.platform.user.service.oauth.OAuthHelper;
 
 /**
@@ -52,25 +57,31 @@ public class SubscriptionService extends AbstractService implements
 
 	@Override
 	public Response subscribe(Subscription subscription) {
+		
+		if (subscription == null || subscription.resource == null || subscription.subscriber == null) {
+			return error(Status.BAD_REQUEST, "Wrong input parameters");
+		}
 
 		// let's subscribe, store the subscription and send back a response
 
-		SubscriptionResult result = new SubscriptionResult();
-		result.initialSubscription = subscription;
-		result.subscriptionID = "TODO-" + UUID.randomUUID().toString();
-
-		subscriptions.put(result.subscriptionID, subscription);
-
-		return Response.ok("subscribed").build();
+		subscription.subscriptionID = "TODO-" + UUID.randomUUID().toString();
+		subscription.resourceUrl = getResourceURI(subscription);
+		subscriptions.put(subscription.subscriptionID, subscription);
+		
+		return created(subscription);
 	}
 
 	@Override
 	public Response unsubscribe(String subscriptionID) {
+		if (subscriptionID == null) {
+			return error(Status.BAD_REQUEST, "subcription ID is mandatary");
+		}
+		
 		Subscription removed = subscriptions.remove(subscriptionID);
 		if (removed == null) {
-			return Response.status(Status.NOT_FOUND).build();
+			return notFound();
 		}
-		return Response.ok(removed).build();
+		return deleted();
 	}
 
 	@Override
@@ -82,16 +93,21 @@ public class SubscriptionService extends AbstractService implements
 		result.addAll(subscriptions.values());
 		String endUserName = OAuthHelper.resolveUserName(mc);
 
-		return Response.ok(new Subscriptions(result)).build();
+		return ok(result.toArray(new Subscription[result.size()]));
 	}
 
 	@Override
 	public Response subscription(String id) {
 		Subscription result = subscriptions.get(id);
 		if (result == null) {
-			return Response.status(Status.NOT_FOUND).build();
+			return notFound();
 		}
-		return Response.ok(result).build();
+		return ok(result);
+	}
+	
+	protected String getResourceURI(Subscription subscription) {
+		URI uri = mc.getUriInfo().getBaseUri();
+		return uri.toString() + "subcriptions/" + subscription.subscriptionID;
 	}
 
 }
