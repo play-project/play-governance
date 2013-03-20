@@ -39,7 +39,6 @@ import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.user.api.bean.User;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 /**
@@ -53,34 +52,24 @@ public class TopicService extends AbstractService implements
 	private MessageContext mc;
 
 	private EventGovernance eventGovernance;
-
+	
 	@Override
 	public Response topics() {
 
+		// filter the topics based on the user permissions
+		// TODO : Topics per user can be found before instead of calling N times the permission checker...
 		List<Topic> topics = null;
 		try {
-			topics = eventGovernance.getTopics();
+			topics = userResourceAccess.getTopicsForUser(getUser(mc));
 		} catch (GovernanceExeption e) {
 			e.printStackTrace();
 			return error(Status.INTERNAL_SERVER_ERROR, "Can not get topics");
-		}
-		
-		// filter the topics based on the user permissions
-		// TODO : Topics per user can be found before instead of calling N times the permission checker...
-		final User user = getUser(mc);
 
-		Collection<Topic> filtered = Collections2.filter(topics,
-				new Predicate<Topic>() {
-					public boolean apply(Topic topic) {
-						// get the topic as resource to check permissions since groups are resources in the platform...
-						String resource = org.ow2.play.governance.api.helpers.ResourceHelper.get(topic);
-						return permissionChecker.checkResource(user.login, resource);
-					}
-				});
+		}
 
 		Collection<org.ow2.play.governance.platform.user.api.rest.bean.Topic> out = Collections2
 				.transform(
-						filtered,
+						topics,
 						new Function<Topic, org.ow2.play.governance.platform.user.api.rest.bean.Topic>() {
 							public org.ow2.play.governance.platform.user.api.rest.bean.Topic apply(
 									Topic input) {
@@ -141,4 +130,5 @@ public class TopicService extends AbstractService implements
 	public void setEventGovernance(EventGovernance eventGovernance) {
 		this.eventGovernance = eventGovernance;
 	}
+
 }

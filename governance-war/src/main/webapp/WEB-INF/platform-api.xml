@@ -22,6 +22,11 @@
 		<property name="permissionService" ref="permissionservice" />
 		<property name="userService" ref="userservice"/>
 	</bean>
+	
+	<bean id="userresourceaccess" class="org.ow2.play.governance.platform.user.service.UserResourceAccess">
+		<property name="eventGovernance" ref="eventservice" />
+		<property name="permissionChecker" ref="permissionchecker" />
+	</bean>
 
 	<bean id="platformoauthmanager"
 		class="org.ow2.play.governance.platform.user.service.oauth.OAuthManager">
@@ -32,24 +37,28 @@
 		class="org.ow2.play.governance.platform.user.service.rest.SubscriptionService">
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
+		<property name="userResourceAccess" ref="userresourceaccess"/>
 	</bean>
 
 	<bean id="platformtopicrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.TopicService">
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
+		<property name="userResourceAccess" ref="userresourceaccess"/>
 		<property name="eventGovernance" ref="eventservice" />
 	</bean>
 
 	<bean id="platformpatternrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.PatternService">
 		<property name="permissionChecker" ref="permissionchecker" />
+		<property name="userResourceAccess" ref="userresourceaccess"/>
 	</bean>
 	
 	<bean id="platformublishrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.PublishService">
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
+		<property name="userResourceAccess" ref="userresourceaccess"/>
 	</bean>
 
 	<import resource="platform-api-rest.xml" />
