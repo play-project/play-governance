@@ -55,5 +55,9 @@ public class Response {
 	public static final javax.ws.rs.core.Response deleted() {
 		return javax.ws.rs.core.Response.status(Status.NO_CONTENT).build();
 	}
+	
+	public static final javax.ws.rs.core.Response unauthorized() {
+		return javax.ws.rs.core.Response.status(Status.UNAUTHORIZED).build();
+	}
 
 }
