@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.ow2.play.governance.user.api.bean.Account;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -38,6 +39,11 @@ public class User {
 	public List<Account> accounts = new ArrayList<Account>();
 
 	public List<String> groups = new ArrayList<String>();
+	
+	/**
+	 * Resources created by the user
+	 */
+	public List<Resource> resources = new ArrayList<Resource>();
 
 	public User() {
 
@@ -46,6 +52,6 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", login=" + login + ", email=" + email
-				+ ", accounts=" + accounts + ", groups=" + groups + "]";
+				+ ", accounts=" + accounts + ", groups=" + groups + ", resources=" + resources + "]";
 	}
 }

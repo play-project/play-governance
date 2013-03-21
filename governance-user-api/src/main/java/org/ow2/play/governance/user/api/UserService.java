@@ -92,4 +92,21 @@ public interface UserService {
 	 */
 	void delete(User user) throws UserException;
 	
+	/**
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws UserException
+	 */
+	User addResource(String login, String resource) throws UserException;
+
+	/**
+	 * 
+	 * @param login
+	 * @param resource
+	 * @return
+	 * @throws UserException
+	 */
+	User removeResource(String login, String resource) throws UserException;
+
 }

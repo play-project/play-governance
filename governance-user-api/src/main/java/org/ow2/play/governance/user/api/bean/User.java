@@ -49,6 +49,11 @@ public class User {
 	 * List of groupIds the user belongs to
 	 */
 	public List<String> groups = new ArrayList<String>();
+	
+	/**
+	 * Resources created by the user
+	 */
+	public List<Resource> resources = new ArrayList<Resource>();
 
 	public User() {
 	}

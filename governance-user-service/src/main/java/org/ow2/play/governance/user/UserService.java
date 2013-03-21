@@ -6,10 +6,13 @@ package org.ow2.play.governance.user;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.ow2.play.commons.security.Crypto;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 import org.ow2.play.governance.user.utils.TokenHelper;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -159,11 +162,59 @@ public class UserService implements
 		if (user.groups != null) {
 			update.set("groups", user.groups);
 		}
+		
+		if (user.resources != null) {
+			update.set("resources", user.resources);
+		}
 
 		return toAPI(mongoTemplate.findAndModify(
 				new Query(where(LOGIN).is(user.login)), update,
 				new FindAndModifyOptions().returnNew(true),
 				org.ow2.play.governance.user.bean.User.class));
+	}
+	
+	@Override
+	public User addResource(String login, String resource) throws UserException {
+		User user = getUser(login);
+		
+		Resource r = new Resource();
+		r.date = "" + System.currentTimeMillis();
+		r.uri = resource;
+		
+		List<Resource> resources = new ArrayList<Resource>();
+		if (user.resources != null) {
+			resources.addAll(user.resources);
+		}
+		resources.add(r);
+		
+		Update update = new Update();
+		update.set("resources", resources);
+		
+		return toAPI(mongoTemplate.findAndModify(
+				new Query(where(LOGIN).is(user.login)), update,
+				new FindAndModifyOptions().returnNew(true),
+				org.ow2.play.governance.user.bean.User.class));		
+	}
+	
+	@Override
+	public User removeResource(String login, String resource)
+			throws UserException {
+		User user = getUser(login);
+		
+		List<Resource> resources = new ArrayList<Resource>();
+		for (Resource resource2 : user.resources) {
+			if (!resource2.uri.equals(resource)) {
+				resources.add(resource2);
+			}
+		}
+		
+		Update update = new Update();
+		update.set("resources", resources);
+		
+		return toAPI(mongoTemplate.findAndModify(
+				new Query(where(LOGIN).is(user.login)), update,
+				new FindAndModifyOptions().returnNew(true),
+				org.ow2.play.governance.user.bean.User.class));	
 	}
 
 	public void setMongoTemplate(MongoTemplate mongoTemplate) {
@@ -185,6 +236,7 @@ public class UserService implements
 		result.login = user.login;
 		result.password = user.password;
 		result.avatarURL = user.avatarURL;
+		result.resources = user.resources;
 		return result;
 	}
 
@@ -198,6 +250,7 @@ public class UserService implements
 		result.login = user.login;
 		result.password = user.password;
 		result.avatarURL = user.avatarURL;
+		result.resources = user.resources;
 		return result;
 	}
 }

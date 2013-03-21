@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.bean.Account;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -300,5 +301,84 @@ public class UserServiceTest {
 		User uuu = userService.getUserFromProvider("twitter", "chachacha");
 		assertNull(uuu);
 		
+	}
+	
+	@Test
+	public void testAddResource() throws Exception {
+		User user = new User();
+		String password = "123";
+		user.login = "cha-" + System.currentTimeMillis();
+		user.password = password;
+		user.groups.add("A");
+		
+		String resource = "http://myresource";
+
+		try {
+			userService.register(user);
+		} catch (UserException e) {
+			fail();
+		} finally {
+			// clear TODO
+		}
+		
+		try {
+			userService.addResource(user.login, resource);
+		} catch (UserException e) {
+			fail();
+		}
+		
+		// get the user and add account
+		User u = userService.getUser(user.login);
+		assertNotNull(u);
+		assertTrue(u.resources != null);
+		assertTrue(u.resources.size() == 1);
+		
+		assertTrue(u.resources.get(0).uri.equals(resource));
+	}
+	
+	@Test
+	public void testRemoveResource() throws Exception {
+		User user = new User();
+		String password = "123";
+		user.login = "cha-" + System.currentTimeMillis();
+		user.password = password;
+		user.groups.add("A");
+
+		String resource1 = "http://myresource1";
+		String resource2 = "http://myresource2";
+
+		Resource r = new Resource();
+		r.date = System.currentTimeMillis() + "";
+		r.uri = resource1;
+		
+		Resource rr = new Resource();
+		rr.date = System.currentTimeMillis() + "";
+		rr.uri = resource2;
+		
+		user.resources.add(r);
+		user.resources.add(rr);
+
+		try {
+			userService.register(user);
+		} catch (UserException e) {
+			fail();
+		} finally {
+			// clear TODO
+		}
+		
+		try {
+			userService.removeResource(user.login, resource1);
+		} catch (UserException e) {
+			fail();
+		}
+		
+		// get the user and add account
+		User u = userService.getUser(user.login);
+		assertNotNull(u);
+		assertTrue(u.resources != null);
+		System.out.println(u.resources);
+		assertTrue(u.resources.size() == 1);
+		
+		assertTrue(u.resources.get(0).uri.equals(resource2));
 	}
 }

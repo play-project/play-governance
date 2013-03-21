@@ -21,10 +21,6 @@ package org.ow2.play.governance.user.rest;
 
 import java.util.logging.Logger;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.commons.rest.error.ResponseBuilder;
