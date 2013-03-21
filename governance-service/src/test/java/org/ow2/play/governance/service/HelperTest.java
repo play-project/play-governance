@@ -92,5 +92,4 @@ public class HelperTest extends TestCase {
 		String ns = Helper.getTopicNS(mr);
 		assertEquals(topic.getNs(), ns);
 	}
-
 }

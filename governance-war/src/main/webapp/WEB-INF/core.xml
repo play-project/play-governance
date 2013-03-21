@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
@@ -12,72 +14,92 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="managementservice"
 		class="org.ow2.play.governance.service.GovernanceManagementService">
 	</bean>
-	
+
 	<bean id="subscriptionstorageservice"
-		class="org.ow2.play.governance.storage.MongoSubscriptionRegistry"  init-method="init">
+		class="org.ow2.play.governance.storage.MongoSubscriptionRegistry"
+		init-method="init">
 	</bean>
-	
+
 	<bean id="bootsubscriptionstorageservice"
-		class="org.ow2.play.governance.storage.MongoBootSubscriptionService" init-method="init">
+		class="org.ow2.play.governance.storage.MongoBootSubscriptionService"
+		init-method="init">
 	</bean>
-	
-	<bean id="wsnsubscriptionservice"
-		class="org.ow2.play.governance.wsn.SubscriptionServiceClient">
+
+	<bean id="wsnsubscriptionservice" class="org.ow2.play.governance.wsn.SubscriptionServiceClient">
 	</bean>
 
 	<bean id="subscriptionmanagementservice"
 		class="org.ow2.play.governance.service.SubscriptionManagementService">
-		<property name="subscriptionService" ref="wsnsubscriptionservice"/>
-		<property name="subscriptionRegistry" ref="subscriptionstorageservice"/>
-		<property name="serviceRegistry" ref="registryservice"/>
+		<property name="subscriptionService" ref="wsnsubscriptionservice" />
+		<property name="subscriptionRegistry" ref="subscriptionstorageservice" />
+		<property name="serviceRegistry" ref="registryservice" />
 	</bean>
-	
-	<bean id="eventservice"
-		class="org.ow2.play.governance.service.EventGovernanceService">
+
+	<bean id="eventservice" class="org.ow2.play.governance.service.EventGovernanceService">
 		<property name="serviceRegistry" ref="registryservice" />
 		<property name="subscriptionService" ref="wsnsubscriptionservice" />
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice" />
 		<property name="metadataService" ref="metadataservice" />
 	</bean>
-	
-	<bean id="topicregistryservice"
-		class="org.ow2.play.governance.service.TopicRegistryService">
+
+	<bean id="topicregistryservice" class="org.ow2.play.governance.service.TopicRegistryService">
 		<property name="metadataService" ref="metadataservice" />
 	</bean>
-	
+
+	<util:map id="wsnsenders" 
+       map-class="java.util.HashMap" 
+       key-type="java.lang.String" 
+       value-type="org.ow2.play.governance.api.WSNTopicNotificationSender">
+       	<entry key="json">
+        	<bean id="jsonwsnsender" class="org.ow2.play.governance.notification.wsn.JSONNotificationSender"/>
+        </entry>
+        <entry key="rdf">
+        	<bean id="rdfwsnsender" class="org.ow2.play.governance.notification.wsn.RDFNotificationSender"/>
+        </entry>
+        <entry key="xml">
+        	<bean id="xmlwsnsender" class="org.ow2.play.governance.notification.wsn.XMLNotificationSender"/>
+        </entry>
+	</util:map>
+
+	<bean id="wsnnotificationservice" class="org.ow2.play.governance.service.NotificationService">
+		<property name="registry" ref="registryservice" />
+		<property name="metadataService" ref="metadataservice" />
+		<property name="senders" ref="wsnsenders"/>
+	</bean>
+
 	<!-- DCEP Governance -->
 	<bean id="simplepatternservice" class="org.ow2.play.governance.dcep.SimplePatternServiceImpl">
 		<property name="registry" ref="registryservice" />
 		<property name="metadataService" ref="metadataservice" />
 	</bean>
-	
+
 	<bean id="patternregistry" class="org.ow2.play.governance.storage.MongoPatternRegistry"
 		init-method="init">
 	</bean>
-	
+
 	<bean id="complexpatternservice" class="org.ow2.play.governance.dcep.ComplexPatternServiceImpl">
 		<property name="simplePatternService" ref="simplepatternservice" />
 		<property name="eventGovernance" ref="eventservice" />
 		<property name="patternRegistry" ref="patternregistry" />
 	</bean>
-	
+
 	<bean id="patternservice" class="org.ow2.play.governance.dcep.PatternServiceImpl">
 		<property name="complexPatternService" ref="complexpatternservice" />
 		<property name="simplePatternService" ref="simplepatternservice" />
 	</bean>
-	
+
 	<!-- EC Wrapper -->
 	<bean id="ecservice" class="org.ow2.play.governance.ec.EventCloudsManagementWsImpl">
 		<property name="registry" ref="registryservice" />
 	</bean>
-	
+
 	<!-- User Management -->
 	<bean id="groupservice" class="org.ow2.play.governance.groups.GroupServiceImpl">
-		<property name="metadataService" ref="metadataservice"/>
+		<property name="metadataService" ref="metadataservice" />
 	</bean>
-	
+
 	<bean id="grouprestservice" class="org.ow2.play.governance.groups.rest.GroupService">
-		<property name="groupService" ref="groupservice"/>
+		<property name="groupService" ref="groupservice" />
 	</bean>
-		
+
 </beans>

@@ -41,5 +41,15 @@ public class HelperTest extends TestCase {
 		Resource resource = new Resource("foo", "http://bar/baz/");
 		assertEquals("baz", Helper.getID(resource));
 	}
+	
+	public void testGetResourceFromURI() {
+		String name = "stream";
+		String url = "http://streams.foo.com/Stream";
+		String uri = url + "#" + name;
+		
+		Resource r = Helper.getResourceFromURI(uri);
+		assertEquals(name, r.getName());
+		assertEquals(url, r.getUrl());
+	}
 
 }

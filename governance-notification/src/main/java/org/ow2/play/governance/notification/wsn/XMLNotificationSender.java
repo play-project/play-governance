@@ -17,41 +17,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.metadata.api;
+package org.ow2.play.governance.notification.wsn;
+
+import org.ow2.play.governance.api.GovernanceExeption;
+import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
+ * Send XML message to the WSN notify service
+ * 
  * @author chamerling
  * 
  */
-public class Helper {
+public class XMLNotificationSender extends AbstractSender {
 
-	public static final String getURI(Resource resource) {
-		return resource.getUrl() + "#" + resource.getName();
-	}
-	
-	public static final String getID(Resource resource) {
-		String tmp = resource.getUrl();
-		if (tmp.endsWith("/")) {
-			tmp = tmp.substring(0, tmp.lastIndexOf('/'));
-		}
-
-		if (tmp.contains("/")) {
-			return tmp.substring(tmp.lastIndexOf('/') + 1);
-		}
-		return tmp;
-	}
-	
 	/**
-	 * Get a {@link Resource} from a unique URI
 	 * 
-	 * @param uri a resource URI like http://streams.foo.com/StreamName#stream
-	 * @return the resource or null if input is not in the right format
 	 */
-	public static final Resource getResourceFromURI(String uri) {
-		if (uri == null || !uri.contains("#")) {
-			return null;
+	public XMLNotificationSender() {
+		super();
+	}
+
+	@Override
+	protected Document translate(String message) throws GovernanceExeption {
+		if (message == null) {
+			throw new GovernanceExeption(
+					"Can not create XML document from null input");
 		}
-		return new Resource(uri.substring(uri.indexOf('#') + 1), uri.substring(0, uri.indexOf('#')));
+		
+		try {
+			return XMLHelper.createDocumentFromString(message);
+		} catch (Exception e) {
+			throw new GovernanceExeption(
+					"Can not create XML document from input", e);
+		}
 	}
 
 }

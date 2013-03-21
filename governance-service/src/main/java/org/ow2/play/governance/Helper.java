@@ -43,7 +43,7 @@ public class Helper {
 
 	private Helper() {
 	}
-
+	
 	public static final String getTopicName(MetaResource mr) {
 		if (mr == null) {
 			return null;

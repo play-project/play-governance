@@ -94,6 +94,12 @@
 			<artifactId>governance-platform-userservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.ow2.play</groupId>
+			<artifactId>governance-notification</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>

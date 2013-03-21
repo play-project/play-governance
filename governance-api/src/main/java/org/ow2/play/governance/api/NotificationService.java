@@ -17,36 +17,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.api.helpers;
+package org.ow2.play.governance.api;
 
-import org.ow2.play.governance.api.Constants;
-import org.ow2.play.governance.api.bean.Topic;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 
 /**
+ * Publish messages
+ * 
  * @author chamerling
- *
+ * 
  */
-public class ResourceHelper {
-	
+@WebService
+public interface NotificationService {
+
 	/**
-	 * Change a topic to a platform resource identifier
+	 * Publish a message into the resource
 	 * 
-	 * @param topic
-	 * @return
+	 * @param resource
+	 * @param message
+	 * @param type
+	 * @throws GovernanceExeption
 	 */
-	public static String get(Topic topic) {
-		StringBuffer sb = new StringBuffer(topic.getNs());
-		if (!topic.getNs().endsWith("/")) {
-			sb.append("/");
-		}
-		sb.append(topic.getName());
-		sb.append("#");
-		sb.append(Constants.STREAM_RESOURCE_NAME);
-		return sb.toString();
-	}
-	
-	public static boolean isTopic(String resourceURI) {
-		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
-	}
+	@WebMethod
+	void publish(String resource, String message, String type)
+			throws GovernanceExeption;
 
 }

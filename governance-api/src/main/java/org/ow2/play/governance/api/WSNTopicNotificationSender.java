@@ -17,36 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.api.helpers;
+package org.ow2.play.governance.api;
 
-import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.bean.Topic;
 
 /**
+ * Send notification to topic. Up to the implementation to translate inut
+ * message in the right format.
+ * 
  * @author chamerling
- *
+ * 
  */
-public class ResourceHelper {
-	
+public interface WSNTopicNotificationSender {
+
 	/**
-	 * Change a topic to a platform resource identifier
 	 * 
+	 * @param endpoint
 	 * @param topic
-	 * @return
+	 * @param message
 	 */
-	public static String get(Topic topic) {
-		StringBuffer sb = new StringBuffer(topic.getNs());
-		if (!topic.getNs().endsWith("/")) {
-			sb.append("/");
-		}
-		sb.append(topic.getName());
-		sb.append("#");
-		sb.append(Constants.STREAM_RESOURCE_NAME);
-		return sb.toString();
-	}
-	
-	public static boolean isTopic(String resourceURI) {
-		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
-	}
+	void notify(String endpoint, Topic topic, String message) throws GovernanceExeption;
 
 }

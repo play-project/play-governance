@@ -59,6 +59,7 @@
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
+		<property name="notificationService" ref="wsnnotificationservice"/>
 	</bean>
 
 	<import resource="platform-api-rest.xml" />

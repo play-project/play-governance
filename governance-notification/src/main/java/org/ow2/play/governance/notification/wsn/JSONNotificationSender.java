@@ -17,36 +17,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.api.helpers;
+package org.ow2.play.governance.notification.wsn;
 
-import org.ow2.play.governance.api.Constants;
-import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.api.GovernanceExeption;
+import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.easycommons.xml.DocumentBuilders;
+
+import eu.play_project.play_commons.eventformat.EventFormatHelpers;
 
 /**
+ * Send JSON message to the WSN notify service
+ * 
  * @author chamerling
- *
+ * 
  */
-public class ResourceHelper {
-	
-	/**
-	 * Change a topic to a platform resource identifier
-	 * 
-	 * @param topic
-	 * @return
-	 */
-	public static String get(Topic topic) {
-		StringBuffer sb = new StringBuffer(topic.getNs());
-		if (!topic.getNs().endsWith("/")) {
-			sb.append("/");
-		}
-		sb.append(topic.getName());
-		sb.append("#");
-		sb.append(Constants.STREAM_RESOURCE_NAME);
-		return sb.toString();
+public class JSONNotificationSender extends AbstractSender {
+
+	public JSONNotificationSender() {
+		super();
 	}
-	
-	public static boolean isTopic(String resourceURI) {
-		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
+
+	@Override
+	protected Document translate(String message) throws GovernanceExeption {
+		if (message == null) {
+			throw new GovernanceExeption("Null input");
+		}
+
+		Document doc = DocumentBuilders.newDocument();
+		doc.appendChild(doc.adoptNode(EventFormatHelpers
+				.wrapWithDomNativeMessageElement(message).cloneNode(true)));
+		return doc;
 	}
 
 }
