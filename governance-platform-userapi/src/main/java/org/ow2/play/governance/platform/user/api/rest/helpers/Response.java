@@ -26,6 +26,11 @@ import javax.ws.rs.core.Response.Status;
  * 
  */
 public class Response {
+	
+	public static final javax.ws.rs.core.Response error(Status status,
+			String pattern, Object... args) {
+		return error(status, String.format(pattern, args));
+	}
 
 	public static final javax.ws.rs.core.Response error(Status status,
 			String message) {
