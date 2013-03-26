@@ -17,36 +17,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.api.helpers;
+package org.ow2.play.governance.resources;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 import org.ow2.play.governance.api.Constants;
-import org.ow2.play.governance.api.bean.Topic;
 
 /**
  * @author chamerling
- *
+ * 
  */
-public class ResourceHelper {
-	
-	/**
-	 * Change a topic to a platform resource identifier
-	 * 
-	 * @param topic
-	 * @return
-	 */
-	public static String get(Topic topic) {
-		StringBuffer sb = new StringBuffer(topic.getNs());
-		if (!topic.getNs().endsWith("/")) {
-			sb.append("/");
-		}
-		sb.append(topic.getName());
-		sb.append("#");
-		sb.append(Constants.STREAM_RESOURCE_NAME);
-		return sb.toString();
-	}
-	
-	public static boolean isTopic(String resourceURI) {
-		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
+public class PatternHelperTest {
+
+	@Test
+	public void testGenerateURI() {
+		assertEquals(Constants.PATTERN_PREFIX_URL + "123#"
+				+ Constants.PATTERN_RESOURCE_NAME,
+				PatternHelper.getPatternURI("123"));
 	}
 
+	@Test
+	public void testGetID() {
+		assertEquals(
+				"123",
+				PatternHelper.getPatternID(Constants.PATTERN_PREFIX_URL
+						+ "123#" + Constants.PATTERN_RESOURCE_NAME));
+	}
 }

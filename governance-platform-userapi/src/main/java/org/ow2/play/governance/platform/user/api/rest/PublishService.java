@@ -20,13 +20,12 @@
 package org.ow2.play.governance.platform.user.api.rest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.ow2.play.governance.platform.user.api.rest.bean.Notification;
 
 /**
  * Push a notification to the system
@@ -42,16 +41,18 @@ public interface PublishService {
 	/**
 	 * Push a new message into the platform.
 	 * 
-	 * Input JSON message is:
-	 * <pre>{"resource": "Myresource", "message" : "mymessage"}</pre>
+	 * Input JSON message is a multipart form data to be able to push large and multiple format data:
 	 * 
-	 * @param notification
-	 * @return
+	 * @param resource : The resource to send notification to
+	 * @param message : The message to send to the resource
+	 * 
+	 * @return HTTP Status 200 if data has been published
 	 */
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response notify(Notification notification);
+	Response notify(@FormParam("resource") String resource,
+			@FormParam("message") String message);
 
 }

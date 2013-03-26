@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2012, PetalsLink
+ * Copyright (c) 2013, Linagora
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,79 +17,90 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance.service;
+package org.ow2.play.governance.resources;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
-import org.ow2.play.governance.Adapter;
-import org.ow2.play.governance.Helper;
+import org.junit.Test;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.metadata.api.MetaResource;
 
 /**
  * @author chamerling
- * 
+ *
  */
-public class HelperTest extends TestCase {
+public class TopicHelperTest {
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Test that transforming topic and metaresource is symetric using the
+	 * adapter...
 	 * 
-	 * @see junit.framework.TestCase#setUp()
+	 * @throws Exception
 	 */
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+	@Test
+	public void testToFrom() throws Exception {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see junit.framework.TestCase#tearDown()
-	 */
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+		Topic t = new Topic();
+		t.setName("TestTopic");
+		t.setNs("http://play.eu/test");
+		t.setPrefix("p");
 
+		MetaResource mr = TopicHelper.transform(t);
+		assertNotNull(mr);
+		
+		assertEquals("stream", mr.getResource().getName());
+		assertEquals("http://play.eu/test/TestTopic", mr.getResource().getUrl());
+		
+		System.out.println(mr);
+		
+		Topic topic = TopicHelper.transform(mr);
+		assertEquals(t, topic);
+
+	}
+	
+	@Test
 	public void testGetTopicName() throws Exception {
 		Topic topic = new Topic();
 		topic.setName("Test");
 		topic.setNs("http://play.eu");
 		topic.setPrefix("p");
 
-		MetaResource mr = Adapter.transform(topic);
+		MetaResource mr = TopicHelper.transform(topic);
 
-		String name = Helper.getTopicName(mr);
+		String name = TopicHelper.getTopicName(mr);
 		assertEquals(topic.getName(), name);
 
-		String prefix = Helper.getTopicPrefix(mr);
+		String prefix = TopicHelper.getTopicPrefix(mr);
 		assertEquals(topic.getPrefix(), prefix);
 
-		String ns = Helper.getTopicNS(mr);
+		String ns = TopicHelper.getTopicNS(mr);
 		assertEquals(topic.getNs(), ns);
 
 	}
 
+	@Test
 	public void testGetTopicPrefix() throws Exception {
 		Topic topic = new Topic();
 		topic.setName("Test");
 		topic.setNs("http://play.eu");
 		topic.setPrefix("p");
 
-		MetaResource mr = Adapter.transform(topic);
+		MetaResource mr = TopicHelper.transform(topic);
 
-		String prefix = Helper.getTopicPrefix(mr);
+		String prefix = TopicHelper.getTopicPrefix(mr);
 		assertEquals(topic.getPrefix(), prefix);
 	}
 
+	@Test
 	public void testGetTopicNS() throws Exception {
 		Topic topic = new Topic();
 		topic.setName("Test");
 		topic.setNs("http://play.eu");
 		topic.setPrefix("p");
 
-		MetaResource mr = Adapter.transform(topic);
+		MetaResource mr = TopicHelper.transform(topic);
 
-		String ns = Helper.getTopicNS(mr);
+		String ns = TopicHelper.getTopicNS(mr);
 		assertEquals(topic.getNs(), ns);
 	}
 }

@@ -22,9 +22,9 @@ package org.ow2.play.governance.service;
 import java.util.List;
 import java.util.Map;
 
-import org.ow2.play.governance.Adapter;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.WSNTopicNotificationSender;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
@@ -76,7 +76,7 @@ public class NotificationService implements
 
 			sender.notify(
 					registry.get(org.ow2.play.service.registry.api.Constants.DSB_CONSUMER),
-					Adapter.transform(metas.get(0)), message);
+					TopicHelper.transform(metas.get(0)), message);
 
 		} catch (RegistryException e) {
 			throw new GovernanceExeption(e);

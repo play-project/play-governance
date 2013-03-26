@@ -15,8 +15,6 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.ow2.play.commons.utils.StreamHelper;
-import org.ow2.play.governance.Adapter;
-import org.ow2.play.governance.Helper;
 import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
@@ -26,6 +24,7 @@ import org.ow2.play.governance.api.TopicAware;
 import org.ow2.play.governance.api.bean.Subscription;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.cxf.CXFHelper;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
@@ -95,7 +94,7 @@ public class EventGovernanceService implements EventGovernance {
         // create it
         MetaResource mr = getResourceForTopic(topic);
         if (mr == null) {
-            mr = Adapter.transform(topic);
+            mr = TopicHelper.transform(topic);
             mr = createMetaResource(mr);
         }
 
@@ -152,7 +151,7 @@ public class EventGovernanceService implements EventGovernance {
         // create it
         MetaResource mr = getResourceForTopic(topic);
         if (mr == null) {
-            mr = Adapter.transform(topic);
+            mr = TopicHelper.transform(topic);
             mr.getMetadata()
                     .add(new Metadata(Constants.TOPIC_MODE, new Data(Type.LITERAL,
                         Constants.TOPIC_MODE_PUBLISHER)));
@@ -230,7 +229,7 @@ public class EventGovernanceService implements EventGovernance {
         // create it again
         MetaResource mr = getResourceForTopic(topic);
         if (mr == null) {
-            mr = Adapter.transform(topic);
+            mr = TopicHelper.transform(topic);
             mr.getMetadata().add(
                     new Metadata(Constants.TOPIC_MODE,
                         new Data(Type.LITERAL, Constants.TOPIC_MODE_SUBSCRIBER)));
@@ -466,7 +465,7 @@ public class EventGovernanceService implements EventGovernance {
     protected MetaResource getResourceForTopic(Topic topic) throws GovernanceExeption {
         MetaResource result = null;
 
-        Resource resource = Helper.getResource(topic);
+        Resource resource = TopicHelper.getResource(topic);
 
         try {
             boolean exists = metadataService.exists(resource);

@@ -28,14 +28,13 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.governance.user.api.bean.User;
 
 import com.google.common.base.Function;
@@ -48,9 +47,6 @@ import com.google.common.collect.Collections2;
 public class TopicService extends AbstractService implements
 		org.ow2.play.governance.platform.user.api.rest.TopicService {
 
-	@Context
-	private MessageContext mc;
-
 	private EventGovernance eventGovernance;
 	
 	@Override
@@ -60,7 +56,7 @@ public class TopicService extends AbstractService implements
 		// TODO : Topics per user can be found before instead of calling N times the permission checker...
 		List<Topic> topics = null;
 		try {
-			topics = userResourceAccess.getTopicsForUser(getUser(mc));
+			topics = userResourceAccess.getTopicsForUser(getUser());
 		} catch (GovernanceExeption e) {
 			e.printStackTrace();
 			return error(Status.INTERNAL_SERVER_ERROR, "Can not get topics");
@@ -105,8 +101,8 @@ public class TopicService extends AbstractService implements
 		Topic input = topics.get(0);
 		
 		// check access
-		final User user = getUser(mc);
-		if (permissionChecker.checkResource(user.login, org.ow2.play.governance.api.helpers.ResourceHelper.get(input))) {
+		final User user = getUser();
+		if (permissionChecker.checkResource(user.login, TopicHelper.get(input))) {
 			org.ow2.play.governance.platform.user.api.rest.bean.Topic topic = new org.ow2.play.governance.platform.user.api.rest.bean.Topic();
 			topic.name = input.getName();
 			topic.ns = input.getNs();

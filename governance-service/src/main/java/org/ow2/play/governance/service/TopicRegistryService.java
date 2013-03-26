@@ -24,12 +24,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.ow2.play.governance.Adapter;
-import org.ow2.play.governance.Helper;
 import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.TopicRegistry;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
@@ -64,7 +63,7 @@ public class TopicRegistryService implements TopicRegistry {
 
 		MetaResource mr = getResourceForTopic(topic);
 		if (mr == null) {
-			mr = Adapter.transform(topic);
+			mr = TopicHelper.transform(topic);
 			if (properties != null) {
 				mr.getMetadata().addAll(properties);
 			}
@@ -101,7 +100,7 @@ public class TopicRegistryService implements TopicRegistry {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Resource : " + r.getResource());
 				}
-				result.add(Adapter.transform(r));
+				result.add(TopicHelper.transform(r));
 			}
 		}
 		return result;
@@ -177,7 +176,7 @@ public class TopicRegistryService implements TopicRegistry {
 			throws GovernanceExeption {
 		MetaResource result = null;
 
-		Resource resource = Helper.getResource(topic);
+		Resource resource = TopicHelper.getResource(topic);
 		try {
 			boolean exists = metadataService.exists(resource);
 			if (exists) {

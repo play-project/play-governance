@@ -22,60 +22,62 @@ package org.ow2.play.governance.platform.user.service.rest;
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.error;
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
 
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.NotificationService;
-import org.ow2.play.governance.api.helpers.ResourceHelper;
-import org.ow2.play.governance.platform.user.api.rest.bean.Notification;
+import org.ow2.play.governance.resources.TopicHelper;
 
 /**
  * @author chamerling
- *
+ * 
  */
-public class PublishService extends AbstractService implements org.ow2.play.governance.platform.user.api.rest.PublishService {
+public class PublishService extends AbstractService implements
+		org.ow2.play.governance.platform.user.api.rest.PublishService {
 
-	@Context
-	private MessageContext mc;
-	
 	private NotificationService notificationService;
-	
-	public Response notify(Notification notification) {
-		
+
+	public Response notify(String resource, String message) {
+
 		// for now publish is only supported in topics
-		if (notification.resource == null) {
+		if (resource == null) {
 			return error(Status.BAD_REQUEST, "resource is mandatory");
 		}
-		
-		if (notification.message == null) {
+
+		if (message == null) {
 			return error(Status.BAD_REQUEST, "message is mandatory");
 		}
-		
-		if (!ResourceHelper.isTopic(notification.resource)) {
-			return error(Status.BAD_REQUEST, "Publish is only supported in topics/streams");
+
+		if (!TopicHelper.isTopic(resource)) {
+			return error(Status.BAD_REQUEST,
+					"Publish is only supported in topics/streams");
 		}
-		
-		// user can publish into the resource only if he has enough permissions...
-		if (!permissionChecker.checkResource(getUser(mc).login, notification.resource)) {
-			return error(Status.UNAUTHORIZED, "Not allowed to pusblish into " + notification.resource);
+
+		// user can publish into the resource only if he has enough
+		// permissions...
+		if (!permissionChecker.checkResource(getUser().login,
+				resource)) {
+			return error(Status.UNAUTHORIZED, "Not allowed to pusblish into "
+					+ resource);
 		}
-		
+
 		// let's push data to the real notification service (ie DSB at the end)
 		try {
-			notificationService.publish(notification.resource, notification.message, "json");
+			notificationService.publish(resource,
+					message, "json");
 		} catch (GovernanceExeption e) {
 			e.printStackTrace();
-			return error(Status.INTERNAL_SERVER_ERROR, "Something bad occured in the platform...");
+			return error(Status.INTERNAL_SERVER_ERROR,
+					"Something bad occured in the platform...");
 		}
-		
+
 		return ok();
 	}
-	
+
 	/**
-	 * @param notificationService the notificationService to set
+	 * @param notificationService
+	 *            the notificationService to set
 	 */
 	public void setNotificationService(NotificationService notificationService) {
 		this.notificationService = notificationService;

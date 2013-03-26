@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>org.ow2.petals.dsb</groupId>
 			<artifactId>dsb-notification-httpclient</artifactId>
-			<version>1.0.0</version>
+			<version>${dsb.version}</version>
 		</dependency>
 
 		<dependency>

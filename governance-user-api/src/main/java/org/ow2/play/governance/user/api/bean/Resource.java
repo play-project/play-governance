@@ -81,4 +81,11 @@ public class Resource {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Resource [uri=" + uri + ", date=" + date + "]";
+	}
 }

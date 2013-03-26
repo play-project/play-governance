@@ -25,16 +25,25 @@ import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.er
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.jaxrs.ext.MessageContext;
+import org.ow2.play.governance.api.GovernanceExeption;
+import org.ow2.play.governance.api.PatternRegistry;
+import org.ow2.play.governance.api.SimplePatternService;
 import org.ow2.play.governance.platform.user.api.rest.bean.Pattern;
+import org.ow2.play.governance.resources.PatternHelper;
+import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.Resource;
+import org.ow2.play.governance.user.api.bean.User;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 /**
@@ -44,49 +53,189 @@ import com.google.common.collect.Lists;
  */
 public class PatternService extends AbstractService implements
 		org.ow2.play.governance.platform.user.api.rest.PatternService {
-	
-	@Context
-	private MessageContext mc;
+
+	private PatternRegistry patternRegistry;
+
+	private SimplePatternService patternService;
 
 	public Response patterns() {
-		Pattern pattern = new Pattern();
-		pattern.data = "ABC";
-		pattern.id = UUID.randomUUID().toString();
-		pattern.resourceUrl = getResourceURI(pattern);
-		
-		Pattern pattern2 = new Pattern();
-		pattern2.data = "AZE";
-		pattern2.id = UUID.randomUUID().toString();
-		pattern2.resourceUrl = getResourceURI(pattern2);
 
-		// to array to get a JSON array as output
-		List<Pattern> result = Lists.newArrayList(pattern, pattern2);
-		return ok(result.toArray(new Pattern[result.size()]));
+		User user = getUser();
+
+		List<Resource> resources = user.resources;
+		Collection<Resource> filtered = Collections2.filter(resources,
+				new Predicate<Resource>() {
+					public boolean apply(Resource input) {
+						return PatternHelper.isPattern(input.uri);
+					}
+				});
+
+		Collection<Pattern> patterns = Collections2.transform(filtered,
+				new Function<Resource, Pattern>() {
+					public Pattern apply(Resource patternResource) {
+						try {
+							org.ow2.play.governance.api.bean.Pattern pattern = patternRegistry
+									.get(PatternHelper
+											.getPatternID(patternResource.uri));
+							Pattern out = new Pattern();
+							out.data = pattern.content;
+							out.id = pattern.id;
+							out.resourceUrl = getResourceURI(out);
+							return out;
+						} catch (GovernanceExeption e) {
+							// ...
+							return new Pattern();
+						}
+					}
+				});
+
+		return ok(patterns.toArray(new Pattern[patterns.size()]));
 	}
 
 	public Response pattern(String id) {
-		Pattern pattern = new Pattern();
-		pattern.data = "ABC";
-		pattern.id = id;
-		pattern.resourceUrl = getResourceURI(pattern);
-		return ok(pattern);
+		if (id == null) {
+			return error(Status.BAD_REQUEST, "Pattern ID is mandatary");
+		}
+
+		// check if it is a user subscription first...
+		final String url = PatternHelper.getPatternURI(id);
+		
+		Resource resource = getUserResource(url);
+		if (resource == null) {
+			return error(Status.BAD_REQUEST,
+					"Pattern %s has not been found in user pattern #RESPATTERN01", id);
+		}
+		
+		org.ow2.play.governance.api.bean.Pattern pattern = null;
+		try {
+			pattern = patternRegistry.get(id);
+			if (pattern == null) {
+				return error(Status.NOT_FOUND,
+						"Pattern %s has not been found in pattern registry #RESPATTERN02", id);
+			}
+		} catch (GovernanceExeption e) {
+			e.printStackTrace();
+			// TODO : send to monitoring
+			return error(Status.INTERNAL_SERVER_ERROR,
+					"Error while getting pattern #RESPATTERN03");
+		}
+
+		Pattern out = new Pattern();
+		out.data = pattern.content;
+		out.id = pattern.id;
+		out.resourceUrl = getResourceURI(out);
+		return ok(out);
 	}
 
-	public Response deploy(Pattern pattern) {
-		if (pattern.data == null) {
+	public Response deploy(String pattern) {
+		if (pattern == null) {
 			return error(Status.BAD_REQUEST, "Pattern data is missing");
 		}
-		pattern.id = UUID.randomUUID().toString();
-		return created(pattern);
+
+		// first, check if the user can deploy the pattern ie if he add good
+		// access rights to the resources he wants to user...
+		// TODO!!!!!
+		User user = getUser();
+
+		String id = UUID.randomUUID().toString();
+
+		// send to pattern service
+		try {
+			patternService.deploy(id, pattern);
+		} catch (GovernanceExeption e) {
+			return error(Status.INTERNAL_SERVER_ERROR,
+					"Pattern can not be deployed : %s", e.getMessage());
+		}
+
+		// once deployed, register it
+		try {
+			org.ow2.play.governance.api.bean.Pattern p = new org.ow2.play.governance.api.bean.Pattern();
+			p.content = pattern;
+			p.id = id;
+			patternRegistry.put(p);
+		} catch (GovernanceExeption e) {
+			e.printStackTrace();
+		}
+
+		// once registred, add it to the user...
+		Pattern p = new Pattern();
+		p.id = id;
+		p.data = pattern;
+		p.resourceUrl = getResourceURI(p);
+		
+		try {
+			userService.addResource(user.login,
+					PatternHelper.getPatternURI(p.id));
+		} catch (UserException e) {
+			e.printStackTrace();
+		}
+
+		return created(p);
 	}
 
 	public Response undeploy(String id) {
+
+		if (id == null) {
+			return error(Status.BAD_REQUEST, "Pattern ID is mandatary");
+		}
+
+		final String url = PatternHelper.getPatternURI(id);
+
+		User user = getUser();
+		
+		Resource resource = getUserResource(url);
+		if (resource == null) {
+			return error(Status.BAD_REQUEST,
+					"Pattern %s has not been found in user pattern #RESTUNDEPLOY01", id);
+		}
+		
+		try {
+			patternService.undeploy(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return error(Status.INTERNAL_SERVER_ERROR,
+					"Error while undeploying pattern #RESTUNDEPLOY02");
+		}
+
+		// delete pattern from the user object.
+		try {
+			user = userService.removeResource(user.login, url);
+		} catch (UserException e) {
+			// just warn...
+			e.printStackTrace();
+		}
+
+		// question: Can we keep pattern in the registry for stats? if
+		// yes, will be cool to change their state
+		try {
+			patternRegistry.delete(Lists.newArrayList(id));
+		} catch (GovernanceExeption e) {
+			// just warn...
+			e.printStackTrace();
+		}
+
 		return deleted();
 	}
-	
+
 	protected String getResourceURI(Pattern pattern) {
 		URI uri = mc.getUriInfo().getBaseUri();
 		return uri.toString() + "patterns/" + pattern.id;
+	}
+
+	/**
+	 * @param patternRegistry
+	 *            the patternRegistry to set
+	 */
+	public void setPatternRegistry(PatternRegistry patternRegistry) {
+		this.patternRegistry = patternRegistry;
+	}
+
+	/**
+	 * @param patternService
+	 *            the patternService to set
+	 */
+	public void setPatternService(SimplePatternService patternService) {
+		this.patternService = patternService;
 	}
 
 }

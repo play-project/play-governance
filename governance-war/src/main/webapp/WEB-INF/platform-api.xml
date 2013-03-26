@@ -38,6 +38,12 @@
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
+		<property name="subscriptionService">
+			<bean class="org.ow2.play.governance.fakes.SubscriptionService"/>
+		</property>
+		<property name="subscriptionRegistry" ref="subscriptionstorageservice"/>
+		<property name="metadataService" ref="metadataservice"/>
+		<property name="registry" ref="registryservice"/>
 	</bean>
 
 	<bean id="platformtopicrestapi"
@@ -50,8 +56,14 @@
 
 	<bean id="platformpatternrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.PatternService">
+		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
+		<property name="patternRegistry" ref="patternregistry"/>
+		<property name="patternService">
+			<!-- FIXME -->
+			<bean class="org.ow2.play.governance.fakes.SimplePatternService"/>
+		</property>
 	</bean>
 	
 	<bean id="platformublishrestapi"
@@ -59,7 +71,11 @@
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
-		<property name="notificationService" ref="wsnnotificationservice"/>
+		<!-- FIXME <property name="notificationService" ref="wsnnotificationservice"/>-->
+		<property name="notificationService">
+			<bean class="org.ow2.play.governance.fakes.NotificationService"/>
+		</property>
+		
 	</bean>
 
 	<import resource="platform-api-rest.xml" />

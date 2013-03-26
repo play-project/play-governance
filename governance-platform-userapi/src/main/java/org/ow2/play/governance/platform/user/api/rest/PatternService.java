@@ -21,6 +21,7 @@ package org.ow2.play.governance.platform.user.api.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,7 +39,7 @@ import org.ow2.play.governance.platform.user.api.rest.bean.PatternResult;
  */
 @Path(PatternService.PATH)
 public interface PatternService {
-	
+
 	public static final String PATH = "/patterns";
 
 	/**
@@ -64,19 +65,17 @@ public interface PatternService {
 	Response pattern(@PathParam("id") String id);
 
 	/**
-	 * Deploy a new pattern to the platform. JSON input is:
-	 * 
-	 * <pre>{"data" : "YOUR PATTERN"}</pre>
+	 * Deploy a new pattern to the platform
 	 * 
 	 * @param the
 	 *            pattern to deploy
-	 * @return the pattern deployment result as {@link PatternResult}
+	 * @return the pattern deployment result as {@link Pattern}
 	 */
 	@POST
 	@Path("")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response deploy(Pattern pattern);
+	Response deploy(@FormParam("pattern") String pattern);
 
 	/**
 	 * Undeploy a pattern from its ID

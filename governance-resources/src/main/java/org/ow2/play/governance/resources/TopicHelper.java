@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2012, PetalsLink
+ * Copyright (c) 2013, Linagora
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.governance;
+package org.ow2.play.governance.resources;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,22 +26,43 @@ import java.util.logging.Logger;
 
 import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.Resource;
+import org.ow2.play.metadata.api.Type;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * @author chamerling
- * 
+ *
  */
-public class Helper {
-
-	private static Logger logger = Logger.getLogger(Helper.class.getName());
-
-	private Helper() {
+public class TopicHelper {
+	
+	private static Logger logger = Logger.getLogger(TopicHelper.class.getName());
+	
+	/**
+	 * Change a topic to a platform resource identifier
+	 * 
+	 * @param topic
+	 * @return
+	 */
+	public static String get(Topic topic) {
+		StringBuffer sb = new StringBuffer(topic.getNs());
+		if (!topic.getNs().endsWith("/")) {
+			sb.append("/");
+		}
+		sb.append(topic.getName());
+		sb.append("#");
+		sb.append(Constants.STREAM_RESOURCE_NAME);
+		return sb.toString();
+	}
+	
+	public static boolean isTopic(String resourceURI) {
+		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
 	}
 	
 	public static final String getTopicName(MetaResource mr) {
@@ -160,4 +181,53 @@ public class Helper {
 		url = url + topic.getName();
 		return new Resource(Constants.STREAM_RESOURCE_NAME, url);		
 	}
+	
+	/**
+	 * Create a metaresource from a topic.
+	 * 
+	 * @param topic
+	 * @return
+	 */
+	public static final MetaResource transform(Topic topic) {
+		if (topic == null) {
+			return null;
+		}
+
+		Resource r = getResource(topic);
+		List<Metadata> meta = Lists.newArrayList(
+				new Metadata(Constants.QNAME_LOACALPART_URL, new Data(
+						Type.LITERAL, topic.getName())),
+				new Metadata(Constants.QNAME_NS_URL, new Data(Type.URI, topic
+						.getNs())), new Metadata(Constants.QNAME_PREFIX_URL,
+						new Data(Type.LITERAL, topic.getPrefix())),
+				new Metadata(Constants.TOPIC, new Data(Type.URI, r.getUrl())));
+
+		return new MetaResource(r, meta);
+	}
+
+	/**
+	 * Transform a metadata resource into a Topic ie get all the topic
+	 * information from the metaresource.
+	 * 
+	 * @param metaResource
+	 * @return
+	 */
+	public static final Topic transform(MetaResource metaResource) {
+		if (metaResource == null) {
+			return null;
+		}
+		Topic topic = new Topic();
+
+		if (Constants.STREAM_RESOURCE_NAME.equals(metaResource.getResource()
+				.getName())) {
+			String ns = getTopicNS(metaResource);
+			String name = getTopicName(metaResource);
+			String prefix = getTopicPrefix(metaResource);
+			topic.setName(name);
+			topic.setNs(ns);
+			topic.setPrefix(prefix);
+		}
+		return topic;
+	}
+	
 }

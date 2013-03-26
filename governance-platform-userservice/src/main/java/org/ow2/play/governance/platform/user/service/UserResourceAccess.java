@@ -26,6 +26,7 @@ import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.permission.api.PermissionChecker;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.governance.user.api.bean.User;
 
 import com.google.common.base.Predicate;
@@ -65,7 +66,7 @@ public class UserResourceAccess {
 						return permissionChecker
 								.checkResource(
 										user.login,
-										org.ow2.play.governance.api.helpers.ResourceHelper
+										TopicHelper
 												.get(topic));
 					}
 				});
