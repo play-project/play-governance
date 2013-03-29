@@ -38,9 +38,7 @@
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
-		<property name="subscriptionService">
-			<bean class="org.ow2.play.governance.fakes.SubscriptionService"/>
-		</property>
+		<property name="subscriptionService" ref="wsnsubscriptionservice"/>
 		<property name="subscriptionRegistry" ref="subscriptionstorageservice"/>
 		<property name="metadataService" ref="metadataservice"/>
 		<property name="registry" ref="registryservice"/>
@@ -71,10 +69,11 @@
 		<property name="userService" ref="userservice" />
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
-		<!-- FIXME <property name="notificationService" ref="wsnnotificationservice"/>-->
-		<property name="notificationService">
+		<property name="notificationService" ref="wsnnotificationservice"/>
+		<!-- <property name="notificationService">
 			<bean class="org.ow2.play.governance.fakes.NotificationService"/>
 		</property>
+		-->
 		
 	</bean>
 
