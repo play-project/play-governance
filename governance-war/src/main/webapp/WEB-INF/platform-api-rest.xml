@@ -48,6 +48,7 @@
 		<jaxrs:serviceBeans>
 			<ref bean="platformsubscriptionrestapi" />
 			<ref bean="platformtopicrestapi" />
+			<ref bean="platformstreamrestapi"/>
 			<ref bean="platformpatternrestapi" />
 			<ref bean="platformublishrestapi"/>
 		</jaxrs:serviceBeans>

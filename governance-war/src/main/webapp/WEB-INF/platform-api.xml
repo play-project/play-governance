@@ -51,6 +51,14 @@
 		<property name="userResourceAccess" ref="userresourceaccess"/>
 		<property name="eventGovernance" ref="eventservice" />
 	</bean>
+	
+	<bean id="platformstreamrestapi"
+		class="org.ow2.play.governance.platform.user.service.rest.StreamService">
+		<property name="userService" ref="userservice" />
+		<property name="permissionChecker" ref="permissionchecker" />
+		<property name="userResourceAccess" ref="userresourceaccess"/>
+		<property name="eventGovernance" ref="eventservice" />
+	</bean>
 
 	<bean id="platformpatternrestapi"
 		class="org.ow2.play.governance.platform.user.service.rest.PatternService">

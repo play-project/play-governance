@@ -62,6 +62,7 @@ public class TopicHelper {
 	}
 	
 	public static boolean isTopic(String resourceURI) {
+		// topics are streams in the platform
 		return resourceURI != null && resourceURI.endsWith("#" + Constants.STREAM_RESOURCE_NAME);
 	}
 	
