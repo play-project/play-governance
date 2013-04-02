@@ -204,18 +204,23 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	@Override
 	@WebMethod
 	public Pattern getPattern(String id) throws GovernanceExeption {
-		String pattern = null;
+		Query query = null;
 		Pattern result = null;
 		try {
-			pattern = getQueryDispatchApiClient().getRegisteredQuery(id);
+			query = getQueryDispatchApiClient().getRegisteredQuery(id);
 		} catch (QueryDispatchException e) {
 			throw new GovernanceExeption(e);
 		}
-		if (pattern != null) {
-			result = new Pattern();
-			result.content = pattern;
-			result.id = id;
+		
+		if (query == null) {
+			throw new GovernanceExeption("Pattern not found");
 		}
+		
+		result = new Pattern();
+		result.name = query.name;
+		result.content = query.content;
+		result.recordDate = query.recordDate;
+		result.id = id;
 		return result;
 	}
 
