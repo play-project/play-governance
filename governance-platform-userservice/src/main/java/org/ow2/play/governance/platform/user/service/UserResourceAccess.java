@@ -32,6 +32,7 @@ import org.ow2.play.governance.user.api.bean.User;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * @author chamerling
@@ -70,7 +71,8 @@ public class UserResourceAccess {
 												.get(topic));
 					}
 				});
-		return Lists.newArrayList(filtered);
+		// send back removing duplicates...
+		return Lists.newArrayList(Sets.newHashSet(filtered));
 	}
 
 	/**
