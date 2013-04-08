@@ -4,8 +4,8 @@
 package org.ow2.play.governance.user;
 
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.UUID;
@@ -189,7 +189,7 @@ public class UserServiceTest {
 		user.accounts.add(a);
 
 		try {
-			userService.register(user);
+			user = userService.register(user);
 		} catch (UserException e) {
 			fail();
 		} finally {
@@ -209,10 +209,7 @@ public class UserServiceTest {
 		b.token = UUID.randomUUID().toString();
 		u.accounts.add(b);
 
-		// set the password (returned one is hashed)
-		u.password = password;
-
-		User uu = userService.update(u);
+		User uu = userService.addAccount(u.id, b);
 		assertNotNull(uu);
 		assertTrue(uu.accounts != null);
 		assertTrue(uu.accounts.size() == 2);
@@ -226,10 +223,10 @@ public class UserServiceTest {
 		String password = "123";
 		user.login = "cha-" + System.currentTimeMillis();
 		user.password = password;
-		user.groups.add("A");
+		user.groups.add(getGroup("http://foo/bar/a"));
 
 		try {
-			userService.register(user);
+			user = userService.register(user);
 		} catch (UserException e) {
 			fail();
 		} finally {
@@ -237,23 +234,18 @@ public class UserServiceTest {
 		}
 		
 		// get the user and add account
+		// not a test...
 		User u = userService.getUser(user.login);
 		assertNotNull(u);
 		assertTrue(u.groups != null);
 		assertTrue(u.groups.size() == 1);
 		
-		u.groups.add("B");
 		
-		// set the password (returned one is hashed)
-		u.password = password;
+		User uu = userService.addGroup(u.id, "http://foo/bar/b");
 		
-		User uu = userService.update(u);
 		assertNotNull(uu);
 		assertTrue(uu.groups != null);
 		assertTrue(uu.groups.size() == 2);
-		
-		assertTrue(uu.groups.contains("A"));
-		assertTrue(uu.groups.contains("B"));
 		
 		System.out.println(uu);
 	}
@@ -309,9 +301,10 @@ public class UserServiceTest {
 		String password = "123";
 		user.login = "cha-" + System.currentTimeMillis();
 		user.password = password;
-		user.groups.add("A");
+		user.groups.add(getGroup("http://group/a"));
 		
 		String resource = "http://myresource";
+		String resourceName = "test";
 
 		try {
 			userService.register(user);
@@ -321,9 +314,12 @@ public class UserServiceTest {
 			// clear TODO
 		}
 		
+		user = userService.getUser(user.login);
+		System.out.println(user.id);
 		try {
-			userService.addResource(user.login, resource);
+			userService.addResource(user.id, resource, resourceName);
 		} catch (UserException e) {
+			e.printStackTrace();
 			fail();
 		}
 		
@@ -334,6 +330,8 @@ public class UserServiceTest {
 		assertTrue(u.resources.size() == 1);
 		
 		assertTrue(u.resources.get(0).uri.equals(resource));
+		assertTrue(u.resources.get(0).name.equals(resourceName));
+
 	}
 	
 	@Test
@@ -342,18 +340,22 @@ public class UserServiceTest {
 		String password = "123";
 		user.login = "cha-" + System.currentTimeMillis();
 		user.password = password;
-		user.groups.add("A");
+		user.groups.add(getGroup("http://foo/bar/group/a"));
 
 		String resource1 = "http://myresource1";
 		String resource2 = "http://myresource2";
 
+		String resourcesName = "test";
+
 		Resource r = new Resource();
 		r.date = System.currentTimeMillis() + "";
 		r.uri = resource1;
+		r.name = resourcesName;
 		
 		Resource rr = new Resource();
 		rr.date = System.currentTimeMillis() + "";
 		rr.uri = resource2;
+		rr.name = resourcesName;
 		
 		user.resources.add(r);
 		user.resources.add(rr);
@@ -366,19 +368,89 @@ public class UserServiceTest {
 			// clear TODO
 		}
 		
+		user = userService.getUser(user.login);
+		System.out.println(user);
+
 		try {
-			userService.removeResource(user.login, resource1);
+			userService.removeResource(user.id, resource1, resourcesName);
 		} catch (UserException e) {
 			fail();
 		}
 		
 		// get the user and add account
 		User u = userService.getUser(user.login);
+
+		System.out.println(u);
+
 		assertNotNull(u);
 		assertTrue(u.resources != null);
 		System.out.println(u.resources);
 		assertTrue(u.resources.size() == 1);
 		
 		assertTrue(u.resources.get(0).uri.equals(resource2));
+	}
+
+	@Test
+	public void testRemoveGroup() throws Exception {
+		User user = new User();
+		String password = "123";
+		user.login = "cha-" + System.currentTimeMillis();
+		user.password = password;
+		user.groups.add(getGroup("http://foo/bar/group/a"));
+		user.groups.add(getGroup("http://foo/bar/group/b"));
+
+		String resource1 = "http://myresource1";
+		String resource2 = "http://myresource2";
+
+		String resourcesName = "test";
+
+		Resource r = new Resource();
+		r.date = System.currentTimeMillis() + "";
+		r.uri = resource1;
+		r.name = resourcesName;
+
+		Resource rr = new Resource();
+		rr.date = System.currentTimeMillis() + "";
+		rr.uri = resource2;
+		rr.name = resourcesName;
+
+		user.resources.add(r);
+		user.resources.add(rr);
+
+		try {
+			userService.register(user);
+		} catch (UserException e) {
+			fail();
+		} finally {
+			// clear TODO
+		}
+
+		user = userService.getUser(user.login);
+		System.out.println(user);
+
+		try {
+			userService.removeGroup(user.id, "http://foo/bar/group/a");
+		} catch (UserException e) {
+			fail();
+		}
+
+		// get the user and add account
+		User u = userService.getUser(user.login);
+
+		System.out.println(u);
+
+		assertNotNull(u);
+		assertTrue(u.groups != null);
+		System.out.println(u.groups);
+		assertTrue(u.groups.size() == 1);
+
+		assertTrue(u.groups.get(0).uri.equals("http://foo/bar/group/b"));
+	}
+
+	private Resource getGroup(String uri) {
+		Resource resource = new Resource();
+		resource.name = "group";
+		resource.uri = uri;
+		return resource;
 	}
 }

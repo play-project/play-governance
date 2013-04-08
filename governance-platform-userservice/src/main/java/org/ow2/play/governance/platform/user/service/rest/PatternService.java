@@ -32,6 +32,7 @@ import java.util.UUID;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.PatternRegistry;
 import org.ow2.play.governance.api.SimplePatternService;
@@ -59,14 +60,13 @@ public class PatternService extends AbstractService implements
 	private SimplePatternService patternService;
 
 	public Response patterns() {
-
 		User user = getUser();
-
 		List<Resource> resources = user.resources;
 		Collection<Resource> filtered = Collections2.filter(resources,
 				new Predicate<Resource>() {
 					public boolean apply(Resource input) {
-						return PatternHelper.isPattern(input.uri);
+						return input.name
+								.equals(Constants.PATTERN_RESOURCE_NAME);
 					}
 				});
 
@@ -74,9 +74,8 @@ public class PatternService extends AbstractService implements
 				new Function<Resource, Pattern>() {
 					public Pattern apply(Resource patternResource) {
 						try {
-							org.ow2.play.governance.api.bean.Pattern pattern = patternRegistry
-									.get(PatternHelper
-											.getPatternID(patternResource.uri));
+							org.ow2.play.governance.api.bean.Pattern pattern = patternRegistry.get(PatternHelper
+									.getPatternIDFromBaseURI(patternResource.uri));
 							Pattern out = new Pattern();
 							out.data = pattern.content;
 							out.id = pattern.id;
@@ -98,9 +97,10 @@ public class PatternService extends AbstractService implements
 		}
 
 		// check if it is a user subscription first...
-		final String url = PatternHelper.getPatternURI(id);
+		final String url = PatternHelper.getBaseURI(id);
 		
-		Resource resource = getUserResource(url);
+		Resource resource = getUserResource(url,
+				Constants.PATTERN_RESOURCE_NAME);
 		if (resource == null) {
 			return error(Status.BAD_REQUEST,
 					"Pattern %s has not been found in user pattern #RESPATTERN01", id);
@@ -162,10 +162,11 @@ public class PatternService extends AbstractService implements
 		p.id = id;
 		p.data = pattern;
 		p.resourceUrl = getResourceURI(p);
-		
+
 		try {
-			userService.addResource(user.login,
-					PatternHelper.getPatternURI(p.id));
+			// store the pattern as resource ie with name pattern and base URI
+			userService.addResource(user.id, PatternHelper.getBaseURI(p.id),
+					Constants.PATTERN_RESOURCE_NAME);
 		} catch (UserException e) {
 			e.printStackTrace();
 		}
@@ -179,11 +180,11 @@ public class PatternService extends AbstractService implements
 			return error(Status.BAD_REQUEST, "Pattern ID is mandatary");
 		}
 
-		final String url = PatternHelper.getPatternURI(id);
-
+		final String url = PatternHelper.getBaseURI(id);
 		User user = getUser();
 		
-		Resource resource = getUserResource(url);
+		Resource resource = getUserResource(url,
+				Constants.PATTERN_RESOURCE_NAME);
 		if (resource == null) {
 			return error(Status.BAD_REQUEST,
 					"Pattern %s has not been found in user pattern #RESTUNDEPLOY01", id);
@@ -199,7 +200,8 @@ public class PatternService extends AbstractService implements
 
 		// delete pattern from the user object.
 		try {
-			user = userService.removeResource(user.login, url);
+			user = userService.removeResource(user.login, url,
+					Constants.PATTERN_RESOURCE_NAME);
 		} catch (UserException e) {
 			// just warn...
 			e.printStackTrace();

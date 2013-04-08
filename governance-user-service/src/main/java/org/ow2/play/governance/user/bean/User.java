@@ -38,7 +38,7 @@ public class User {
 	
 	public List<Account> accounts = new ArrayList<Account>();
 
-	public List<String> groups = new ArrayList<String>();
+	public List<Resource> groups = new ArrayList<Resource>();
 	
 	/**
 	 * Resources created by the user

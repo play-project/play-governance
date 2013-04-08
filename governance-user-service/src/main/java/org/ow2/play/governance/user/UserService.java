@@ -6,12 +6,12 @@ package org.ow2.play.governance.user;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.ow2.play.commons.security.Crypto;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.Account;
 import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 import org.ow2.play.governance.user.utils.TokenHelper;
@@ -19,6 +19,10 @@ import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 /**
  * User management. Use mongo as backend.
@@ -30,7 +34,7 @@ public class UserService implements
 		org.ow2.play.governance.user.api.UserService {
 
 	static String LOGIN = "login";
-	
+
 	static String APITOKEN = "apitoken";
 
 	private MongoTemplate mongoTemplate;
@@ -67,10 +71,11 @@ public class UserService implements
 
 		try {
 			// create an unique API token...
-			user.apiToken = TokenHelper.generate(UUID.randomUUID().toString().getBytes("UTF-8"));
+			user.apiToken = TokenHelper.generate(UUID.randomUUID().toString()
+					.getBytes("UTF-8"));
 		} catch (Exception e) {
 		}
-		
+
 		mongoTemplate.save(fromAPI(user));
 		return user;
 	}
@@ -80,7 +85,7 @@ public class UserService implements
 		if (user == null || user.login == null) {
 			throw new UserException("Null user data...");
 		}
-		//this.authenticate(user.login, user.password);
+		// this.authenticate(user.login, user.password);
 		User u = getUser(user.login);
 		if (u == null) {
 			throw new UserException("User nto found");
@@ -99,7 +104,7 @@ public class UserService implements
 		}
 		return toAPI(user);
 	}
-	
+
 	@Override
 	public User getUserFromID(String id) throws UserException {
 		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
@@ -110,7 +115,7 @@ public class UserService implements
 		}
 		return toAPI(user);
 	}
-	
+
 	@Override
 	public User getUserFromToken(String token) throws UserException {
 		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
@@ -129,8 +134,8 @@ public class UserService implements
 		Query query = query(where("accounts").elemMatch(
 				where("login").is(login).and("provider").is(provider)));
 
-		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(query,
-				org.ow2.play.governance.user.bean.User.class);
+		org.ow2.play.governance.user.bean.User user = mongoTemplate.findOne(
+				query, org.ow2.play.governance.user.bean.User.class);
 
 		if (user == null) {
 			return null;
@@ -138,12 +143,19 @@ public class UserService implements
 		return toAPI(user);
 	}
 
+	/**
+	 * FIXME : This method is buggy, it will delete resources if the incoming
+	 * user is not well filled (not up to date...)
+	 * 
+	 * @deprecated use atomic methods...
+	 */
+	@Deprecated
 	@Override
 	public User update(User user) throws UserException {
 		if (user == null || user.login == null)
 			throw new UserException("null user data");
 
-		//this.authenticate(user.login, user.password);
+		// this.authenticate(user.login, user.password);
 
 		Update update = new Update();
 		// get the original data to check the diff...
@@ -162,7 +174,7 @@ public class UserService implements
 		if (user.groups != null) {
 			update.set("groups", user.groups);
 		}
-		
+
 		if (user.resources != null) {
 			update.set("resources", user.resources);
 		}
@@ -172,49 +184,119 @@ public class UserService implements
 				new FindAndModifyOptions().returnNew(true),
 				org.ow2.play.governance.user.bean.User.class));
 	}
-	
+
 	@Override
-	public User addResource(String login, String resource) throws UserException {
-		User user = getUser(login);
-		
+	public User addResource(String id, String resourceURI, String resourceName)
+			throws UserException {
+		User user = getUserFromID(id);
+
 		Resource r = new Resource();
 		r.date = "" + System.currentTimeMillis();
-		r.uri = resource;
-		
-		List<Resource> resources = new ArrayList<Resource>();
-		if (user.resources != null) {
-			resources.addAll(user.resources);
-		}
-		resources.add(r);
+		r.uri = resourceURI;
+		r.name = resourceName;
 		
 		Update update = new Update();
-		update.set("resources", resources);
-		
+		update.push("resources", r);
+
 		return toAPI(mongoTemplate.findAndModify(
 				new Query(where(LOGIN).is(user.login)), update,
 				new FindAndModifyOptions().returnNew(true),
-				org.ow2.play.governance.user.bean.User.class));		
+				org.ow2.play.governance.user.bean.User.class));
 	}
-	
+
 	@Override
-	public User removeResource(String login, String resource)
+	public User removeResource(String id, final String resourceURI,
+			final String resourceName)
 			throws UserException {
-		User user = getUser(login);
-		
-		List<Resource> resources = new ArrayList<Resource>();
-		for (Resource resource2 : user.resources) {
-			if (!resource2.uri.equals(resource)) {
-				resources.add(resource2);
-			}
-		}
-		
+		User user = getUserFromID(id);
+
+		List<Resource> resources = Lists.newArrayList(Collections2.filter(
+				user.resources,
+				new Predicate<Resource>() {
+					public boolean apply(Resource input) {
+						return !(input.name.equals(resourceName) && input.uri
+								.equals(resourceURI));
+					};
+				}));
+
 		Update update = new Update();
 		update.set("resources", resources);
 		
 		return toAPI(mongoTemplate.findAndModify(
 				new Query(where(LOGIN).is(user.login)), update,
 				new FindAndModifyOptions().returnNew(true),
-				org.ow2.play.governance.user.bean.User.class));	
+				org.ow2.play.governance.user.bean.User.class));
+	}
+
+	@Override
+	public User addAccount(String id, Account account) throws UserException {
+		User user = getUserFromID(id);
+
+		if (account == null || account.provider == null) {
+			throw new UserException("Null account");
+		}
+
+		Update update = new Update();
+		update.push("accounts", account);
+
+		return toAPI(mongoTemplate.findAndModify(
+				new Query(where(LOGIN).is(user.login)), update,
+				new FindAndModifyOptions().returnNew(true),
+				org.ow2.play.governance.user.bean.User.class));
+	}
+
+	@Override
+	public User removeAccount(String id, String provider)
+			throws UserException {
+		throw new UserException("Not implemented");
+	}
+
+	@Override
+	public User addGroup(String id, String uri)
+			throws UserException {
+		User user = getUserFromID(id);
+		if (uri == null || uri.trim().length() == 0) {
+			throw new UserException("Bad group parameters");
+		}
+		
+		Update update = new Update();
+		Resource resource = new Resource();
+		// FIXME : Constant
+		resource.name = "group";
+		resource.uri = uri;
+		resource.date = "" + System.currentTimeMillis();
+
+		update.push("groups", resource);
+
+		return toAPI(mongoTemplate.findAndModify(
+				new Query(where(LOGIN).is(user.login)), update,
+				new FindAndModifyOptions().returnNew(true),
+				org.ow2.play.governance.user.bean.User.class));
+	}
+
+	@Override
+	public User removeGroup(String id, final String groupURI)
+			throws UserException {
+		User user = getUserFromID(id);
+
+		// TODO : Constants
+		final String groupName = "group";
+
+		List<Resource> groups = Lists.newArrayList(Collections2.filter(
+				user.groups, new Predicate<Resource>() {
+					public boolean apply(Resource input) {
+						return !(input.name.equals(groupName) && input.uri
+								.equals(groupURI));
+					};
+				}));
+
+		Update update = new Update();
+		update.set("groups", groups);
+
+		return toAPI(mongoTemplate.findAndModify(
+				new Query(where(LOGIN).is(user.login)), update,
+				new FindAndModifyOptions().returnNew(true),
+				org.ow2.play.governance.user.bean.User.class));
 	}
 
 	public void setMongoTemplate(MongoTemplate mongoTemplate) {

@@ -27,6 +27,7 @@ import org.ow2.play.governance.permission.api.PermissionChecker;
 import org.ow2.play.governance.permission.api.PermissionService;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.UserService;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
@@ -52,11 +53,8 @@ public class PermissionCheck implements PermissionChecker {
 
 	private PermissionService permissionService;
 
-	/* (non-Javadoc)
-	 * @see org.ow2.play.governance.platform.user.service.PermissionChecker#checkGroup(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public boolean checkGroup(String user, String group) {
+	public boolean checkGroup(String user, final String group) {
 		User u = null;
 		try {
 			u = userService.getUser(user);
@@ -64,7 +62,14 @@ public class PermissionCheck implements PermissionChecker {
 			// logger
 			e.printStackTrace();
 		}
-		return u != null && u.groups != null && u.groups.contains(group);
+
+		return u != null && u.groups != null
+				&& Iterables.tryFind(u.groups, new Predicate<Resource>() {
+					public boolean apply(Resource input) {
+						return input.uri != null && input.name != null
+								&& group.equals(input.uri + "#" + input.name);
+					}
+				}).isPresent();
 	}
 
 	/* (non-Javadoc)

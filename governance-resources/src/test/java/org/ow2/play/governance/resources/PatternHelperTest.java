@@ -44,4 +44,12 @@ public class PatternHelperTest {
 				PatternHelper.getPatternID(Constants.PATTERN_PREFIX_URL
 						+ "123#" + Constants.PATTERN_RESOURCE_NAME));
 	}
+
+	@Test
+	public void testGetPatternIDFromBaseURI() {
+		assertEquals("123",
+				PatternHelper
+						.getPatternIDFromBaseURI(Constants.PATTERN_PREFIX_URL
+								+ "123"));
+	}
 }

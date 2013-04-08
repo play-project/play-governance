@@ -46,9 +46,10 @@ public class User {
 	public List<Account> accounts = new ArrayList<Account>();
 
 	/**
-	 * List of groupIds the user belongs to
+	 * List of groupIds the user belongs to. Groups are special resources.
+	 * Resource date is the date user joined the group.
 	 */
-	public List<String> groups = new ArrayList<String>();
+	public List<Resource> groups = new ArrayList<Resource>();
 	
 	/**
 	 * Resources created by the user

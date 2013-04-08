@@ -71,11 +71,13 @@ public abstract class AbstractService {
 	 * @param uri
 	 * @return
 	 */
-	protected Resource getUserResource(final String uri) {
+	protected Resource getUserResource(final String uri, final String name) {
 		Optional<Resource> optional = Iterables.tryFind(getUser().resources,
 				new Predicate<Resource>() {
 					public boolean apply(Resource input) {
-						return input.uri != null && input.uri.equals(uri);
+						return input.uri != null && input.uri.equals(uri)
+								&& input.name != null
+								&& input.name.equals(name);
 					}
 				});
 		if (!optional.isPresent()) {

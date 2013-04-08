@@ -22,7 +22,10 @@ package org.ow2.play.governance.user.api.bean;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A user resource.
+ * A user resource. Since a resource is a URI with a fragment to match the
+ * platform metadata stuff, we need to represent fragment here (as name field).
+ * This will be easier to passe in REST URLs for queries...
+ * 
  * 
  * @author chamerling
  * 
@@ -35,10 +38,20 @@ public class Resource {
 	 */
 	public String uri;
 
+	public String name;
+
 	/**
-	 * Resource date (creation, join, ...)
+	 * Resource date (creation, join, ...). Filled by the service
+	 * implementation, not the client side.
 	 */
 	public String date;
+
+
+	@Override
+	public String toString() {
+		return "Resource [uri=" + uri + " name=" + name + ", date=" + date
+				+ "]";
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -50,6 +63,7 @@ public class Resource {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((uri == null) ? 0 : uri.hashCode());
 		return result;
 	}
@@ -73,19 +87,16 @@ public class Resource {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (uri == null) {
 			if (other.uri != null)
 				return false;
 		} else if (!uri.equals(other.uri))
 			return false;
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Resource [uri=" + uri + ", date=" + date + "]";
 	}
 }

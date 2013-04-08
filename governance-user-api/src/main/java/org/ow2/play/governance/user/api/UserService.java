@@ -3,6 +3,7 @@
  */
 package org.ow2.play.governance.user.api;
 
+import org.ow2.play.governance.user.api.bean.Account;
 import org.ow2.play.governance.user.api.bean.User;
 
 /**
@@ -71,6 +72,7 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 * @throws UserException
+	 * @deprecated
 	 */
 	User update(User user) throws UserException;
 
@@ -98,7 +100,8 @@ public interface UserService {
 	 * @return
 	 * @throws UserException
 	 */
-	User addResource(String login, String resource) throws UserException;
+	User addResource(String id, String resourceURI, String resourceName)
+			throws UserException;
 
 	/**
 	 * 
@@ -107,6 +110,46 @@ public interface UserService {
 	 * @return
 	 * @throws UserException
 	 */
-	User removeResource(String login, String resource) throws UserException;
+	User removeResource(String id, String resourceURI, String resourceName)
+			throws UserException;
+	
+	/**
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws UserException
+	 */
+	User addAccount(String id, Account account) throws UserException;
+
+	/**
+	 * Remove account from user
+	 * 
+	 * @param login the user login 
+	 * @param provider the provider we want to remove account
+	 * @return
+	 * @throws UserException
+	 */
+	User removeAccount(String id, String provider) throws UserException;
+	
+	/**
+	 * Add group to user
+	 * 
+	 * @param uri
+	 *            the group URI (without fragment)
+	 * @return
+	 * @throws UserException
+	 */
+	User addGroup(String id, String uri) throws UserException;
+
+	/**
+	 * Remove group from user
+	 * 
+	 * @param uri
+	 *            : The group URI (without fragment)
+	 * 
+	 * @return
+	 * @throws UserException
+	 */
+	User removeGroup(String id, String uri) throws UserException;
 
 }

@@ -33,6 +33,8 @@ import javax.ws.rs.core.Response;
 
 import org.ow2.play.governance.user.api.Provider;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.Account;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 
 /**
@@ -43,6 +45,8 @@ import org.ow2.play.governance.user.api.bean.User;
 public interface UserService {
 
 	/**
+	 * FIXME : Can have conflict with {@link #get(String)}
+	 * 
 	 * Get a user from its login
 	 * @param login
 	 * @return
@@ -62,7 +66,117 @@ public interface UserService {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response get(@PathParam("id") String id);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param group
+	 *            . Resource group. Only URI is required, resource name is group
+	 *            for groups...
+	 * @return
+	 */
+	@POST
+	@Path("{id}/groups")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Response addGroup(@PathParam("id") String id, Resource group);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param uri
+	 *            the group URI to delete. The fragment part is not used in this
+	 *            resource operation.
+	 * @return
+	 */
+	@DELETE
+	@Path("{id}/groups")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response deleteGroup(@PathParam("id") String id,
+			@QueryParam("uri") String uri);
 
+	/**
+	 * Get groups for given user.
+	 * 
+	 * @param id
+	 * @param group
+	 * @return
+	 */
+	@GET
+	@Path("{id}/groups")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Response getGroups(@PathParam("id") String id);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param resource JSON payload
+	 * @return
+	 */
+	@POST
+	@Path("{id}/resources")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Response addResource(@PathParam("id") String id, Resource resource);
+	
+	/**
+	 * Delete a resource from its base URI and name
+	 * 
+	 * @param id
+	 *            the user ID
+	 * @param resource
+	 * @return
+	 */
+	@DELETE
+	@Path("{id}/resources")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response deleteResource(@PathParam("id") String id,
+			@QueryParam("uri") String resource, @QueryParam("name") String name);
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GET
+	@Path("{id}/resources")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response getResources(@PathParam("id") String id);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param account JSON payload
+	 * @return
+	 */
+	@POST
+	@Path("{id}/accounts")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Response addAccount(@PathParam("id") String id, Account account);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param account
+	 * @return
+	 */
+	@DELETE
+	@Path("{id}/accounts")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response deleteAccount(@PathParam("id") String id,
+			@QueryParam("provider") String provider);
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GET
+	@Path("{id}/accounts")
+	@Produces(MediaType.APPLICATION_JSON)
+	Response getAccounts(@PathParam("id") String id);
 
 	/**
 	 * Get a user from its provider information
@@ -103,9 +217,11 @@ public interface UserService {
 
 	/**
 	 * Update a user. Received data is user as JSON.
+	 * Note : This will not update the login nor resources...
 	 * 
 	 * @param user
 	 * @return
+	 * @deprecated
 	 */
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -133,4 +249,6 @@ public interface UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	Response delete(User user);
+	
+
 }

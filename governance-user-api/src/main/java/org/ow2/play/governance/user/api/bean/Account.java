@@ -3,6 +3,8 @@
  */
 package org.ow2.play.governance.user.api.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * An external authentication provider. This is used to login using external
  * oauth providers such as twitter, google, github, facebook....
@@ -10,6 +12,7 @@ package org.ow2.play.governance.user.api.bean;
  * @author chamerling
  * 
  */
+@XmlRootElement
 public class Account {
 
 	/**

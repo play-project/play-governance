@@ -36,6 +36,7 @@ import org.ow2.play.governance.permission.api.PermissionChecker;
 import org.ow2.play.governance.permission.service.PermissionService;
 import org.ow2.play.governance.user.UserService;
 import org.ow2.play.governance.user.api.UserException;
+import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -165,14 +166,14 @@ public class PermissionCheckTest {
 	
 	@Test
 	public void testUserGroupOK() {
-		String group = "http://foo/bar/MyGroup#group";
-		String group2 = "http://foo/bar/MyGroup2#group";
+		String group = "http://foo/bar/MyGroup";
+		String group2 = "http://foo/bar/MyGroup2";
 		String resource = "MyResource";
 		
 		User user = new User();
 		user.login = "chamerling";
 		user.password = "foo";
-		user.groups.add(group);
+		user.groups.add(getGroup(group));
 		try {
 			userService.register(user);
 		} catch (UserException e) {
@@ -183,7 +184,7 @@ public class PermissionCheckTest {
 		Permission p = new Permission();
 		p.name = "foo";
 		p.accessTo.add(resource);
-		p.agent.add(group);
+		p.agent.add(group + "#group");
 		try {
 			permissionService.addPermission(p);
 		} catch (GovernanceExeption e) {
@@ -192,10 +193,10 @@ public class PermissionCheckTest {
 		}
 		
 		// just created it so it should be here...
-		assertTrue(check.checkGroup("chamerling", group));
+		assertTrue(check.checkGroup("chamerling", group + "#group"));
 
 		// not in
-		assertFalse(check.checkGroup("chamerling", group2));
+		assertFalse(check.checkGroup("chamerling", group2 + "#group"));
 
 		// wrong user
 		assertFalse(check.checkGroup("nop", group));
@@ -214,12 +215,12 @@ public class PermissionCheckTest {
 	public void checkResourceUserInGroup() {
 		String login = "chamerling";
 		String resource = "http://foo/bar/Resource#stream";
-		String group = "http://foo/bar/Group#group";
+		String group = "http://foo/bar/Group";
 		
 		User user = new User();
 		user.login = login;
 		user.password = "foo";
-		user.groups.add(group);
+		user.groups.add(getGroup(group));
 		try {
 			userService.register(user);
 		} catch (UserException e) {
@@ -230,14 +231,13 @@ public class PermissionCheckTest {
 		Permission p = new Permission();
 		p.name = "foo";
 		p.accessTo.add(resource);
-		p.agent.add(group);
+		p.agent.add(group + "#group");
 		try {
 			permissionService.addPermission(p);
 		} catch (GovernanceExeption e) {
 			e.printStackTrace();
 			fail();
 		}
-		
 		
 		assertTrue(check.checkResource(login, resource));
 	}
@@ -247,12 +247,12 @@ public class PermissionCheckTest {
 		String login = "chamerling";
 		String resource = "http://foo/bar/Resource#stream";
 		String group = "http://foo/bar/Group#group";
-		String group2 = "http://foo/bar/Group2#group";
+		String group2 = "http://foo/bar/Group2";
 		
 		User user = new User();
 		user.login = login;
 		user.password = "foo";
-		user.groups.add(group2);
+		user.groups.add(getGroup(group2));
 		try {
 			userService.register(user);
 		} catch (UserException e) {
@@ -279,12 +279,12 @@ public class PermissionCheckTest {
 		String login = "chamerling";
 		String resource = "http://foo/bar/Resource#stream";
 		String resource2 = "http://foo/bar/Resource#stream";
-		String group = "http://foo/bar/Group#group";
+		String group = "http://foo/bar/Group";
 		
 		User user = new User();
 		user.login = login;
 		user.password = "foo";
-		user.groups.add(group);
+		user.groups.add(getGroup(group));
 		try {
 			userService.register(user);
 		} catch (UserException e) {
@@ -295,7 +295,7 @@ public class PermissionCheckTest {
 		Permission p = new Permission();
 		p.name = "foo";
 		p.accessTo.add(resource);
-		p.agent.add(group);
+		p.agent.add(group + "#group");
 		try {
 			permissionService.addPermission(p);
 		} catch (GovernanceExeption e) {
@@ -305,6 +305,14 @@ public class PermissionCheckTest {
 		
 		
 		assertFalse(check.checkResource(login, resource2));
+	}
+
+	private Resource getGroup(String url) {
+		Resource r = new Resource();
+		r.uri = url;
+		r.name = "group";
+		r.date = "" + System.currentTimeMillis();
+		return r;
 	}
 
 }

@@ -140,8 +140,11 @@ public class SubscriptionService extends AbstractService implements
 		// 3. when stored, update the user object with the new subscription
 		// resource
 		try {
-			userService.addResource(getUser().login,
-					SubscriptionHelper.getSubscriptionURL(result.getId()));
+			userService
+					.addResource(
+							getUser().id,
+							SubscriptionHelper.getBaseURL(result.getId()),
+							org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 		} catch (UserException e) {
 			System.out.println("Can not store subscription into the user...");
 			e.printStackTrace();
@@ -163,9 +166,10 @@ public class SubscriptionService extends AbstractService implements
 		}
 
 		// get the subscription URI
-		String url = SubscriptionHelper.getSubscriptionURL(subscriptionID);
+		String url = SubscriptionHelper.getBaseURL(subscriptionID);
 
-		Resource resource = getUserResource(url);
+		Resource resource = getUserResource(url,
+				org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 		if (resource == null) {
 			return error(Status.BAD_REQUEST,
 					"Subscription %s has not been found in user subscriptions #RESTUNSUBS01");
@@ -190,7 +194,11 @@ public class SubscriptionService extends AbstractService implements
 
 		// delete subscription from the user object.
 		try {
-			userService.removeResource(getUser().login, url);
+			userService
+					.removeResource(
+							getUser().login,
+							url,
+							org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 		} catch (UserException e) {
 			// just warn...
 			e.printStackTrace();
@@ -216,7 +224,8 @@ public class SubscriptionService extends AbstractService implements
 		Collection<Resource> filtered = Collections2.filter(resources,
 				new Predicate<Resource>() {
 					public boolean apply(Resource input) {
-						return isSubscription(input);
+						return input.name
+								.equals(org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 					}
 				});
 
@@ -224,8 +233,9 @@ public class SubscriptionService extends AbstractService implements
 				filtered, new Function<Resource, Subscription>() {
 					public Subscription apply(Resource subscriptionResource) {
 						// ask the subscription registry...
-
-						String url = subscriptionResource.uri;
+						String url = SubscriptionHelper.get(
+								subscriptionResource.uri,
+								subscriptionResource.name);
 						org.ow2.play.governance.api.bean.Subscription filter = new org.ow2.play.governance.api.bean.Subscription();
 						filter.setId(SubscriptionHelper.getSubscriptionID(url));
 						try {
@@ -261,9 +271,10 @@ public class SubscriptionService extends AbstractService implements
 		}
 
 		// check if it is a user subscription first...
-		String url = SubscriptionHelper.getSubscriptionURL(id);
+		String url = SubscriptionHelper.getBaseURL(id);
 
-		Resource resource = getUserResource(url);
+		Resource resource = getUserResource(url,
+				org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 		if (resource == null) {
 			return notFound();
 		}

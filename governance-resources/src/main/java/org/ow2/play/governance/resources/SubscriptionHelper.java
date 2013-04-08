@@ -21,7 +21,6 @@ package org.ow2.play.governance.resources;
 
 import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.bean.Subscription;
-import org.ow2.play.metadata.api.Resource;
 
 /**
  * @author chamerling
@@ -36,8 +35,12 @@ public class SubscriptionHelper {
 		return getSubscriptionURL(s.getId());
 	}
 
-	public static String get(Resource resource) {
-		return null;
+	public static String get(String uri, String name) {
+		return uri + "#" + name;
+	}
+
+	public static String getBaseURL(String id) {
+		return String.format(Constants.SUBCRIPTION_BASE_PATTERN, id);
 	}
 
 	public static String getSubscriptionURL(String id) {

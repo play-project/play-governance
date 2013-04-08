@@ -35,6 +35,10 @@ public class PatternHelper {
 		return getPatternURI(p.id);
 	}
 
+	public static String getBaseURI(String id) {
+		return String.format(Constants.PATTERN_BASE_PATTERN, id);
+	}
+
 	public static String getPatternURI(String id) {
 		return String.format(Constants.PATTERN_PATTERN, id);
 	}
@@ -47,6 +51,11 @@ public class PatternHelper {
 				Constants.PATTERN_PREFIX_URL.length(),
 				resourceURI.lastIndexOf("#"
 						+ Constants.PATTERN_RESOURCE_NAME));
+	}
+
+	public static String getPatternIDFromBaseURI(String baseURI) {
+		return baseURI.substring(Constants.PATTERN_PREFIX_URL.length(),
+				baseURI.length());
 	}
 
 	public static boolean isPattern(String resourceURI) {

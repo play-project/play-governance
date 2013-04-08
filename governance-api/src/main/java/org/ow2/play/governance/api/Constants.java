@@ -33,12 +33,17 @@ public interface Constants {
 	public static String SUBCRIPTION_RESOURCE_NAME = "subscription";
 	
 	public static String SUBCRIPTION_PREFIX_URL = "http://subscriptions.play.ow2.org/";
+
+	public static String SUBCRIPTION_BASE_PATTERN = SUBCRIPTION_PREFIX_URL
+			+ "%s";
 	
 	public static String SUBCRIPTION_PATTERN = SUBCRIPTION_PREFIX_URL + "%s#" + SUBCRIPTION_RESOURCE_NAME;
 
 	public static String PATTERN_RESOURCE_NAME = "pattern";
 	
 	public static String PATTERN_PREFIX_URL = "http://patterns.play.ow2.org/";
+
+	public static String PATTERN_BASE_PATTERN = PATTERN_PREFIX_URL + "%s";
 	
 	public static String PATTERN_PATTERN = PATTERN_PREFIX_URL + "%s#" + PATTERN_RESOURCE_NAME;
 
