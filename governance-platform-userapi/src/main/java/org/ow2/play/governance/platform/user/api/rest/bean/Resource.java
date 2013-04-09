@@ -36,4 +36,10 @@ public abstract class Resource {
 	@XmlElement(name = "resource_url")
 	public String resourceUrl;
 
+	/**
+	 * The date the resource has been created
+	 */
+	@XmlElement(name = "date")
+	public String date;
+
 }

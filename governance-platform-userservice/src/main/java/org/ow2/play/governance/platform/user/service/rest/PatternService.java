@@ -80,6 +80,8 @@ public class PatternService extends AbstractService implements
 							out.data = pattern.content;
 							out.id = pattern.id;
 							out.resourceUrl = getResourceURI(out);
+							out.date = patternResource.date;
+
 							return out;
 						} catch (GovernanceExeption e) {
 							// ...
@@ -124,6 +126,7 @@ public class PatternService extends AbstractService implements
 		out.data = pattern.content;
 		out.id = pattern.id;
 		out.resourceUrl = getResourceURI(out);
+		out.date = resource.date;
 		return ok(out);
 	}
 

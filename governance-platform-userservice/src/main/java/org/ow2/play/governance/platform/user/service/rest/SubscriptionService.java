@@ -250,6 +250,7 @@ public class SubscriptionService extends AbstractService implements
 								out.subscriptionID = s.getId();
 								out.resource = TopicHelper.get(s.getTopic());
 								out.resourceUrl = getResourceURI(out);
+								out.date = subscriptionResource.date;
 								return out;
 							}
 						} catch (GovernanceExeption e) {
@@ -299,6 +300,7 @@ public class SubscriptionService extends AbstractService implements
 		out.subscriber = result.getSubscriber();
 		out.subscriptionID = result.getId();
 		out.resourceUrl = getResourceURI(out);
+		out.date = resource.date;
 		return ok(out);
 	}
 
