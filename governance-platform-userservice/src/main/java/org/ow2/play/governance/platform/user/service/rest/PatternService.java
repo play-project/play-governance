@@ -200,7 +200,7 @@ public class PatternService extends AbstractService implements
 
 		// delete pattern from the user object.
 		try {
-			user = userService.removeResource(user.login, url,
+			user = userService.removeResource(user.id, url,
 					Constants.PATTERN_RESOURCE_NAME);
 		} catch (UserException e) {
 			// just warn...
