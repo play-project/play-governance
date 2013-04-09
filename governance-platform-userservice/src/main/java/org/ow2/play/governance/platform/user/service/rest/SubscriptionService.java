@@ -196,7 +196,7 @@ public class SubscriptionService extends AbstractService implements
 		try {
 			userService
 					.removeResource(
-							getUser().login,
+							getUser().id,
 							url,
 							org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
 		} catch (UserException e) {
