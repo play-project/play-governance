@@ -36,6 +36,8 @@ public class User {
 	
 	public String apitoken;
 	
+	public String date;
+
 	public List<Account> accounts = new ArrayList<Account>();
 
 	public List<Resource> groups = new ArrayList<Resource>();

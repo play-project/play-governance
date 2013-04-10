@@ -69,6 +69,9 @@ public class UserService implements
 
 		user.password = Crypto.passwordHash(user.password);
 
+		// TODO : Real date support...
+		user.date = "" + System.currentTimeMillis();
+
 		try {
 			// create an unique API token...
 			user.apiToken = TokenHelper.generate(UUID.randomUUID().toString()
@@ -319,6 +322,7 @@ public class UserService implements
 		result.password = user.password;
 		result.avatarURL = user.avatarURL;
 		result.resources = user.resources;
+		result.date = user.date;
 		return result;
 	}
 
@@ -333,6 +337,7 @@ public class UserService implements
 		result.password = user.password;
 		result.avatarURL = user.avatarURL;
 		result.resources = user.resources;
+		result.date = user.date;
 		return result;
 	}
 }

@@ -41,6 +41,11 @@ public class User {
 	public String apiToken;
 	
 	/**
+	 * Registration date
+	 */
+	public String date;
+
+	/**
 	 * Providers accounts for the user
 	 */
 	public List<Account> accounts = new ArrayList<Account>();
