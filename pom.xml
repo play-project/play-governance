@@ -63,6 +63,7 @@
     <module>governance-permission-service</module>
     <module>governance-notification</module>
     <module>governance-resources</module>
+    <module>governance-rest</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

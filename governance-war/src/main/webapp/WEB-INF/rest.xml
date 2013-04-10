@@ -25,6 +25,16 @@
 			<cxf:logging />
 		</cxf:features>
 	</cxf:bus>
+	
+	<bean id="governanceoauthmanager"
+		class="org.ow2.play.governance.rest.oauth.FixedTokenOAuthDataProvider">
+		<property name="token" value="1234567890" />
+	</bean>
+	
+	<bean id="governanceoauthfilter"
+		class="org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter">
+		<property name="dataProvider" ref="governanceoauthmanager" />
+	</bean>
 
 	<util:list id="jsonkeys">
 		<value>accounts</value>
@@ -62,6 +72,7 @@
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonprovider" />
+			<ref bean="governanceoauthfilter" />			
 		</jaxrs:providers>
 	</jaxrs:server>
 	
