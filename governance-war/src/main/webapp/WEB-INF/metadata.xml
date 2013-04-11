@@ -20,8 +20,8 @@
         http://www.springframework.org/schema/data/jpa              http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         http://www.springframework.org/schema/data/mongo            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-	<mongo:db-factory host="localhost" port="27017"
-		dbname="play" />
+	<mongo:db-factory host="${org.ow2.play.governance.mongo.host}" port="${org.ow2.play.governance.mongo.port}"
+		dbname="${org.ow2.play.governance.mongo.db}" />
 		
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />

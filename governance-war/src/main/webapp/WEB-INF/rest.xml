@@ -28,7 +28,7 @@
 	
 	<bean id="governanceoauthmanager"
 		class="org.ow2.play.governance.rest.oauth.FixedTokenOAuthDataProvider">
-		<property name="token" value="1234567890" />
+		<property name="token" value="${org.ow2.play.governance.rest.oauth.token}" />
 	</bean>
 	
 	<bean id="governanceoauthfilter"
