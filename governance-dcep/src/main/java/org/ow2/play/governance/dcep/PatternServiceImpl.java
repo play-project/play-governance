@@ -51,6 +51,11 @@ public class PatternServiceImpl implements SimplePatternService {
 
 	private SimplePatternService simplePatternService;
 
+	public void analyze(String pattern) throws GovernanceExeption {
+		logger.info("Analyze pattern");
+		simplePatternService.analyze(pattern);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

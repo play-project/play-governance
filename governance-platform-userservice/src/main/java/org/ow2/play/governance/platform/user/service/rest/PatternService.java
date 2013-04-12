@@ -222,6 +222,20 @@ public class PatternService extends AbstractService implements
 		return deleted();
 	}
 
+	public Response analyze(String pattern) {
+		if (pattern == null || pattern.trim().length() == 0) {
+			return error(Status.BAD_REQUEST, "Pattern is mandatary");
+		}
+
+		try {
+			patternService.analyze(pattern);
+		} catch (GovernanceExeption e) {
+			e.printStackTrace();
+			return error(Status.BAD_REQUEST, e.getMessage());
+		}
+		return Response.ok().build();
+	}
+
 	protected String getResourceURI(Pattern pattern) {
 		URI uri = mc.getUriInfo().getBaseUri();
 		return uri.toString() + "patterns/" + pattern.id;

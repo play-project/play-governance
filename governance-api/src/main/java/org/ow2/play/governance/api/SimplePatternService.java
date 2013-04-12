@@ -40,6 +40,14 @@ import org.ow2.play.governance.api.bean.Topic;
 public interface SimplePatternService {
 
 	/**
+	 * Analyze the query, throws an exception is something if bad.
+	 * 
+	 * @param pattern
+	 * @throws GovernanceExeption
+	 */
+	void analyze(String pattern) throws GovernanceExeption;
+
+	/**
 	 * Get input topics from the pattern
 	 * 
 	 * @param pattern

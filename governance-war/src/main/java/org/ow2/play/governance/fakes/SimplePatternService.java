@@ -34,6 +34,11 @@ public class SimplePatternService implements
 		org.ow2.play.governance.api.SimplePatternService {
 
 	@Override
+	public void analyze(String pattern) throws GovernanceExeption {
+		System.out.println(">>>>>>>>>>>>>>> ANALYZE QUERY" + pattern);
+	}
+
+	@Override
 	public List<Topic> getInputTopics(String pattern) throws GovernanceExeption {
 		System.out.println(">>>>>>>>>>>>>>> GET INPUT TOPICS " + pattern);
 		return new ArrayList<Topic>();

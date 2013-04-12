@@ -78,6 +78,18 @@ public interface PatternService {
 	Response deploy(@FormParam("pattern") String pattern);
 
 	/**
+	 * Analyze a pattern
+	 * 
+	 * @param pattern
+	 * @return JSON response of the pattern analysis
+	 */
+	@POST
+	@Path("/analyze")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	Response analyze(@FormParam("pattern") String pattern);
+
+	/**
 	 * Undeploy a pattern from its ID
 	 * 
 	 * @param id

@@ -64,6 +64,21 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	
 	private MetadataService metadataService;
 
+	public void analyze(String pattern) throws GovernanceExeption {
+		logger.info("Analyze pattern");
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine(pattern);
+		}
+
+		try {
+			getQueryDispatchApiClient().analyseQuery(
+					UUID.randomUUID().toString(), pattern);
+		} catch (QueryDispatchException e) {
+			e.printStackTrace();
+			throw new GovernanceExeption(e);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
