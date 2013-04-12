@@ -66,10 +66,11 @@
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
 		<property name="patternRegistry" ref="patternregistry"/>
-		<property name="patternService">
-			<!-- FIXME -->
-			<bean class="org.ow2.play.governance.fakes.SimplePatternService"/>
+		<property name="patternService" ref="patternservice"/>
+		<!-- NOTE: Just a fake for tests...
+		<bean class="org.ow2.play.governance.fakes.SimplePatternService"/>
 		</property>
+		-->
 	</bean>
 	
 	<bean id="platformublishrestapi"
@@ -78,8 +79,9 @@
 		<property name="permissionChecker" ref="permissionchecker" />
 		<property name="userResourceAccess" ref="userresourceaccess"/>
 		<property name="notificationService" ref="wsnnotificationservice"/>
-		<!-- <property name="notificationService">
-			<bean class="org.ow2.play.governance.fakes.NotificationService"/>
+		<!--
+		<property name="notificationService">
+		<bean class="org.ow2.play.governance.fakes.NotificationService"/>
 		</property>
 		-->
 		
