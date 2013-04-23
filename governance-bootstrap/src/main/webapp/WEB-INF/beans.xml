@@ -29,7 +29,7 @@
 	<bean id="registry"
 		class="org.ow2.play.governance.bootstrap.client.ServiceRegistry">
 		<property name="url"
-			value="http://localhost:8080/registry/RegistryService" />
+			value="http://localhost:8080/play/registry/RegistryService" />
 	</bean>
 
 	<bean id="metaclient"
