@@ -77,6 +77,12 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<version>${cxf.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-extension-providers</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>fr.inria.eventcloud</groupId>
@@ -100,6 +106,18 @@
 			<groupId>org.ow2.play</groupId>
 			<artifactId>governance-cxf</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>3.0.7.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.3.2</version>
 		</dependency>
 
 	</dependencies>

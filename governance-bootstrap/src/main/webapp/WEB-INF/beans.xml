@@ -37,7 +37,7 @@
 		<property name="registry" ref="registry" />
 	</bean>
 
-	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
+	<bean id="jsonprovider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="serializeAsArray" value="true" />
 	</bean>
 
