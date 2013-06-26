@@ -125,4 +125,9 @@ public class RegistryClient implements Registry {
 	public List<Entry> entries() throws RegistryException {
 		return getClient().entries();
 	}
+
+    @Override
+    public void delete(String key) throws RegistryException {
+        getClient().delete(key);
+    }
 }

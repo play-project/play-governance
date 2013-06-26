@@ -60,6 +60,15 @@ public interface Registry {
 	@WebMethod
 	void put(String key, String value) throws RegistryException;
 
+    /**
+     * Delete an entry based on its key
+     *
+     * @param key
+     * @throws RegistryException if key is null
+     */
+    @WebMethod
+	void delete(String key) throws RegistryException;
+
 	/**
 	 * Get all the keys
 	 * 

@@ -148,4 +148,34 @@ public class RegistryImplTest extends TestCase {
 			reg.close();
 		}
 	}
+
+    public void testDelete() {
+        RegistryImpl reg = new RegistryImpl();
+
+        try {
+            reg.init();
+
+            String name = UUID.randomUUID().toString();
+            String in = "http://testdelete";
+
+            reg.put(name, in);
+
+            // check that the value has been added before deleting it...
+            String value = reg.get(name);
+            assertEquals(in, value);
+
+            // let's delete...
+            reg.delete(name);
+
+            // we can not find any value anymore...
+            value = reg.get(name);
+            assertNull(value);
+
+        } catch (RegistryException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        } finally {
+            reg.close();
+        }
+    }
 }

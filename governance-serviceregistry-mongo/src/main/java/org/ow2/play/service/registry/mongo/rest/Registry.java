@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.service.registry.api.Entries;
+import org.ow2.play.service.registry.api.Entry;
 import org.ow2.play.service.registry.api.RegistryException;
 
 /**
@@ -87,7 +88,46 @@ public class Registry implements
 		}
 	}
 
-	public void setRegistry(org.ow2.play.service.registry.api.Registry registry) {
+    @Override
+    public Response put(Entry entry) {
+        if (registry == null) {
+            return Response.serverError().build();
+        }
+
+        if (entry == null || entry.key == null || entry.value == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        try {
+            registry.put(entry.key, entry.value);
+        } catch (RegistryException e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @Override
+    public Response delete(String key) {
+        if (registry == null) {
+            return Response.serverError().build();
+        }
+
+        if (key == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        try {
+            registry.delete(key);
+        } catch (RegistryException e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    public void setRegistry(org.ow2.play.service.registry.api.Registry registry) {
 		this.registry = registry;
 	}
 

@@ -136,8 +136,14 @@ public class ServiceRegistry implements Registry {
 	@Override
 	@WebMethod
 	public List<Entry> entries() throws RegistryException {
-		logger.info("Get client");
+		logger.info("Get entries");
 		return getClient().entries();
 	}
 
+    @Override
+    @WebMethod
+    public void delete(String key) throws RegistryException {
+        logger.info("Delete entry from key " + key);
+        getClient().delete(key);
+    }
 }

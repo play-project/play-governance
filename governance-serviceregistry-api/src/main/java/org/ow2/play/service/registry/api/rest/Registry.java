@@ -19,10 +19,9 @@
  */
 package org.ow2.play.service.registry.api.rest;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import org.ow2.play.service.registry.api.Entry;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -45,6 +44,27 @@ public interface Registry {
 	@Path("load")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response load(@QueryParam("url") String url);
+
+    /**
+     * Put a new entry
+     * @param entry
+     * @return {@link Response.Status.CREATED} if created
+     */
+    @POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Response put(Entry entry);
+
+    /**
+     * Delete an entry with the given key
+     *
+     * @param key
+     * @return {@link Response.Status.NO_CONTENT} if deleted
+     */
+    @DELETE
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Response delete(String key);
 
 	/**
 	 * Clear the registry data

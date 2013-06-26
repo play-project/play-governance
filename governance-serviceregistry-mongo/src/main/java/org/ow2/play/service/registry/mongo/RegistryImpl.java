@@ -207,11 +207,29 @@ public class RegistryImpl implements Registry {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.ow2.play.service.registry.api.Registry#keys()
-	 */
+    @Override
+    @WebMethod
+    public void delete(String key) throws RegistryException {
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine(String.format("Delete entry for key %s", key));
+        }
+        checkInitialized();
+
+        if (key == null) {
+            throw new RegistryException("Can not delete from null key");
+        }
+
+        DBObject filter = new BasicDBObject();
+        filter.put(NAME_KEY, key);
+        collection.findAndRemove(filter);
+    }
+
+
+    /*
+         * (non-Javadoc)
+         *
+         * @see org.ow2.play.service.registry.api.Registry#keys()
+         */
 	@Override
 	@WebMethod
 	public List<String> keys() throws RegistryException {

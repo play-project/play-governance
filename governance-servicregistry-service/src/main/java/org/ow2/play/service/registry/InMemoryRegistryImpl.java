@@ -156,7 +156,16 @@ public class InMemoryRegistryImpl implements Registry {
 		return result;
 	}
 
-	protected boolean isURL(String url) {
+    @Override
+    @WebMethod
+    public void delete(String key) throws RegistryException {
+        if (key == null) {
+            throw new RegistryException("Null key");
+        }
+        this.map.remove(key);
+    }
+
+    protected boolean isURL(String url) {
 		if (url == null) {
 			return false;
 		}
