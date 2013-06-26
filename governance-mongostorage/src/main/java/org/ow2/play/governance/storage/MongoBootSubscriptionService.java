@@ -13,6 +13,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.ow2.petals.nosql.mongo.AbstractMongoService;
+import org.ow2.petals.nosql.mongo.MongoHelper;
 import org.ow2.play.governance.api.BootSubscriptionService;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Subscription;
@@ -71,7 +72,7 @@ public class MongoBootSubscriptionService extends AbstractMongoService implement
 	@Override
 	@WebMethod
 	public void removeAll() {
-		clearCollection();
+        MongoHelper.clearCollection(getDbCollection());
 	}
 
 	@Override

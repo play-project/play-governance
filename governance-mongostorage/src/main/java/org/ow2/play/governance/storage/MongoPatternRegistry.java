@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.jws.WebMethod;
 
 import org.ow2.petals.nosql.mongo.AbstractMongoService;
+import org.ow2.petals.nosql.mongo.MongoHelper;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.PatternRegistry;
 import org.ow2.play.governance.api.bean.Pattern;
@@ -101,7 +102,7 @@ public class MongoPatternRegistry extends AbstractMongoService implements
 	@Override
 	public void clear() throws GovernanceExeption {
 		logger.info("Removing all the patterns");
-		clearCollection();
+        MongoHelper.clearCollection(getDbCollection());
 	}
 
 	/*
