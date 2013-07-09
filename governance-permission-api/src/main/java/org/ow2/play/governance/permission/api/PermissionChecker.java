@@ -55,6 +55,8 @@ public interface PermissionChecker {
 	 * @param resource
 	 * @param role
 	 * @return
+     *
+     * @deprecated use checkMode
 	 */
 	boolean checkRole(String user, String resource, String role);
 

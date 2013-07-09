@@ -97,8 +97,7 @@ public class PermissionCheck implements PermissionChecker {
 	 */
 	@Override
 	public boolean checkRole(String user, String resource, String role) {
-		// return checkResource(user, resource) && roleIsOK(role);
-		return true;
+		return checkMode(user, resource, role);
 	}
 
     /**
