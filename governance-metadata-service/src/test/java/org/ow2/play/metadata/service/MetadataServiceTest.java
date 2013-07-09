@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.play.metadata.api.Data;
@@ -192,6 +193,50 @@ public class MetadataServiceTest {
 			fail();
 		}
 	}
+
+    /**
+     * This is not an API test. It just get the metadata from the service and tries to remove it from value.
+     * TODO : Implement a real remove from name...
+     */
+    @Test
+    public void removeMetaFromMetaName() {
+        Resource r = new Resource(UUID.randomUUID().toString(), "http://bar");
+        Metadata removeme = new Metadata("remove", new Data("mytype", "myvalue"));
+        Metadata donotremoveme = new Metadata("donotremove", new Data("mytype", "myvalue"));
+
+        org.ow2.play.metadata.api.MetaResource mr = new org.ow2.play.metadata.api.MetaResource();
+        mr.setResource(r);
+        mr.getMetadata().add(removeme);
+        mr.getMetadata().add(donotremoveme);
+
+        try {
+            metadataService.create(mr);
+        } catch (MetadataException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        try {
+            List<Metadata> list = metadataService.getMetaData(r);
+            assertTrue(list.size() >= 2);
+
+            assertTrue(list.contains(removeme));
+            assertTrue(list.contains(donotremoveme));
+
+            Metadata toremove = metadataService.getMetadataValue(r, "remove");
+            Assert.assertNotNull(toremove);
+            metadataService.removeMetadata(r, toremove);
+            List<Metadata> list2 = metadataService.getMetaData(r);
+            assertTrue(list2.size() < list.size());
+
+            assertTrue(!list2.contains(removeme));
+            assertTrue(list2.contains(donotremoveme));
+
+        } catch (MetadataException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 
 	@Test
 	public void removeUnknownMeta() {

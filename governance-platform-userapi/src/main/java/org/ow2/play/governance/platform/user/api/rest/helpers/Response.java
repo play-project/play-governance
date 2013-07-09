@@ -65,4 +65,8 @@ public class Response {
 		return javax.ws.rs.core.Response.status(Status.UNAUTHORIZED).build();
 	}
 
+    public static final javax.ws.rs.core.Response forbidden() {
+        return javax.ws.rs.core.Response.status(Status.FORBIDDEN).build();
+    }
+
 }

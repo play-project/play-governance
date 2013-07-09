@@ -59,4 +59,16 @@ public interface StreamService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response stream(@PathParam("id") String id);
+
+    /**
+     * Check is the user can access to the stream in the given mode.
+     *
+     * @param id the stream ID to check access to
+     * @param mode the mode to check access to
+     * @return HTTP 200 OK if access is authorized, else HTTP 403 unauthorized
+     */
+    @GET
+    @Path("/{id}/access/{mode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Response checkAccess(@PathParam("id") String id, @PathParam("mode") String mode);
 }

@@ -56,7 +56,8 @@ public class Metadata {
 	public Metadata(String name, Data data) {
 		this();
 		this.name = name;
-		this.data.add(data);
+        if (data != null)
+		    this.data.add(data);
 	}
 
 	/**

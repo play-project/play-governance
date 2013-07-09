@@ -56,6 +56,7 @@ public class PublishService extends AbstractService implements
 
 		// user can publish into the resource only if he has enough
 		// permissions...
+        // TODO : Check that the user can publish to this resource
 		if (!permissionChecker.checkResource(getUser().login,
 				resource)) {
 			return error(Status.UNAUTHORIZED, "Not allowed to pusblish into "

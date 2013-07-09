@@ -99,7 +99,8 @@ public interface PermissionService {
 	void setAccessTo(String name, List<String> accessTo) throws GovernanceExeption;
 	
 	/**
-	 * 
+	 * Get all the resources where the access to is equals to the input one
+     *
 	 * @param accessTo
 	 * @return
 	 * @throws GovernanceExeption
@@ -118,7 +119,8 @@ public interface PermissionService {
 	void setAgent(String name, List<String> agents) throws GovernanceExeption;
 
 	/**
-	 * 
+	 * Get all the resources where the agent is equal to the input one
+     *
 	 * @param agent
 	 * @return
 	 * @throws GovernanceExeption

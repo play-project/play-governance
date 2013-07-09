@@ -26,6 +26,8 @@ import static org.junit.Assert.fail;
 
 import java.util.Set;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,7 @@ import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.permission.api.Permission;
 import org.ow2.play.governance.permission.api.PermissionChecker;
 import org.ow2.play.governance.permission.service.PermissionService;
+import org.ow2.play.governance.resources.ModeHelper;
 import org.ow2.play.governance.user.UserService;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.bean.Resource;
@@ -274,11 +277,12 @@ public class PermissionCheckTest {
 		
 		assertFalse(check.checkResource(login, resource));
 	}
-	
+
+    @Test
 	public void checkUnknownResource() {
 		String login = "chamerling";
 		String resource = "http://foo/bar/Resource#stream";
-		String resource2 = "http://foo/bar/Resource#stream";
+		String resource2 = "http://foo/bar/Resource2#stream";
 		String group = "http://foo/bar/Group";
 		
 		User user = new User();
@@ -302,10 +306,343 @@ public class PermissionCheckTest {
 			e.printStackTrace();
 			fail();
 		}
-		
-		
 		assertFalse(check.checkResource(login, resource2));
 	}
+
+    /**
+     * Test the the user can access to a resource which is in right mode and where the user belongs to the group
+     *
+     */
+    @Test
+    public void getGroupsForResourceInMode() {
+        String login = "chamerling";
+        String resource = "http://foo/bar/Resource#stream";
+        String groupIn = "http://foo/bar/GroupIn";
+        String groupNotIn = "http://foo/bar/GroupNotIn";
+
+
+        User user = new User();
+        user.login = login;
+        user.password = "foo";
+        user.groups.add(getGroup(groupIn));
+        try {
+            userService.register(user);
+        } catch (UserException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertTrue(true);
+        // TODO
+        //assertTrue(check.checkMode(login, resource, "read"));
+
+    }
+
+    @Test
+    public void getGroupsForResourceInModeCheckModeDiff() {
+        String resource = "http://foo/bar/ResourceA#stream";
+        String groupIn = "http://foo/bar/GroupIn";
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check that we can find what we inserted
+        Set<String> groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("read"));
+        assertEquals(1, groups.size());
+        System.out.println(groups);
+
+        // This one is not available
+        groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("write"));
+        assertEquals(0, groups.size());
+
+        // check an unknown resource
+        groups = check.getGroupsForResourceInMode("http://foo/bar/ResourceB#stream", ModeHelper.getFullURI("read"));
+        assertEquals(0, groups.size());
+
+        // create a new permission for the stream in another group with another mode...
+        String groupIn2 = "http://foo/bar/GroupIn2";
+        p = new Permission();
+        p.name = "bar";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn2 + "#group");
+        p.mode.add(ModeHelper.getFullURI("write"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check that we still have one group for read
+        groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("read"));
+        assertEquals(1, groups.size());
+        String group = Iterables.getFirst(groups, "");
+        assertEquals(groupIn + "#group", group);
+        System.out.println(groups);
+
+        // and check that we can find the newly inserted value
+        groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("write"));
+        assertEquals(1, groups.size());
+        group = Iterables.getFirst(groups, "");
+        assertEquals(groupIn2 + "#group", group);
+        System.out.println(groups);
+    }
+
+    @Test
+    public void getGroupsForResourceInModeCheckAfterMultipleInsert() {
+        String resource = "http://foo/bar/ResourceA#stream";
+        String groupIn = "http://foo/bar/GroupIn";
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // create a new permission for the stream in another group with another mode...
+        String groupIn2 = "http://foo/bar/GroupIn2";
+        p = new Permission();
+        p.name = "bar";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn2 + "#group");
+        p.mode.add(ModeHelper.getFullURI("write"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check that we have one group for read
+        Set<String> groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("read"));
+        assertEquals(1, groups.size());
+        String group = Iterables.getFirst(groups, "");
+        assertEquals(groupIn + "#group", group);
+        System.out.println(groups);
+
+        // and check that we can find the newly inserted value
+        groups = check.getGroupsForResourceInMode(resource, ModeHelper.getFullURI("write"));
+        assertEquals(1, groups.size());
+        group = Iterables.getFirst(groups, "");
+        assertEquals(groupIn2 + "#group", group);
+        System.out.println(groups);
+    }
+
+    /**
+     * Register a permission for a resource in a mode and query another resource in another mode.
+     * Hopefully, this should return nothing...
+     */
+    @Test
+    public void getGroupsForResourceInModeCheckUnregisteredResource() {
+
+        // register a resource, then query an unregistered one
+
+        String resource = "http://foo/bar/ResourceA#stream";
+        String groupIn = "http://foo/bar/GroupIn";
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check an unknown resource
+        Set<String> groups = check.getGroupsForResourceInMode("http://foo/bar/ResourceB#stream", ModeHelper.getFullURI("read"));
+        System.out.println(groups);
+        assertEquals(0, groups.size());
+    }
+
+    /**
+     * Register a resource with a mode and query it with another mode.
+     * This should return nothing.
+     */
+    @Test
+    public void getGroupsForResourceInModeCheckResourceWithInvalidMode() {
+
+        // register a resource, then query an unregistered one
+
+        String resource = "http://foo/bar/ResourceA#stream";
+        String groupIn = "http://foo/bar/GroupIn";
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(groupIn + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // check resource with write instead of read
+        Set<String> groups = check.getGroupsForResourceInMode("http://foo/bar/ResourceA#stream", ModeHelper.getFullURI("write"));
+        System.out.println(groups);
+        assertEquals(0, groups.size());
+    }
+
+    /**
+     * Check that the registered user can access to a resource which is registered in its group
+     */
+    @Test
+    public void checkModeInOneGroup() {
+        String group = "http://foo/bar/CheckModeGroup";
+        String resource = "http://foo/bar/ResourceCheckMode#stream";
+
+        User user = new User();
+        user.login = "chamerling";
+        user.password = "foo";
+        user.groups.add(getGroup(group));
+        try {
+            userService.register(user);
+        } catch (UserException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(group + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertTrue(check.checkMode(user.login, resource, ModeHelper.getFullURI("read")));
+    }
+
+    @Test
+    public void checkModeInNGroups() {
+        String group = "http://foo/bar/CheckModeGroup";
+        String group2 = "http://foo/bar/CheckModeGroup2";
+        String resource = "http://foo/bar/ResourceCheckMode#stream";
+
+        User user = new User();
+        user.login = "chamerling";
+        user.password = "foo";
+        user.groups.add(getGroup(group));
+        user.groups.add(getGroup(group2));
+        try {
+            userService.register(user);
+        } catch (UserException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(group + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertTrue(check.checkMode(user.login, resource, ModeHelper.getFullURI("read")));
+    }
+
+    @Test
+    public void checkModeInNoGroups() {
+        String group = "http://foo/bar/CheckModeGroup";
+        String group2 = "http://foo/bar/CheckModeGroup2";
+        String resource = "http://foo/bar/ResourceCheckMode#stream";
+
+        User user = new User();
+        user.login = "chamerling";
+        user.password = "foo";
+        user.groups.add(getGroup(group));
+        try {
+            userService.register(user);
+        } catch (UserException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(group2 + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertFalse(check.checkMode(user.login, resource, ModeHelper.getFullURI("read")));
+    }
+
+    @Test
+    public void checkModeInvalidModeValue() {
+        String group = "http://foo/bar/CheckModeGroup";
+        String resource = "http://foo/bar/ResourceCheckMode#stream";
+
+        User user = new User();
+        user.login = "chamerling";
+        user.password = "foo";
+        user.groups.add(getGroup(group));
+        try {
+            userService.register(user);
+        } catch (UserException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Permission p = new Permission();
+        p.name = "foo";
+        p.accessTo.add(resource);
+        p.agent.add(group + "#group");
+        p.mode.add(ModeHelper.getFullURI("read"));
+
+        try {
+            permissionService.addPermission(p);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            fail();
+        }
+        assertFalse(check.checkMode(user.login, resource, ModeHelper.getFullURI("write")));
+    }
 
 	private Resource getGroup(String url) {
 		Resource r = new Resource();

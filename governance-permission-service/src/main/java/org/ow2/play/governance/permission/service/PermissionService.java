@@ -221,7 +221,7 @@ public class PermissionService implements
 	public List<MetaResource> getWhereAgent(String agent)
 			throws GovernanceExeption {
 		if (agent == null) {
-			throw new GovernanceExeption("Null agent is not alloawed");
+			throw new GovernanceExeption("Null agent is not allowed");
 		}
 
 		try {
@@ -237,7 +237,7 @@ public class PermissionService implements
 	public List<MetaResource> getWhereMode(String mode)
 			throws GovernanceExeption {
 		if (mode == null) {
-			throw new GovernanceExeption("Null mode is not alloawed");
+			throw new GovernanceExeption("Null mode is not allowed");
 		}
 
 		try {

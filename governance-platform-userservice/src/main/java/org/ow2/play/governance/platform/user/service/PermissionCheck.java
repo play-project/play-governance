@@ -19,12 +19,16 @@
  */
 package org.ow2.play.governance.platform.user.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Collections2;
 import org.ow2.play.governance.api.GovernanceExeption;
+import org.ow2.play.governance.permission.api.Constants;
 import org.ow2.play.governance.permission.api.PermissionChecker;
 import org.ow2.play.governance.permission.api.PermissionService;
+import org.ow2.play.governance.resources.ResourceHelper;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.UserService;
 import org.ow2.play.governance.user.api.bean.Resource;
@@ -97,9 +101,40 @@ public class PermissionCheck implements PermissionChecker {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.ow2.play.governance.platform.user.service.PermissionChecker#getGroupsForResource(java.lang.String)
-	 */
+    /**
+     * Get all the user resources and check if the input one is available with the given mode.
+     *
+     * @param user
+     * @param resource resource URI
+     * @param mode mode URI
+     * @return
+     */
+    @Override
+    public boolean checkMode(String user, String resource, String mode) {
+        // TODO : we should be able to do it in one mongodb query
+
+        // load the user just one time instead of calling checkGroup N times...
+        User u = null;
+        try {
+            u = userService.getUser(user);
+        } catch (UserException e) {
+            // logger
+            e.printStackTrace();
+        }
+
+        return Sets.intersection(getGroupsForResourceInMode(resource, mode), Sets.newHashSet(Collections2.transform(u.groups, new Function<Resource, String>() {
+            @Override
+            public String apply(Resource input) {
+                System.out.println(input);
+                return input.uri + "#" + input.name;
+            }
+        }))).size() > 0;
+
+    }
+
+    /* (non-Javadoc)
+         * @see org.ow2.play.governance.platform.user.service.PermissionChecker#getGroupsForResource(java.lang.String)
+         */
 	@Override
 	public Set<String> getGroupsForResource(String resource) {
 		Set<String> result = Sets.newHashSet();
@@ -147,11 +182,116 @@ public class PermissionCheck implements PermissionChecker {
 		return result;
 	}
 
-	/**
-	 * @param permissionService
-	 *            the permissionService to set
-	 */
-	public void setPermissionService(PermissionService permissionService) {
+    /**
+     * Get all the groups where the resource is available in a given mode
+     *
+     * @param resource
+     * @param mode
+     * @return
+     */
+    public Set<String> getGroupsForResourceInMode(final String resource, final String mode) {
+        if (resource == null || mode == null) {
+            return Sets.newHashSet();
+        }
+
+        Set<String> result = Sets.newHashSet();
+
+        // get all the permissions where the access is defined for this resource
+        // ie the permission is defined for the given resource
+        List<MetaResource> permissions = null;
+        try {
+            permissions = permissionService.getWhereAccessTo(resource);
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            return result;
+        }
+
+        if (permissions == null) {
+            return result;
+        }
+
+        // get all the permissions where the mode is set like the input one
+        Iterable<MetaResource> permissionsWhereModeIsOK = Iterables.filter(permissions, new Predicate<MetaResource>() {
+            @Override
+            public boolean apply(MetaResource input) {
+
+                // get the mode metadata
+                Metadata md = Iterables.tryFind(input.getMetadata(), new Predicate<Metadata>() {
+                    @Override
+                    public boolean apply(org.ow2.play.metadata.api.Metadata input) {
+                        return input.getName().equals(Constants.MODE);
+                    }
+                }).orNull();
+
+                if (md == null) {
+                    return false;
+                }
+
+                // found a mode metadata, let's check the mode value is the input one
+                Data found = Iterables.tryFind(md.getData(), new Predicate<Data>() {
+                    @Override
+                    public boolean apply(Data input) {
+                        return Type.URI.equals(input.getType()) && mode.equals(input.getValue());
+                    }
+                }).orNull();
+
+                if (found != null) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // we now have all the permissions where the resource and mode are like the input one:
+        // extract the groups from them (ie agent metadata)
+        Iterable<Set<String>> groupss = Iterables.transform(permissionsWhereModeIsOK, new Function<MetaResource, Set<String>>() {
+            public Set<String> apply(MetaResource input) {
+
+                Set<String> result = Sets.newHashSet();
+
+                // first time we extract all permissions where the agent is set
+                Metadata md = Iterables.tryFind(input.getMetadata(), new Predicate<Metadata>() {
+                    @Override
+                    public boolean apply(org.ow2.play.metadata.api.Metadata input) {
+                        return input.getName().equals(Constants.AGENT);
+                    }
+                }).orNull();
+
+                if (md == null) {
+                    return result;
+                }
+
+                Iterable<Data> all = Iterables.filter(md.getData(), new Predicate<Data>() {
+                    @Override
+                    public boolean apply(org.ow2.play.metadata.api.Data input) {
+                        return input != null && input.getValue() != null && input.getValue().endsWith("#group");
+                    }
+                });
+
+                result = Sets.newHashSet(Iterables.transform(all, new Function<Data, String>() {
+                    @Override
+                    public String apply(org.ow2.play.metadata.api.Data input) {
+                        return input.getValue();
+                    }
+                }));
+
+                return result;
+            };
+        });
+
+        // change the set of set<string> into set<string> (eliminate duplicates)
+        Iterator<Set<String>> iter = groupss.iterator();
+        while(iter.hasNext()) {
+            Iterables.addAll(result, iter.next());
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param permissionService
+     */
+    public void setPermissionService(PermissionService permissionService) {
 		this.permissionService = permissionService;
 	}
 

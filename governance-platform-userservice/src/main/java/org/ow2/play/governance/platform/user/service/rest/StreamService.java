@@ -20,6 +20,7 @@
 package org.ow2.play.governance.platform.user.service.rest;
 
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.error;
+import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.forbidden;
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.notFound;
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.ok;
 import static org.ow2.play.governance.platform.user.api.rest.helpers.Response.unauthorized;
@@ -34,6 +35,7 @@ import javax.ws.rs.core.Response.Status;
 import org.ow2.play.governance.api.EventGovernance;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.bean.Topic;
+import org.ow2.play.governance.resources.ModeHelper;
 import org.ow2.play.governance.resources.StreamHelper;
 import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.governance.user.api.bean.User;
@@ -105,9 +107,37 @@ public class StreamService extends AbstractService implements
 			return unauthorized();
 		}
 	}
-	
 
-	protected String getResourceURI(Topic topic) {
+    @Override
+    public Response checkAccess(String id, String mode) {
+        List<Topic> topics = null;
+        try {
+            topics = eventGovernance.getTopicsFromName(id);
+        } catch (GovernanceExeption e) {
+            return error(Status.BAD_REQUEST, "Can not get stream with ID " + id);
+        }
+
+        if (topics.size() == 0) {
+            return notFound();
+        }
+
+        // get the first one...
+        Topic input = topics.get(0);
+
+        // check access
+        final User user = getUser();
+        if (permissionChecker.checkMode(user.login, TopicHelper.get(input), ModeHelper.getFullURI(mode))) {
+            org.ow2.play.governance.platform.user.api.rest.bean.Stream stream = new org.ow2.play.governance.platform.user.api.rest.bean.Stream();
+            stream.id = StreamHelper.getStreamID(input);
+            stream.resourceUrl = getResourceURI(input);
+            return ok(stream);
+        } else {
+            //return unauthorized();
+            return forbidden();
+        }
+    }
+
+    protected String getResourceURI(Topic topic) {
 		URI uri = mc.getUriInfo().getBaseUri();
 		return uri.toString() + "streams/" + topic.getName();
 	}

@@ -32,7 +32,7 @@ public interface PermissionChecker {
 	 * group
 	 * 
 	 * @param user
-	 * @param metaResource
+	 * @param group
 	 * @return
 	 */
 	boolean checkGroup(String user, String group);
@@ -43,7 +43,7 @@ public interface PermissionChecker {
 	 * check the resource access mode.
 	 * 
 	 * @param user
-	 * @param groups
+	 * @param resource
 	 * @return
 	 */
 	boolean checkResource(String user, String resource);
@@ -58,6 +58,17 @@ public interface PermissionChecker {
 	 */
 	boolean checkRole(String user, String resource, String role);
 
+    /**
+     * Check if the user have access to the resource in the given mode
+     *
+     * @param user
+     * @param resource resource URI
+     * @param mode mode URI
+     * @return true if access is OK with the given mode
+     */
+	boolean checkMode(String user, String resource, String mode);
+
+
 	/**
 	 * Get the list of group IDs where the resource is available
 	 * 
@@ -65,5 +76,14 @@ public interface PermissionChecker {
 	 * @return
 	 */
 	Set<String> getGroupsForResource(String resource);
+
+    /**
+     * Get all the groups where the resource is accessible with the given mode
+     *
+     * @param resource
+     * @param mode
+     * @return
+     */
+    Set<String> getGroupsForResourceInMode(final String resource, final String mode);
 
 }
