@@ -36,8 +36,11 @@ import org.ow2.play.governance.api.Constants;
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.PatternRegistry;
 import org.ow2.play.governance.api.SimplePatternService;
+import org.ow2.play.governance.api.bean.Topic;
 import org.ow2.play.governance.platform.user.api.rest.bean.Pattern;
+import org.ow2.play.governance.resources.ModeHelper;
 import org.ow2.play.governance.resources.PatternHelper;
+import org.ow2.play.governance.resources.TopicHelper;
 import org.ow2.play.governance.user.api.UserException;
 import org.ow2.play.governance.user.api.bean.Resource;
 import org.ow2.play.governance.user.api.bean.User;
@@ -135,14 +138,59 @@ public class PatternService extends AbstractService implements
 			return error(Status.BAD_REQUEST, "Pattern data is missing");
 		}
 
-		// first, check if the user can deploy the pattern ie if he add good
-		// access rights to the resources he wants to user...
-		// TODO!!!!!
-		User user = getUser();
-
+		final User user = getUser();
 		String id = UUID.randomUUID().toString();
 
-		// send to pattern service
+        List<String> inputs = Lists.newArrayList();
+        List<String> outputs = Lists.newArrayList();
+
+        try {
+            inputs.addAll(Collections2.transform(patternService.getInputTopics(pattern), new Function<Topic, String>() {
+                @Override
+                public String apply(Topic input) {
+                    return TopicHelper.get(input);
+                }
+            }));
+
+            outputs.addAll(Collections2.transform(patternService.getOutputTopics(pattern), new Function<Topic, String>() {
+                @Override
+                public String apply(Topic input) {
+                    return TopicHelper.get(input);
+                }
+            }));
+
+        } catch (GovernanceExeption e) {
+            e.printStackTrace();
+            return error(Status.INTERNAL_SERVER_ERROR, "Can not retrieve streams from pattern : %s", e.getMessage());
+        }
+
+        // check the inputs
+        Collection<String> authorizedInputs = Collections2.filter(inputs, new Predicate<String>() {
+            @Override
+            public boolean apply(String input) {
+                return permissionChecker.checkMode(user.login, input, ModeHelper.SUBSCRIBE);
+            }
+        });
+
+        if (authorizedInputs.size() != inputs.size()) {
+            // invalid permissions, some streams are not accessible to the current user
+            return error(Status.PRECONDITION_FAILED, "Invalid permissions, some input streams are not accessible to the current user");
+        }
+
+        // check the outputs
+        Collection<String> authorizedOutputs = Collections2.filter(outputs, new Predicate<String>() {
+            @Override
+            public boolean apply(String output) {
+                return permissionChecker.checkMode(user.login, output, ModeHelper.NOTIFY);
+            }
+        });
+
+        if (authorizedOutputs.size() != outputs.size()) {
+            // invalid permissions, some streams are not accessible to the current user
+            return error(Status.PRECONDITION_FAILED, "Invalid permissions, some output streams are not accessible to the current user");
+        }
+
+        // if all is OK (ie user have valid access to all), deploy!
 		try {
 			patternService.deploy(id, pattern);
 		} catch (GovernanceExeption e) {

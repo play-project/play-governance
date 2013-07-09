@@ -65,7 +65,12 @@ public interface PatternService {
 	Response pattern(@PathParam("id") String id);
 
 	/**
-	 * Deploy a new pattern to the platform
+	 * Deploy a new pattern to the platform. Before deploying, the governance will enforce the following rules:
+     *
+     * 1. User must have Subscribe access to input streams defined in the pattern
+     * 2. User must have Notify access to output streams defined in the pattern
+     *
+     * Input and output Streams may be defined in several groups the user have access to.
 	 * 
 	 * @param the
 	 *            pattern to deploy
