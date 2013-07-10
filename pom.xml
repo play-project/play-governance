@@ -68,6 +68,15 @@
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
+
+    <profiles>
+        <profile>
+            <id>itest</id>
+            <modules>
+                <module>governance-itest</module>
+            </modules>
+        </profile>
+    </profiles>
   
   <dependencyManagement>
     <dependencies>
