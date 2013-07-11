@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.ow2.play.governance.api.GovernanceExeption;
 import org.ow2.play.governance.api.NotificationService;
+import org.ow2.play.governance.resources.ModeHelper;
 import org.ow2.play.governance.resources.TopicHelper;
 
 /**
@@ -56,12 +57,10 @@ public class PublishService extends AbstractService implements
 
 		// user can publish into the resource only if he has enough
 		// permissions...
-        // TODO : Check that the user can publish to this resource
-		if (!permissionChecker.checkResource(getUser().login,
-				resource)) {
-			return error(Status.UNAUTHORIZED, "Not allowed to pusblish into "
-					+ resource);
-		}
+        if (!permissionChecker.checkMode(getUser().login, resource, ModeHelper.NOTIFY)) {
+            return error(Status.UNAUTHORIZED, "Not allowed to publish into "
+                    + resource);
+        }
 
 		// let's push data to the real notification service (ie DSB at the end)
 		try {
