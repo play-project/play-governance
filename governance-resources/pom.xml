@@ -28,6 +28,12 @@
     	<artifactId>governance-api</artifactId>
     	<version>${project.version}</version>
     </dependency>
+
+      <dependency>
+          <groupId>org.ow2.play</groupId>
+          <artifactId>governance-permission-api</artifactId>
+          <version>${project.version}</version>
+      </dependency>
     
     <dependency>
     	<groupId>com.google.guava</groupId>

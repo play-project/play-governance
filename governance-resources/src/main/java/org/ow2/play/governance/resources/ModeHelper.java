@@ -1,6 +1,7 @@
 package org.ow2.play.governance.resources;
 
 import com.google.common.collect.Maps;
+import org.ow2.play.governance.permission.api.Constants;
 
 import java.util.Map;
 
@@ -9,11 +10,11 @@ import java.util.Map;
  */
 public class ModeHelper {
 
-    public static final String ACL_PREFIX = "http://www.w3.org/ns/auth/acl";
-    public static final String NOTIFY = "http://docs.oasis-open.org/wsn/b-2/Notify";
-    public static final String SUBSCRIBE = "http://docs.oasis-open.org/wsn/b-2/Subscribe";
-    public static final String READ = "http://www.w3.org/ns/auth/acl#Read";
-    public static final String WRITE = "http://www.w3.org/ns/auth/acl#Write";
+    public static final String ACL_PREFIX = Constants.ACL_PREFIX;
+    public static final String NOTIFY = Constants.NOTIFY;
+    public static final String SUBSCRIBE = Constants.SUBSCRIBE;
+    public static final String READ = Constants.READ;
+    public static final String WRITE = Constants.WRITE;
 
     public static Map<String, String> modes = Maps.newHashMap();
 

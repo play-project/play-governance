@@ -24,8 +24,10 @@ package org.ow2.play.governance.permission.api;
  *
  */
 public interface Constants {
-	
-	public static String PERMISSION_RESOURCE = "permission";
+
+    public static final String ACL_PREFIX = "http://www.w3.org/ns/auth/acl";
+
+    public static String PERMISSION_RESOURCE = "permission";
 	
 	public static String RESOURCE_NS = "http://permissions.event-processing.org/id/";
 	
@@ -43,8 +45,8 @@ public interface Constants {
 	
 	public static String READ = "http://www.w3.org/ns/auth/acl#Read";
 
-	public static String SUBSCRIBE = "http://www.w3.org/ns/auth/acl#Subscribe";
+	public static String SUBSCRIBE = "http://docs.oasis-open.org/wsn/b-2/Subscribe";
 
-	public static String NOTIFY = "http://www.w3.org/ns/auth/acl#Notify";
+	public static String NOTIFY = "http://docs.oasis-open.org/wsn/b-2/Notify";
 
 }
