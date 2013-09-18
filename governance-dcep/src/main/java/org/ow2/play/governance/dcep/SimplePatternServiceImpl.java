@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
 package org.ow2.play.governance.dcep;
@@ -64,6 +64,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	
 	private MetadataService metadataService;
 
+	@Override
 	public void analyze(String pattern) throws GovernanceExeption {
 		logger.info("Analyze pattern");
 		if (logger.isLoggable(Level.FINE)) {
@@ -102,6 +103,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 				Set<String> input = details.getInputStreams();
 				result.addAll(Collections2.transform(input,
 						new Function<String, Topic>() {
+							@Override
 							public Topic apply(String in) {
 								return streamToTopic(in);
 							}
@@ -201,7 +203,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 		
 		List<Query> patterns = getQueryDispatchApiClient().getRegisteredQueries();
 		if (patterns == null) {
-			return result;	
+			return result;
 		}
 		
 		for (Query q : patterns) {
@@ -298,7 +300,7 @@ public class SimplePatternServiceImpl implements SimplePatternService {
 	}
 
 	protected String generateID() {
-		return "http://play.ow2.org/pattern/" + UUID.randomUUID().toString();
+		return UUID.randomUUID().toString();
 	}
 	
 	/**
