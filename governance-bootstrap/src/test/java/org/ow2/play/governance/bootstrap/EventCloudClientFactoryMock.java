@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
 package org.ow2.play.governance.bootstrap;
@@ -176,6 +176,60 @@ public class EventCloudClientFactoryMock implements EventCloudClientFactory {
                 // TODO Auto-generated method stub
                 return false;
             }
+
+			@Override
+			public boolean createEventCloud(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public String deployPublishWsProxy(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String deployPublishWsnService(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String deployPutGetWsProxy(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String deploySubscribeWsProxy(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String deploySubscribeWsnService(String arg0, String arg1) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<String> getNodeProviderIds() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public boolean ping() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void setSocialFilter(String arg0, double arg1) {
+				// TODO Auto-generated method stub
+				
+			}
 
         });
     }
