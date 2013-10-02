@@ -38,17 +38,16 @@ public class ModeHelper {
         if (modes.containsValue(mode)) {
             return mode;
         }
-
-        if (mode.startsWith(ACL_PREFIX)) {
+        else if (mode.startsWith(ACL_PREFIX)) {
             return mode;
-        }
-        
+        }       
         // lookup in the cache if we can find a mode (in lowercase)
-        if (null != modes.get(mode.toLowerCase())) {
+        else if (null != modes.get(mode.toLowerCase())) {
             return modes.get(mode.toLowerCase());
         }
-
         // not found in cache, build an ad-hoc URI and send it back
-        return ACL_PREFIX + "#" + mode;
+        else {
+        	return ACL_PREFIX + "#" + mode;
+        }
     }
 }
