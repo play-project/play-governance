@@ -162,7 +162,7 @@ public class SubscriptionService extends AbstractService implements
 	@Override
 	public Response unsubscribe(String subscriptionID) {
 		if (subscriptionID == null) {
-			return error(Status.BAD_REQUEST, "subcription ID is mandatary");
+			return error(Status.BAD_REQUEST, "subcription ID is mandatory");
 		}
 
 		// get the subscription URI
@@ -270,7 +270,7 @@ public class SubscriptionService extends AbstractService implements
 	@Override
 	public Response subscription(String id) {
 		if (id == null) {
-			return error(Status.BAD_REQUEST, "subcription ID is mandatary");
+			return error(Status.BAD_REQUEST, "subcription ID is mandatory");
 		}
 
 		// check if it is a user subscription first...
