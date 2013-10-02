@@ -64,7 +64,7 @@ public class SubscriptionServiceClient implements SubscriptionService {
 		if (subscription.getProvider() == null
 				|| subscription.getSubscriber() == null) {
 			throw new GovernanceExeption(
-					"Can not subscribe with null provider or subcriber");
+					"Can not subscribe with null provider or subscriber");
 		}
 
 		if (subscription.getTopic() == null) {

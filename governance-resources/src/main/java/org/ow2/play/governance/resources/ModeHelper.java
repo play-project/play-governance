@@ -1,9 +1,10 @@
 package org.ow2.play.governance.resources;
 
-import com.google.common.collect.Maps;
+import java.util.Map;
+
 import org.ow2.play.governance.permission.api.Constants;
 
-import java.util.Map;
+import com.google.common.collect.Maps;
 
 /**
  * @author Christophe Hamerling - chamerling@linagora.com
@@ -21,6 +22,7 @@ public class ModeHelper {
     static {
         modes.put("notify", NOTIFY);
         modes.put("subscribe", SUBSCRIBE);
+        modes.put("subcribe", SUBSCRIBE); // compensate for typos elsewhere
         modes.put("read", READ);
         modes.put("write", WRITE);
     }
@@ -33,16 +35,20 @@ public class ModeHelper {
      * @return
      */
     public static String getFullURI(String mode) {
-        if (mode.startsWith(ACL_PREFIX)) {
+        if (modes.containsValue(mode)) {
             return mode;
         }
 
+        if (mode.startsWith(ACL_PREFIX)) {
+            return mode;
+        }
+        
         // lookup in the cache if we can find a mode (in lowercase)
         if (null != modes.get(mode.toLowerCase())) {
             return modes.get(mode.toLowerCase());
         }
 
-        // not found in cache, build an URI and send it back
+        // not found in cache, build an ad-hoc URI and send it back
         return ACL_PREFIX + "#" + mode;
     }
 }

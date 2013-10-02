@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
 package org.ow2.play.governance.platform.user.service.rest;
@@ -97,7 +97,7 @@ public class SubscriptionService extends AbstractService implements
 		// permissions
 		if (!permissionChecker.checkResource(getUser().login,
 				subscription.resource)) {
-			return error(Status.UNAUTHORIZED, "Not allowed to subcribe to "
+			return error(Status.UNAUTHORIZED, "Not allowed to subscribe to "
 					+ subscription.resource);
 		}
 
@@ -223,6 +223,7 @@ public class SubscriptionService extends AbstractService implements
 		List<Resource> resources = getUser().resources;
 		Collection<Resource> filtered = Collections2.filter(resources,
 				new Predicate<Resource>() {
+					@Override
 					public boolean apply(Resource input) {
 						return input.name
 								.equals(org.ow2.play.governance.api.Constants.SUBCRIPTION_RESOURCE_NAME);
@@ -231,6 +232,7 @@ public class SubscriptionService extends AbstractService implements
 
 		Collection<Subscription> subscriptions = Collections2.transform(
 				filtered, new Function<Resource, Subscription>() {
+					@Override
 					public Subscription apply(Resource subscriptionResource) {
 						// ask the subscription registry...
 						String url = SubscriptionHelper.get(
