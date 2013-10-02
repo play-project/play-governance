@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
 package org.ow2.play.governance.platform.user.service.rest;
@@ -62,11 +62,13 @@ public class PatternService extends AbstractService implements
 
 	private SimplePatternService patternService;
 
+	@Override
 	public Response patterns() {
 		User user = getUser();
 		List<Resource> resources = user.resources;
 		Collection<Resource> filtered = Collections2.filter(resources,
 				new Predicate<Resource>() {
+					@Override
 					public boolean apply(Resource input) {
 						return input.name
 								.equals(Constants.PATTERN_RESOURCE_NAME);
@@ -75,6 +77,7 @@ public class PatternService extends AbstractService implements
 
 		Collection<Pattern> patterns = Collections2.transform(filtered,
 				new Function<Resource, Pattern>() {
+					@Override
 					public Pattern apply(Resource patternResource) {
 						try {
 							org.ow2.play.governance.api.bean.Pattern pattern = patternRegistry.get(PatternHelper
@@ -96,9 +99,10 @@ public class PatternService extends AbstractService implements
 		return ok(patterns.toArray(new Pattern[patterns.size()]));
 	}
 
+	@Override
 	public Response pattern(String id) {
 		if (id == null) {
-			return error(Status.BAD_REQUEST, "Pattern ID is mandatary");
+			return error(Status.BAD_REQUEST, "Pattern ID is mandatory");
 		}
 
 		// check if it is a user subscription first...
@@ -133,6 +137,7 @@ public class PatternService extends AbstractService implements
 		return ok(out);
 	}
 
+	@Override
 	public Response deploy(String pattern) {
 		if (pattern == null) {
 			return error(Status.BAD_REQUEST, "Pattern data is missing");
@@ -225,10 +230,11 @@ public class PatternService extends AbstractService implements
 		return created(p);
 	}
 
+	@Override
 	public Response undeploy(String id) {
 
 		if (id == null) {
-			return error(Status.BAD_REQUEST, "Pattern ID is mandatary");
+			return error(Status.BAD_REQUEST, "Pattern ID is mandatory");
 		}
 
 		final String url = PatternHelper.getBaseURI(id);
@@ -270,9 +276,10 @@ public class PatternService extends AbstractService implements
 		return deleted();
 	}
 
+	@Override
 	public Response analyze(String pattern) {
 		if (pattern == null || pattern.trim().length() == 0) {
-			return error(Status.BAD_REQUEST, "Pattern is mandatary");
+			return error(Status.BAD_REQUEST, "Pattern is mandatory");
 		}
 
 		try {
