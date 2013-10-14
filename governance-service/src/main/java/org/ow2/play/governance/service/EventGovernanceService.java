@@ -204,7 +204,7 @@ public class EventGovernanceService implements EventGovernance {
 
         // store the subscription
         if (subscribeResult != null && subscriptionRegistry != null) {
-            subscriptionRegistry.addSubscription(subscription);
+            subscriptionRegistry.addSubscription(subscribeResult);
         }
 
         // get the DSB endpoint to subscribe to. For now it is unique but we
@@ -254,6 +254,7 @@ public class EventGovernanceService implements EventGovernance {
         // create the topic on the DSB if needed
         TopicAware dsbClient = getDSBTopicClient();
         if (Collections2.filter(dsbClient.get(), new Predicate<Topic>() {
+            @Override
             public boolean apply(Topic dsbTopic) {
                 logger.fine("Checking topic from DSB " + dsbTopic);
                 return topic.equals(dsbTopic);
@@ -321,7 +322,7 @@ public class EventGovernanceService implements EventGovernance {
 
             // store the subscription
             if (subscribeResult != null && subscriptionRegistry != null) {
-                subscriptionRegistry.addSubscription(subscription);
+                subscriptionRegistry.addSubscription(subscribeResult);
             }
         }
         // get the DSB endpoint to subscribe to
@@ -379,7 +380,8 @@ public class EventGovernanceService implements EventGovernance {
 				topic.setNs(ns);
 
 				List<Metadata> md = new ArrayList<Metadata>(Collections2.filter(r.getMetadata(), new Predicate<Metadata>() {
-					public boolean apply(Metadata meta) {
+					@Override
+                    public boolean apply(Metadata meta) {
 						return meta.getName() != null && meta.getName().equals(Constants.QNAME_PREFIX_URL);
 					}
 				}));
@@ -412,7 +414,8 @@ public class EventGovernanceService implements EventGovernance {
        
         // TODO : Real query...
         result.addAll(Collections2.filter(getTopics(), new Predicate<Topic>() {
-        	public boolean apply(Topic topic) {
+        	@Override
+            public boolean apply(Topic topic) {
         		System.out.println(topic.getName() + " " + topicName);
         		return topic.getName().equals(topicName);
         	}
@@ -572,6 +575,7 @@ public class EventGovernanceService implements EventGovernance {
     protected void createDSBTopic(final Topic topic) throws GovernanceExeption {
         TopicAware dsbClient = getDSBTopicClient();
         if (Collections2.filter(dsbClient.get(), new Predicate<Topic>() {
+            @Override
             public boolean apply(Topic dsbTopic) {
                 logger.fine("Checking topic from DSB " + dsbTopic);
                 return topic.equals(dsbTopic);
@@ -594,7 +598,7 @@ public class EventGovernanceService implements EventGovernance {
      * Create a new event cloud if it does not exists
      * 
      * @param topic
-     * @throws GovernanceExeption 
+     * @throws GovernanceExeption
      */
     protected void createEventCloud(Topic topic) throws GovernanceExeption {
         String streamName = StreamHelper.getStreamName(new QName(topic.getNs(), topic.getName(), topic
