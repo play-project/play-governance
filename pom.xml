@@ -1,133 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-	<artifactId>play-parent</artifactId>
-    <groupId>org.ow2.play</groupId>
-    <version>1.2-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<artifactId>play-parent</artifactId>
+		<groupId>org.ow2.play</groupId>
+		<version>1.2-SNAPSHOT</version>
+	</parent>
 
-  <name>play-governance</name>
-  <artifactId>play-governance</artifactId>
-  <groupId>org.ow2.play</groupId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  
-  <properties>
-    <dsb.version>1.0.0</dsb.version>
-    <cxf.version>2.6.0</cxf.version>
-    <guava.version>13.0.1</guava.version>
-    <icu4j.version>4.8.1.1</icu4j.version>
-    <mongo.java.driver.version>2.8.0</mongo.java.driver.version>
-    <play.commons.eventformat.version>1.1</play.commons.eventformat.version>
-  </properties>
-  
-  <modules>
-    <!-- Governance Runtime -->
-    <module>governance-api</module>
-    <module>governance-service</module>
-    <module>governance-mongostorage</module>
-    <module>governance-mocks</module>
-    <module>governance-migrator</module>
-    <module>governance-wsn</module>
-    <module>governance-bootstrap</module>
-    <!--<module>governance-monitoring</module>-->
-    <!--<module>governance-bsm</module>-->
-    <!--<module>governance-monitoring-api</module>-->
-    <module>governance-dcep</module>
-    <module>governance-ec</module>
-    <module>governance-dsb</module>
-    <!-- Governance Metadata -->
+	<name>play-governance</name>
+	<artifactId>play-governance</artifactId>
+	<groupId>org.ow2.play</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<dsb.version>1.0.0</dsb.version>
+		<cxf.version>2.6.0</cxf.version>
+		<guava.version>13.0.1</guava.version>
+		<icu4j.version>4.8.1.1</icu4j.version>
+		<mongo.java.driver.version>2.8.0</mongo.java.driver.version>
+		<play.commons.eventformat.version>1.1</play.commons.eventformat.version>
+	</properties>
+
+	<modules>
+		<!-- Governance Runtime -->
+		<module>governance-api</module>
+		<module>governance-service</module>
+		<module>governance-mongostorage</module>
+		<module>governance-mocks</module>
+		<module>governance-migrator</module>
+		<module>governance-wsn</module>
+		<module>governance-bootstrap</module>
+		<!--<module>governance-monitoring</module> -->
+		<!--<module>governance-bsm</module> -->
+		<!--<module>governance-monitoring-api</module> -->
+		<module>governance-dcep</module>
+		<module>governance-ec</module>
+		<module>governance-dsb</module>
+		<!-- Governance Metadata -->
 		<module>governance-metadata-api</module>
 		<module>governance-metadata-client</module>
 		<module>governance-metadata-service</module>
-    <module>governance-metadata-json</module>
-    <module>governance-metadata-inject</module>
-    <!-- Governance Registry -->
-    <module>governance-serviceregistry-api</module>
-    <module>governance-servicregistry-service</module>
-    <module>governance-serviceregistry-soapclient</module>
-    <module>governance-serviceregistry-mongo</module>
-    <!-- User Management -->
-    <module>governance-user-api</module>
-    <module>governance-user-service</module>
-    <module>governance-groups</module>
-    <!-- Utils -->
-    <module>governance-cxf</module>
-    <!-- Finals -->
-    <module>governance-war</module>
-    <module>governance-platform-userapi</module>
-    <module>governance-platform-userservice</module>
-    <module>governance-permission-api</module>
-    <module>governance-permission-service</module>
-    <module>governance-notification</module>
-    <module>governance-resources</module>
-    <module>governance-rest</module>
-  </modules>
-  <build>
-    <defaultGoal>install</defaultGoal>
-  </build>
+		<module>governance-metadata-json</module>
+		<module>governance-metadata-inject</module>
+		<!-- Governance Registry -->
+		<module>governance-serviceregistry-api</module>
+		<module>governance-servicregistry-service</module>
+		<module>governance-serviceregistry-soapclient</module>
+		<module>governance-serviceregistry-mongo</module>
+		<!-- User Management -->
+		<module>governance-user-api</module>
+		<module>governance-user-service</module>
+		<module>governance-groups</module>
+		<!-- Utils -->
+		<module>governance-cxf</module>
+		<!-- Finals -->
+		<module>governance-war</module>
+		<module>governance-platform-userapi</module>
+		<module>governance-platform-userservice</module>
+		<module>governance-permission-api</module>
+		<module>governance-permission-service</module>
+		<module>governance-notification</module>
+		<module>governance-resources</module>
+		<module>governance-rest</module>
+	</modules>
 
-    <profiles>
-        <profile>
-            <id>itest</id>
-            <modules>
-                <module>governance-itest</module>
-            </modules>
-        </profile>
-    </profiles>
-  
-  <dependencyManagement>
-    <dependencies>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-minimal</artifactId>
-      <version>${cxf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
-    <dependency>
-      <groupId>fr.inria.eventcloud</groupId>
-      <artifactId>eventcloud-webservices-api</artifactId>
-      <version>${eventcloud.version}</version>
-    </dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>${mongo.java.driver.version}</version>
-		</dependency>
-        <dependency>
-            <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
-            <version>${icu4j.version}</version>
-        </dependency>
-	</dependencies>
-  </dependencyManagement>
-  
-  <repositories>
-    <repository>
-      <id>ow2.release</id>
-      <url>http://repository.ow2.org/nexus/content/repositories/releases/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>ow2.snapshot</id>
-      <url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+	<build>
+		<defaultGoal>install</defaultGoal>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>itest</id>
+			<modules>
+				<module>governance-itest</module>
+			</modules>
+		</profile>
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-bundle-minimal</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.inria.eventcloud</groupId>
+				<artifactId>eventcloud-webservices-api</artifactId>
+				<version>${eventcloud.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongo-java-driver</artifactId>
+				<version>${mongo.java.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.icu</groupId>
+				<artifactId>icu4j</artifactId>
+				<version>${icu4j.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>ow2.release</id>
+			<url>http://repository.ow2.org/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ow2.snapshot</id>
+			<url>http://repository.ow2.org/nexus/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
