@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
 package org.ow2.play.governance.platform.user.api.rest;
@@ -49,7 +49,6 @@ public interface PublishService {
 	 * @return HTTP Status 200 if data has been published
 	 */
 	@POST
-	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response notify(@FormParam("resource") String resource,
