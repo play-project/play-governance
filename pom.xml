@@ -21,7 +21,7 @@
 		<cxf.version>2.6.0</cxf.version>
 		<guava.version>13.0.1</guava.version>
 		<icu4j.version>4.8.1.1</icu4j.version>
-		<mongo.java.driver.version>2.11.0</mongo.java.driver.version>
+		<mongo.java.driver.version>2.11.3</mongo.java.driver.version>
 		<play.commons.eventformat.version>1.1</play.commons.eventformat.version>
 	</properties>
 
