@@ -8,6 +8,7 @@
 		<artifactId>play-parent</artifactId>
 		<groupId>org.ow2.play</groupId>
 		<version>1.2-SNAPSHOT</version>
+		<relativePath /> <!-- unset the default -->
 	</parent>
 
 	<name>play-governance</name>
